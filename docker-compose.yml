@@ -1,0 +1,32 @@
+services:
+  db:
+    image: postgres:15
+    container_name: TraktorBNB_db
+    restart: always
+    environment:
+      POSTGRES_USER: user_TraktorBNB
+      POSTGRES_PASSWORD: password_TraktorBNB
+      POSTGRES_DB: TraktorBNB_db
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U user_TraktorBNB -d TraktorBNB_db"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+  backend:
+    build: .
+    container_name: TraktorBNB_backend
+    ports:
+      - "8000:8000"
+    environment:
+      DATABASE_URL: postgresql://user_TraktorBNB:password_TraktorBNB@db:5432/TraktorBNB_db
+    depends_on:
+      db:
+        condition: service_healthy
+
+volumes:
+  postgres_data:
