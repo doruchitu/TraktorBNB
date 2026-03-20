@@ -4,33 +4,71 @@ import { useNavigate } from 'react-router-dom';
 
 function Login() {
   const [formData, setFormData] = useState({ email: '', password: '' });
+  const [error, setError] = useState('');
+  const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
 
   const handleLogin = async (e) => {
     e.preventDefault();
+    setError('');
+    setLoading(true);
+
     try {
-      const response = await axios.post("http://localhost:8000/login", formData);
-      alert("Login reușit!");
-      // După login, îl trimitem pe pagina principală (pe care o vom face ulterior)
+      // FastAPI OAuth2 așteaptă form-data cu câmpul "username"
+      const form = new URLSearchParams();
+      form.append('username', formData.email);
+      form.append('password', formData.password);
+
+      const response = await axios.post("http://localhost:8000/login", form);
+      
+      // Salvează tokenul
+      localStorage.setItem('token', response.data.access_token);
+      
       navigate('/');
     } catch (err) {
-      alert("Email sau parolă incorectă.");
+      setError('Email sau parolă incorectă.');
+    } finally {
+      setLoading(false);
     }
   };
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-gray-100">
       <form onSubmit={handleLogin} className="bg-white p-8 rounded-lg shadow-md w-96">
-        <h2 className="text-2xl font-bold mb-6 text-blue-600 text-center">Login TraktorBNB</h2>
-        <input className="w-full mb-4 p-2 border rounded" type="email" placeholder="Email" 
-               onChange={e => setFormData({...formData, email: e.target.value})} />
-        <input className="w-full mb-6 p-2 border rounded" type="password" placeholder="Parolă" 
-               onChange={e => setFormData({...formData, password: e.target.value})} />
-        <button className="w-full bg-blue-600 text-white py-2 rounded hover:bg-blue-700 font-bold">
-          Intră în Cont
+        <h2 className="text-2xl font-bold mb-6 text-green-600 text-center">
+          🚜 TraktorBNB
+        </h2>
+
+        {error && (
+          <div className="mb-4 p-2 bg-red-100 text-red-600 rounded text-sm text-center">
+            {error}
+          </div>
+        )}
+
+        <input
+          className="w-full mb-4 p-2 border rounded focus:outline-none focus:ring-2 focus:ring-green-400"
+          type="email"
+          placeholder="Email"
+          onChange={e => setFormData({...formData, email: e.target.value})}
+        />
+        <input
+          className="w-full mb-6 p-2 border rounded focus:outline-none focus:ring-2 focus:ring-green-400"
+          type="password"
+          placeholder="Parolă"
+          onChange={e => setFormData({...formData, password: e.target.value})}
+        />
+        <button
+          disabled={loading}
+          className="w-full bg-green-600 text-white py-2 rounded hover:bg-green-700 font-bold disabled:opacity-50"
+        >
+          {loading ? 'Se încarcă...' : 'Intră în Cont'}
         </button>
+
         <p className="mt-4 text-center text-sm">
-          Nu ai cont? <span className="text-blue-500 cursor-pointer" onClick={() => navigate('/signup')}>Înregistrează-te</span>
+          Nu ai cont?{' '}
+          <span className="text-green-500 cursor-pointer hover:underline" onClick={() => navigate('/signup')}>
+            Înregistrează-te
+          </span>
         </p>
       </form>
     </div>
