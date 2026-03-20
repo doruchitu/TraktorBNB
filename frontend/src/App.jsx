@@ -3,6 +3,7 @@ import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-d
 import Signup from './pages/Signup';
 import Login from './pages/Login';
 import Home from './pages/Home';
+import AdaugaUtilaj from './pages/AdaugaUtilaj';
 
 // Componentă care verifică dacă userul e logat
 function ProtectedRoute({ children }) {
@@ -18,6 +19,7 @@ function App() {
         <Route path="/login" element={<Login />} />
         <Route path="/signup" element={<Signup />} />
         <Route path="/home" element={<ProtectedRoute><Home /></ProtectedRoute>} />
+        <Route path="/adauga-utilaj" element={<ProtectedRoute><AdaugaUtilaj /></ProtectedRoute>} />
 
         {/* Exemplu pentru paginile viitoare */}
         {/* <Route path="/dashboard" element={<ProtectedRoute><Dashboard /></ProtectedRoute>} /> */}
