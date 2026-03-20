@@ -13,7 +13,7 @@ app = FastAPI(title="TraktorBNB")
 
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["http://localhost:3000"],
+    allow_origins=["http://localhost:5173"],
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
@@ -46,11 +46,19 @@ def create_user(user: schemas.UserCreate, db: Session = Depends(get_db)):
     db.refresh(new_user)
     return new_user
 
-
 @app.post("/login")
 def login(form: OAuth2PasswordRequestForm = Depends(), db: Session = Depends(get_db)):
+    print(f"🔑 Login attempt: {form.username}")
     db_user = db.query(entities.User).filter(entities.User.email == form.username).first()
-    if not db_user or not verify_password(form.password, db_user.password_hash):
+    print(f"👤 User found: {db_user}")
+    if not db_user:
+        print("❌ User not found")
+        raise HTTPException(status_code=401, detail="Email sau parolă incorectă")
+    
+    password_ok = verify_password(form.password, db_user.password_hash)
+    print(f"🔐 Password ok: {password_ok}")
+    
+    if not password_ok:
         raise HTTPException(status_code=401, detail="Email sau parolă incorectă")
 
     token = create_access_token({"sub": db_user.email})

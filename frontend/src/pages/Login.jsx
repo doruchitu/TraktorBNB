@@ -24,7 +24,7 @@ function Login() {
       // Salvează tokenul
       localStorage.setItem('token', response.data.access_token);
       
-      navigate('/');
+      navigate('/home');
     } catch (err) {
       setError('Email sau parolă incorectă.');
     } finally {
