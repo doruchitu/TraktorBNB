@@ -19,7 +19,7 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-# Înregistrăm router-ele
+# inregistrare routeree
 app.include_router(machinery.router)
 
 
