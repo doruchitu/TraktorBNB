@@ -1,6 +1,8 @@
 import React, { useState } from 'react';
-import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
+import { auth } from '../firebase';
+import { createUserWithEmailAndPassword, updateProfile } from 'firebase/auth';
+import axios from 'axios';
 
 function Signup() {
   const [formData, setFormData] = useState({
@@ -24,13 +26,19 @@ function Signup() {
     setError('');
 
     const validationError = validate();
-    if (validationError) {
-      setError(validationError);
-      return;
-    }
+    if (validationError) { setError(validationError); return; }
 
     setLoading(true);
     try {
+      // Creăm userul în Firebase
+      const userCredential = await createUserWithEmailAndPassword(auth, formData.email, formData.password);
+      
+      // Setăm numele în Firebase
+      await updateProfile(userCredential.user, {
+        displayName: `${formData.nume} ${formData.prenume}`
+      });
+
+      // Salvăm și în baza noastră de date
       await axios.post("http://localhost:8000/users/", {
         nume: formData.nume,
         prenume: formData.prenume,
@@ -38,9 +46,14 @@ function Signup() {
         telefon: formData.telefon,
         password: formData.password,
       });
+
       navigate('/login');
     } catch (err) {
-      setError(err.response?.data?.detail || 'Eroare la înregistrare.');
+      if (err.code === 'auth/email-already-in-use') {
+        setError('Email-ul este deja folosit.');
+      } else {
+        setError(err.response?.data?.detail || 'Eroare la înregistrare.');
+      }
     } finally {
       setLoading(false);
     }

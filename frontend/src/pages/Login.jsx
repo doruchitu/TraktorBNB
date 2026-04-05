@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
-import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
+import { auth } from '../firebase';
+import { signInWithEmailAndPassword } from 'firebase/auth';
 
 function Login() {
   const [formData, setFormData] = useState({ email: '', password: '' });
@@ -14,16 +15,10 @@ function Login() {
     setLoading(true);
 
     try {
-      // FastAPI OAuth2 așteaptă form-data cu câmpul "username"
-      const form = new URLSearchParams();
-      form.append('username', formData.email);
-      form.append('password', formData.password);
-
-      const response = await axios.post("http://localhost:8000/login", form);
-      
-      // Salvează tokenul
-      localStorage.setItem('token', response.data.access_token);
-      
+      const userCredential = await signInWithEmailAndPassword(auth, formData.email, formData.password);
+      const token = await userCredential.user.getIdToken();
+      localStorage.setItem('token', token);
+      localStorage.setItem('user', JSON.stringify({ nume: userCredential.user.displayName || formData.email }));
       navigate('/home');
     } catch (err) {
       setError('Email sau parolă incorectă.');
