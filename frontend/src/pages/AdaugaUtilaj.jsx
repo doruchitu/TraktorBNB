@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
+import { auth } from '../firebase';
 
 const judete = [
   "Alba", "Arad", "Argeș", "Bacău", "Bihor", "Bistrița-Năsăud", "Botoșani",
@@ -60,25 +61,25 @@ export default function AdaugaUtilaj() {
     setStep(step + 1);
   };
 
-  const handleSubmit = async () => {
-    setLoading(true);
-    setError("");
-    try {
-      const token = localStorage.getItem("token");
-      await axios.post("http://localhost:8000/machinery/", {
-        ...formData,
-        putere_cp: formData.putere_cp ? parseInt(formData.putere_cp) : null,
-        pret_zi: parseFloat(formData.pret_zi),
-      }, {
-        headers: { Authorization: `Bearer ${token}` }
-      });
-      setSuccess(true);
-    } catch (err) {
-      setError(err.response?.data?.detail || "Eroare la adăugarea utilajului.");
-    } finally {
-      setLoading(false);
-    }
-  };
+const handleSubmit = async () => {
+  setLoading(true);
+  setError("");
+  try {
+    const token = await auth.currentUser.getIdToken();  // ← token Firebase proaspăt
+    await axios.post("http://localhost:8000/machinery/", {
+      ...formData,
+      putere_cp: formData.putere_cp ? parseInt(formData.putere_cp) : null,
+      pret_zi: parseFloat(formData.pret_zi),
+    }, {
+      headers: { Authorization: `Bearer ${token}` }
+    });
+    setSuccess(true);
+  } catch (err) {
+    setError(err.response?.data?.detail || "Eroare la adăugarea utilajului.");
+  } finally {
+    setLoading(false);
+  }
+};
 
   const inputStyle = {
     width: "100%",

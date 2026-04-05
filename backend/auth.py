@@ -1,9 +1,10 @@
 from fastapi import Depends, HTTPException
 from fastapi.security import OAuth2PasswordBearer
 from sqlalchemy.orm import Session
-from jose import jwt, JWTError
 from passlib.context import CryptContext
 from datetime import datetime, timedelta
+from jose import jwt
+import requests
 from database import SessionLocal
 import entities
 
@@ -13,6 +14,8 @@ ACCESS_TOKEN_EXPIRE_HOURS = 24
 
 pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
 oauth2_scheme = OAuth2PasswordBearer(tokenUrl="/login")
+
+FIREBASE_PROJECT_ID = "traktorbnb"
 
 def get_db():
     db = SessionLocal()
@@ -33,19 +36,41 @@ def create_access_token(data: dict) -> str:
     to_encode.update({"exp": expire})
     return jwt.encode(to_encode, SECRET_KEY, algorithm=ALGORITHM)
 
+def verify_firebase_token(token: str) -> dict:
+    try:
+        # Obținem cheile publice Firebase
+        keys_url = "https://www.googleapis.com/robot/v1/metadata/x509/securetoken@system.gserviceaccount.com"
+        keys = requests.get(keys_url).json()
+        
+        # Decodăm header-ul să găsim kid-ul
+        header = jwt.get_unverified_header(token)
+        kid = header.get("kid")
+        
+        if kid not in keys:
+            raise HTTPException(status_code=401, detail="Token invalid")
+        
+        # Verificăm tokenul
+        payload = jwt.decode(
+            token,
+            keys[kid],
+            algorithms=["RS256"],
+            audience=FIREBASE_PROJECT_ID,
+        )
+        return payload
+    except Exception:
+        raise HTTPException(status_code=401, detail="Token Firebase invalid sau expirat")
+
 def get_current_user(
     token: str = Depends(oauth2_scheme),
     db: Session = Depends(get_db)
 ) -> entities.User:
-    try:
-        payload = jwt.decode(token, SECRET_KEY, algorithms=[ALGORITHM])
-        email: str = payload.get("sub")
-        if not email:
-            raise HTTPException(status_code=401, detail="Token invalid")
-    except JWTError:
-        raise HTTPException(status_code=401, detail="Token invalid sau expirat")
+    payload = verify_firebase_token(token)
+    email = payload.get("email")
+    
+    if not email:
+        raise HTTPException(status_code=401, detail="Token invalid")
     
     user = db.query(entities.User).filter(entities.User.email == email).first()
     if not user:
-        raise HTTPException(status_code=401, detail="Utilizator negăsit")
+        raise HTTPException(status_code=401, detail="Utilizator negăsit în baza de date")
     return user
