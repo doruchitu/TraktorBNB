@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
+import { auth } from "../firebase";
 
 const judete = ["Toate", "Cluj", "Timiș", "Brașov", "Iași", "Sibiu", "Mureș", "Alba", "Galați", "Suceava", "Dolj"];
 
@@ -12,6 +13,14 @@ export default function Home() {
   const [searchQuery, setSearchQuery] = useState("");
   const [visible, setVisible] = useState(false);
   const [loadingUtilaje, setLoadingUtilaje] = useState(true);
+  const [modalUtilaj, setModalUtilaj] = useState(null);
+  const [zileOcupate, setZileOcupate] = useState([]);
+  const [dataStart, setDataStart] = useState(null);
+  const [dataEnd, setDataEnd] = useState(null);
+  const [lunaAfisata, setLunaAfisata] = useState(new Date());
+  const [bookingLoading, setBookingLoading] = useState(false);
+  const [bookingError, setBookingError] = useState("");
+  const [bookingSuccess, setBookingSuccess] = useState(false);
 
   useEffect(() => {
     const token = localStorage.getItem("token");
@@ -36,6 +45,110 @@ export default function Home() {
     localStorage.removeItem("token");
     localStorage.removeItem("user");
     navigate("/login");
+  };
+
+  const deschideModal = async (utilaj) => {
+    setModalUtilaj(utilaj);
+    setDataStart(null);
+    setDataEnd(null);
+    setBookingError("");
+    setBookingSuccess(false);
+    setLunaAfisata(new Date());
+    try {
+      const res = await axios.get(`http://localhost:8000/bookings/ocupate/${utilaj.id}`);
+      setZileOcupate(res.data.zile_ocupate);
+    } catch (err) {
+      setZileOcupate([]);
+    }
+  };
+
+  const esteOcupata = (data) => {
+    const str = data.toISOString().split("T")[0];
+    return zileOcupate.includes(str);
+  };
+
+  const esteInTrecut = (data) => {
+    const azi = new Date();
+    azi.setHours(0, 0, 0, 0);
+    return data < azi;
+  };
+
+  const esteSelectata = (data) => {
+    const str = data.toISOString().split("T")[0];
+    if (dataStart && str === dataStart) return true;
+    if (dataEnd && str === dataEnd) return true;
+    if (dataStart && dataEnd) {
+      const start = new Date(dataStart);
+      const end = new Date(dataEnd);
+      return data >= start && data <= end;
+    }
+    return false;
+  };
+
+  const handleClickZi = (data) => {
+    if (esteOcupata(data) || esteInTrecut(data)) return;
+    const str = data.toISOString().split("T")[0];
+    if (!dataStart || (dataStart && dataEnd)) {
+      setDataStart(str);
+      setDataEnd(null);
+    } else {
+      if (str <= dataStart) {
+        setDataStart(str);
+        setDataEnd(null);
+      } else {
+        const start = new Date(dataStart);
+        const end = new Date(str);
+        let current = new Date(start);
+        let valid = true;
+        while (current <= end) {
+          if (esteOcupata(current)) { valid = false; break; }
+          current.setDate(current.getDate() + 1);
+        }
+        if (!valid) {
+          setBookingError("Există zile ocupate în intervalul selectat.");
+          return;
+        }
+        setDataEnd(str);
+        setBookingError("");
+      }
+    }
+  };
+
+  const handleRezerva = async () => {
+    if (!dataStart || !dataEnd) {
+      setBookingError("Selectează data de start și data de end.");
+      return;
+    }
+    setBookingLoading(true);
+    setBookingError("");
+    try {
+      const token = await auth.currentUser.getIdToken();
+      await axios.post("http://localhost:8000/bookings/", {
+        utilaj_id: modalUtilaj.id,
+        data_start: new Date(dataStart).toISOString(),
+        data_end: new Date(dataEnd).toISOString(),
+      }, {
+        headers: { Authorization: `Bearer ${token}` }
+      });
+      setBookingSuccess(true);
+    } catch (err) {
+      setBookingError(err.response?.data?.detail || "Eroare la rezervare.");
+    } finally {
+      setBookingLoading(false);
+    }
+  };
+
+  const getDaysInMonth = (date) => {
+    const year = date.getFullYear();
+    const month = date.getMonth();
+    const firstDay = new Date(year, month, 1);
+    const lastDay = new Date(year, month + 1, 0);
+    const days = [];
+    for (let i = 0; i < firstDay.getDay(); i++) days.push(null);
+    for (let d = 1; d <= lastDay.getDate(); d++) {
+      days.push(new Date(year, month, d));
+    }
+    return days;
   };
 
   const utilajeFiltrate = utilaje.filter(u => {
@@ -92,7 +205,6 @@ export default function Home() {
           fontSize: "200px", opacity: 0.04, color: "white",
           userSelect: "none", whiteSpace: "nowrap", fontWeight: "bold",
         }}>🌾</div>
-
         <p style={{ color: "#9db89d", fontSize: "13px", letterSpacing: "3px", textTransform: "uppercase", marginBottom: "16px", fontFamily: "Arial, sans-serif" }}>
           Platforma #1 de închirieri agricole din România
         </p>
@@ -222,14 +334,17 @@ export default function Home() {
                       <span style={{ fontSize: "22px", fontWeight: "bold", color: "#2d4a2d" }}>{u.pret_zi} lei</span>
                       <span style={{ fontSize: "12px", color: "#aaa", fontFamily: "Arial, sans-serif" }}> / zi</span>
                     </div>
-                    <button disabled={!u.disponibil} style={{
-                      background: u.disponibil ? "#1a2e1a" : "#ccc",
-                      color: u.disponibil ? "#e8d5a3" : "#888",
-                      border: "none", borderRadius: "6px",
-                      padding: "9px 18px", fontSize: "13px",
-                      cursor: u.disponibil ? "pointer" : "not-allowed",
-                      fontFamily: "inherit",
-                    }}>
+                    <button
+                      disabled={!u.disponibil}
+                      onClick={() => deschideModal(u)}
+                      style={{
+                        background: u.disponibil ? "#1a2e1a" : "#ccc",
+                        color: u.disponibil ? "#e8d5a3" : "#888",
+                        border: "none", borderRadius: "6px",
+                        padding: "9px 18px", fontSize: "13px",
+                        cursor: u.disponibil ? "pointer" : "not-allowed",
+                        fontFamily: "inherit",
+                      }}>
                       {u.disponibil ? "Rezervă" : "Indisponibil"}
                     </button>
                   </div>
@@ -249,6 +364,158 @@ export default function Home() {
         <div style={{ fontSize: "20px", marginBottom: "8px" }}>🚜 TraktorBNB</div>
         <p style={{ margin: 0, opacity: 0.6 }}>© 2026 TraktorBNB · Platforma fermierilor români</p>
       </footer>
+
+      {/* Modal calendar */}
+      {modalUtilaj && (
+        <div style={{
+          position: "fixed", top: 0, left: 0, right: 0, bottom: 0,
+          background: "rgba(0,0,0,0.6)", zIndex: 1000,
+          display: "flex", alignItems: "center", justifyContent: "center",
+          padding: "1rem",
+        }} onClick={() => setModalUtilaj(null)}>
+          <div style={{
+            background: "white", borderRadius: "16px",
+            padding: "2rem", maxWidth: "480px", width: "100%",
+            boxShadow: "0 20px 60px rgba(0,0,0,0.3)",
+            maxHeight: "90vh", overflowY: "auto",
+          }} onClick={e => e.stopPropagation()}>
+
+            {bookingSuccess ? (
+              <div style={{ textAlign: "center", padding: "1rem" }}>
+                <div style={{ fontSize: "60px", marginBottom: "16px" }}>🎉</div>
+                <h3 style={{ color: "#1a2e1a", marginBottom: "8px" }}>Rezervare trimisă!</h3>
+                <p style={{ color: "#888", fontFamily: "Arial, sans-serif", fontSize: "14px", marginBottom: "24px" }}>
+                  Proprietarul va aproba sau respinge cererea ta în curând.
+                </p>
+                <button onClick={() => setModalUtilaj(null)} style={{
+                  background: "#1a2e1a", color: "#e8d5a3", border: "none",
+                  borderRadius: "8px", padding: "10px 24px", cursor: "pointer",
+                  fontFamily: "Georgia, serif",
+                }}>Închide</button>
+              </div>
+            ) : (
+              <>
+                {/* Header modal */}
+                <div style={{ display: "flex", justifyContent: "space-between", alignItems: "start", marginBottom: "1.5rem" }}>
+                  <div>
+                    <h3 style={{ color: "#1a2e1a", margin: "0 0 4px", fontSize: "20px" }}>
+                      {modalUtilaj.marca} {modalUtilaj.model}
+                    </h3>
+                    <p style={{ color: "#888", margin: 0, fontFamily: "Arial, sans-serif", fontSize: "13px" }}>
+                      📍 {modalUtilaj.judet} · {modalUtilaj.pret_zi} lei/zi
+                    </p>
+                  </div>
+                  <button onClick={() => setModalUtilaj(null)} style={{
+                    background: "none", border: "none", fontSize: "20px", cursor: "pointer", color: "#aaa",
+                  }}>✕</button>
+                </div>
+
+                {/* Legenda */}
+                <div style={{ display: "flex", gap: "16px", marginBottom: "1rem", fontFamily: "Arial, sans-serif", fontSize: "12px" }}>
+                  {[
+                    { color: "#27ae60", label: "Disponibil" },
+                    { color: "#e74c3c", label: "Ocupat" },
+                    { color: "#1a2e1a", label: "Selectat" },
+                  ].map(l => (
+                    <div key={l.label} style={{ display: "flex", alignItems: "center", gap: "6px" }}>
+                      <div style={{ width: "14px", height: "14px", borderRadius: "3px", background: l.color }} />
+                      <span style={{ color: "#555" }}>{l.label}</span>
+                    </div>
+                  ))}
+                </div>
+
+                {/* Calendar header */}
+                <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "1rem" }}>
+                  <button onClick={() => setLunaAfisata(new Date(lunaAfisata.getFullYear(), lunaAfisata.getMonth() - 1))}
+                    style={{ background: "none", border: "1px solid #ddd", borderRadius: "6px", padding: "6px 12px", cursor: "pointer", fontSize: "16px" }}>
+                    ‹
+                  </button>
+                  <span style={{ fontWeight: "bold", color: "#1a2e1a", fontSize: "16px" }}>
+                    {lunaAfisata.toLocaleString("ro-RO", { month: "long", year: "numeric" })}
+                  </span>
+                  <button onClick={() => setLunaAfisata(new Date(lunaAfisata.getFullYear(), lunaAfisata.getMonth() + 1))}
+                    style={{ background: "none", border: "1px solid #ddd", borderRadius: "6px", padding: "6px 12px", cursor: "pointer", fontSize: "16px" }}>
+                    ›
+                  </button>
+                </div>
+
+                {/* Zile saptamana */}
+                <div style={{ display: "grid", gridTemplateColumns: "repeat(7, 1fr)", gap: "4px", marginBottom: "4px" }}>
+                  {["D", "L", "M", "M", "J", "V", "S"].map((z, i) => (
+                    <div key={i} style={{ textAlign: "center", fontSize: "11px", fontFamily: "Arial, sans-serif", color: "#aaa", padding: "4px 0", fontWeight: "bold" }}>
+                      {z}
+                    </div>
+                  ))}
+                </div>
+
+                {/* Zile calendar */}
+                <div style={{ display: "grid", gridTemplateColumns: "repeat(7, 1fr)", gap: "4px", marginBottom: "1.5rem" }}>
+                  {getDaysInMonth(lunaAfisata).map((data, i) => {
+                    if (!data) return <div key={i} />;
+                    const ocupata = esteOcupata(data);
+                    const trecut = esteInTrecut(data);
+                    const selectata = esteSelectata(data);
+                    const disabled = ocupata || trecut;
+
+                    let bg = "#e8f5e8";
+                    let color = "#2d4a2d";
+                    if (trecut) { bg = "#f5f5f5"; color = "#ccc"; }
+                    if (ocupata) { bg = "#fde8e8"; color = "#e74c3c"; }
+                    if (selectata) { bg = "#1a2e1a"; color = "#e8d5a3"; }
+
+                    return (
+                      <div key={i} onClick={() => handleClickZi(data)} style={{
+                        textAlign: "center", padding: "8px 4px",
+                        borderRadius: "6px", cursor: disabled ? "not-allowed" : "pointer",
+                        background: bg, color: color,
+                        fontSize: "13px", fontFamily: "Arial, sans-serif",
+                        fontWeight: selectata ? "bold" : "normal",
+                        transition: "all 0.15s",
+                        border: selectata ? "2px solid #4a7c4a" : "2px solid transparent",
+                      }}>
+                        {data.getDate()}
+                      </div>
+                    );
+                  })}
+                </div>
+
+                {/* Interval selectat */}
+                {(dataStart || dataEnd) && (
+                  <div style={{ background: "#f0f7f0", borderRadius: "8px", padding: "12px", marginBottom: "1rem", border: "1px solid #d4e8d4", fontFamily: "Arial, sans-serif", fontSize: "13px" }}>
+                    <div style={{ display: "flex", justifyContent: "space-between" }}>
+                      <span style={{ color: "#5a7a5a" }}>Start: <strong style={{ color: "#1a2e1a" }}>{dataStart || "—"}</strong></span>
+                      <span style={{ color: "#5a7a5a" }}>End: <strong style={{ color: "#1a2e1a" }}>{dataEnd || "—"}</strong></span>
+                    </div>
+                    {dataStart && dataEnd && (
+                      <p style={{ margin: "8px 0 0", color: "#2d4a2d", fontWeight: "bold" }}>
+                        💰 Total: {Math.ceil((new Date(dataEnd) - new Date(dataStart)) / (1000 * 60 * 60 * 24) + 1) * modalUtilaj.pret_zi} lei
+                        ({Math.ceil((new Date(dataEnd) - new Date(dataStart)) / (1000 * 60 * 60 * 24) + 1)} zile)
+                      </p>
+                    )}
+                  </div>
+                )}
+
+                {bookingError && (
+                  <div style={{ marginBottom: "1rem", padding: "10px", background: "#fef2f2", border: "1px solid #fca5a5", borderRadius: "8px", color: "#dc2626", fontSize: "13px", fontFamily: "Arial, sans-serif" }}>
+                    {bookingError}
+                  </div>
+                )}
+
+                <button onClick={handleRezerva} disabled={bookingLoading || !dataStart || !dataEnd} style={{
+                  width: "100%",
+                  background: (!dataStart || !dataEnd || bookingLoading) ? "#ccc" : "#1a2e1a",
+                  color: "#e8d5a3", border: "none", borderRadius: "8px",
+                  padding: "13px", fontSize: "15px",
+                  cursor: (!dataStart || !dataEnd || bookingLoading) ? "not-allowed" : "pointer",
+                  fontFamily: "Georgia, serif", fontWeight: "bold",
+                }}>
+                  {bookingLoading ? "Se trimite..." : "🚜 Confirmă rezervarea"}
+                </button>
+              </>
+            )}
+          </div>
+        </div>
+      )}
     </div>
   );
 }

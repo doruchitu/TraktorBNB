@@ -6,6 +6,7 @@ from database import SessionLocal, engine
 from auth import hash_password, verify_password, create_access_token, get_db
 from routers import machinery
 import entities, schemas
+from routers import machinery, bookings
 
 entities.Base.metadata.create_all(bind=engine)
 
@@ -21,6 +22,7 @@ app.add_middleware(
 
 # inregistrare routeree
 app.include_router(machinery.router)
+app.include_router(bookings.router)
 
 
 @app.get("/")
