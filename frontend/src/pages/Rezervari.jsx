@@ -52,6 +52,24 @@ export default function Rezervari() {
     }
   };
 
+  const handleDescarcaContract = async (bookingId) => {
+    try {
+      const token = await auth.currentUser.getIdToken();
+      const res = await fetch(`http://localhost:8000/contract/${bookingId}`, {
+        headers: { Authorization: `Bearer ${token}` }
+      });
+      const blob = await res.blob();
+      const url = window.URL.createObjectURL(blob);
+      const a = document.createElement("a");
+      a.href = url;
+      a.download = `contract_TBN_${String(bookingId).padStart(4, "0")}.pdf`;
+      a.click();
+      window.URL.revokeObjectURL(url);
+    } catch (err) {
+      console.error(err);
+    }
+  };
+
   const statusColor = (status) => {
     switch (status) {
       case "pending": return { bg: "#fef3c7", color: "#d97706", label: "În așteptare" };
@@ -194,18 +212,30 @@ export default function Rezervari() {
                             </div>
                           </div>
 
-                          {r.status === "pending" && (
-                            <button onClick={() => handleAction(r.id, "cancel")}
-                              disabled={actionLoading === r.id + "cancel"}
-                              style={{
-                                background: "white", color: "#dc2626",
-                                border: "1px solid #dc2626", borderRadius: "6px",
-                                padding: "8px 16px", fontSize: "13px",
+                          <div style={{ display: "flex", gap: "8px", flexWrap: "wrap" }}>
+                            {r.status === "pending" && (
+                              <button onClick={() => handleAction(r.id, "cancel")}
+                                disabled={actionLoading === r.id + "cancel"}
+                                style={{
+                                  background: "white", color: "#dc2626",
+                                  border: "1px solid #dc2626", borderRadius: "6px",
+                                  padding: "8px 16px", fontSize: "13px",
+                                  cursor: "pointer", fontFamily: "Georgia, serif",
+                                }}>
+                                {actionLoading === r.id + "cancel" ? "Se anulează..." : "Anulează rezervarea"}
+                              </button>
+                            )}
+                            {r.status === "approved" && (
+                              <button onClick={() => handleDescarcaContract(r.id)} style={{
+                                background: "#1a2e1a", color: "#e8d5a3",
+                                border: "none", borderRadius: "6px",
+                                padding: "8px 20px", fontSize: "13px",
                                 cursor: "pointer", fontFamily: "Georgia, serif",
                               }}>
-                              {actionLoading === r.id + "cancel" ? "Se anulează..." : "Anulează rezervarea"}
-                            </button>
-                          )}
+                                📄 Descarcă contract
+                              </button>
+                            )}
+                          </div>
                         </div>
                       );
                     })}
@@ -265,30 +295,42 @@ export default function Rezervari() {
                             </div>
                           </div>
 
-                          {r.status === "pending" && (
-                            <div style={{ display: "flex", gap: "8px" }}>
-                              <button onClick={() => handleAction(r.id, "approve")}
-                                disabled={actionLoading === r.id + "approve"}
-                                style={{
-                                  background: "#1a2e1a", color: "#e8d5a3",
-                                  border: "none", borderRadius: "6px",
-                                  padding: "8px 20px", fontSize: "13px",
-                                  cursor: "pointer", fontFamily: "Georgia, serif",
-                                }}>
-                                {actionLoading === r.id + "approve" ? "Se aprobă..." : "✅ Aprobă"}
+                          <div style={{ display: "flex", gap: "8px", flexWrap: "wrap" }}>
+                            {r.status === "pending" && (
+                              <>
+                                <button onClick={() => handleAction(r.id, "approve")}
+                                  disabled={actionLoading === r.id + "approve"}
+                                  style={{
+                                    background: "#1a2e1a", color: "#e8d5a3",
+                                    border: "none", borderRadius: "6px",
+                                    padding: "8px 20px", fontSize: "13px",
+                                    cursor: "pointer", fontFamily: "Georgia, serif",
+                                  }}>
+                                  {actionLoading === r.id + "approve" ? "Se aprobă..." : "✅ Aprobă"}
+                                </button>
+                                <button onClick={() => handleAction(r.id, "reject")}
+                                  disabled={actionLoading === r.id + "reject"}
+                                  style={{
+                                    background: "white", color: "#dc2626",
+                                    border: "1px solid #dc2626", borderRadius: "6px",
+                                    padding: "8px 20px", fontSize: "13px",
+                                    cursor: "pointer", fontFamily: "Georgia, serif",
+                                  }}>
+                                  {actionLoading === r.id + "reject" ? "Se respinge..." : "❌ Respinge"}
+                                </button>
+                              </>
+                            )}
+                            {r.status === "approved" && (
+                              <button onClick={() => handleDescarcaContract(r.id)} style={{
+                                background: "#1a2e1a", color: "#e8d5a3",
+                                border: "none", borderRadius: "6px",
+                                padding: "8px 20px", fontSize: "13px",
+                                cursor: "pointer", fontFamily: "Georgia, serif",
+                              }}>
+                                📄 Descarcă contract
                               </button>
-                              <button onClick={() => handleAction(r.id, "reject")}
-                                disabled={actionLoading === r.id + "reject"}
-                                style={{
-                                  background: "white", color: "#dc2626",
-                                  border: "1px solid #dc2626", borderRadius: "6px",
-                                  padding: "8px 20px", fontSize: "13px",
-                                  cursor: "pointer", fontFamily: "Georgia, serif",
-                                }}>
-                                {actionLoading === r.id + "reject" ? "Se respinge..." : "❌ Respinge"}
-                              </button>
-                            </div>
-                          )}
+                            )}
+                          </div>
                         </div>
                       );
                     })}
