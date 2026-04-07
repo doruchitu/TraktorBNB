@@ -1,4 +1,4 @@
-from sqlalchemy import Column, Integer, String, Float, ForeignKey, DateTime, Boolean, Text
+from sqlalchemy import Column, Integer, String, Float, ForeignKey, DateTime, Boolean, Text, Date
 from sqlalchemy.orm import relationship
 from database import Base
 import datetime
@@ -27,11 +27,13 @@ class Machinery(Base):
     model = Column(String, nullable=False)
     putere_cp = Column(Integer)
     judet = Column(String, index=True)
-    pret_zi = Column(Float, nullable=False)        # redenumit: pret pe zi
-    descriere = Column(Text, default="")           # ✅ nou
-    imagine_url = Column(String, default="")       # ✅ nou
-    disponibil = Column(Boolean, default=True)     # ✅ nou
-    created_at = Column(DateTime, default=datetime.datetime.utcnow)  # ✅ nou
+    pret_zi = Column(Float, nullable=False)        
+    descriere = Column(Text, default="")           
+    imagine_url = Column(String, default="")       
+    disponibil = Column(Boolean, default=True)    
+    created_at = Column(DateTime, default=datetime.datetime.utcnow)
+    data_disponibil_de = Column(Date, nullable=True)    
+    data_disponibil_pana = Column(Date, nullable=True)  
 
     owner = relationship("User", back_populates="utilaje_proprii")
     rezervari = relationship("Booking", back_populates="utilaj")

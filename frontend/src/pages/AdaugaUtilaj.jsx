@@ -33,6 +33,8 @@ export default function AdaugaUtilaj() {
     pret_zi: "",
     descriere: "",
     imagine_url: "",
+    data_disponibil_de: "",
+    data_disponibil_pana: "",
   });
 
   const handleChange = (field) => (e) => {
@@ -51,6 +53,10 @@ export default function AdaugaUtilaj() {
     if (!formData.judet) return "Județul este obligatoriu.";
     if (!formData.pret_zi || isNaN(formData.pret_zi) || Number(formData.pret_zi) <= 0)
       return "Prețul pe zi trebuie să fie un număr pozitiv.";
+    if (formData.data_disponibil_de && formData.data_disponibil_pana) {
+      if (formData.data_disponibil_pana <= formData.data_disponibil_de)
+        return "Data de sfârșit trebuie să fie după data de început.";
+    }
     return null;
   };
 
@@ -61,25 +67,27 @@ export default function AdaugaUtilaj() {
     setStep(step + 1);
   };
 
-const handleSubmit = async () => {
-  setLoading(true);
-  setError("");
-  try {
-    const token = await auth.currentUser.getIdToken();  // ← token Firebase proaspăt
-    await axios.post("http://localhost:8000/machinery/", {
-      ...formData,
-      putere_cp: formData.putere_cp ? parseInt(formData.putere_cp) : null,
-      pret_zi: parseFloat(formData.pret_zi),
-    }, {
-      headers: { Authorization: `Bearer ${token}` }
-    });
-    setSuccess(true);
-  } catch (err) {
-    setError(err.response?.data?.detail || "Eroare la adăugarea utilajului.");
-  } finally {
-    setLoading(false);
-  }
-};
+  const handleSubmit = async () => {
+    setLoading(true);
+    setError("");
+    try {
+      const token = await auth.currentUser.getIdToken();
+      await axios.post("http://localhost:8000/machinery/", {
+        ...formData,
+        putere_cp: formData.putere_cp ? parseInt(formData.putere_cp) : null,
+        pret_zi: parseFloat(formData.pret_zi),
+        data_disponibil_de: formData.data_disponibil_de || null,
+        data_disponibil_pana: formData.data_disponibil_pana || null,
+      }, {
+        headers: { Authorization: `Bearer ${token}` }
+      });
+      setSuccess(true);
+    } catch (err) {
+      setError(err.response?.data?.detail || "Eroare la adăugarea utilajului.");
+    } finally {
+      setLoading(false);
+    }
+  };
 
   const inputStyle = {
     width: "100%",
@@ -116,7 +124,7 @@ const handleSubmit = async () => {
             Utilajul tău este acum disponibil pentru închiriere.
           </p>
           <div style={{ display: "flex", gap: "12px", justifyContent: "center" }}>
-            <button onClick={() => { setSuccess(false); setStep(1); setFormData({ marca: "", model: "", tip: "", putere_cp: "", judet: "", pret_zi: "", descriere: "", imagine_url: "" }); }}
+            <button onClick={() => { setSuccess(false); setStep(1); setFormData({ marca: "", model: "", tip: "", putere_cp: "", judet: "", pret_zi: "", descriere: "", imagine_url: "", data_disponibil_de: "", data_disponibil_pana: "" }); }}
               style={{ padding: "12px 24px", background: "white", border: "1.5px solid #1a2e1a", borderRadius: "8px", color: "#1a2e1a", fontSize: "14px", cursor: "pointer", fontFamily: "Georgia, serif" }}>
               Adaugă alt utilaj
             </button>
@@ -276,7 +284,7 @@ const handleSubmit = async () => {
                 </select>
               </div>
 
-              <div style={{ marginBottom: "1.5rem" }}>
+              <div style={{ marginBottom: "1.2rem" }}>
                 <label style={labelStyle}>Preț pe zi (RON) *</label>
                 <div style={{ position: "relative" }}>
                   <input style={{ ...inputStyle, paddingRight: "60px" }} type="number" placeholder="ex: 450"
@@ -288,6 +296,43 @@ const handleSubmit = async () => {
                     color: "#5a7a5a", fontSize: "13px", fontFamily: "Arial, sans-serif", pointerEvents: "none"
                   }}>RON/zi</span>
                 </div>
+              </div>
+
+              {/* Interval disponibilitate */}
+              <div style={{ background: "#f0f7f0", borderRadius: "10px", padding: "1rem", marginBottom: "1.2rem", border: "1px solid #d4e8d4" }}>
+                <p style={{ fontSize: "12px", color: "#5a7a5a", fontFamily: "Arial, sans-serif", marginBottom: "12px", letterSpacing: "1px", textTransform: "uppercase", fontWeight: "bold" }}>
+                  📅 Interval disponibilitate — opțional
+                </p>
+                <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "1rem" }}>
+                  <div>
+                    <label style={labelStyle}>Disponibil de la</label>
+                    <input
+                      type="date"
+                      style={inputStyle}
+                      value={formData.data_disponibil_de}
+                      onChange={handleChange("data_disponibil_de")}
+                      onFocus={e => e.target.style.borderColor = "#4a7c4a"}
+                      onBlur={e => e.target.style.borderColor = "#d4e8d4"}
+                    />
+                  </div>
+                  <div>
+                    <label style={labelStyle}>Disponibil până la</label>
+                    <input
+                      type="date"
+                      style={inputStyle}
+                      value={formData.data_disponibil_pana}
+                      min={formData.data_disponibil_de || ""}
+                      onChange={handleChange("data_disponibil_pana")}
+                      onFocus={e => e.target.style.borderColor = "#4a7c4a"}
+                      onBlur={e => e.target.style.borderColor = "#d4e8d4"}
+                    />
+                  </div>
+                </div>
+                {formData.data_disponibil_de && formData.data_disponibil_pana && (
+                  <p style={{ margin: "10px 0 0", fontSize: "13px", color: "#2d4a2d", fontFamily: "Arial, sans-serif" }}>
+                    ✅ Disponibil {Math.ceil((new Date(formData.data_disponibil_pana) - new Date(formData.data_disponibil_de)) / (1000 * 60 * 60 * 24))} zile
+                  </p>
+                )}
               </div>
 
               {formData.pret_zi && formData.judet && (
@@ -344,6 +389,8 @@ const handleSubmit = async () => {
                     { label: "Putere", value: formData.putere_cp ? `${formData.putere_cp} CP` : "—" },
                     { label: "Județ", value: formData.judet },
                     { label: "Preț/zi", value: `${formData.pret_zi} RON` },
+                    { label: "Disponibil de la", value: formData.data_disponibil_de || "—" },
+                    { label: "Disponibil până la", value: formData.data_disponibil_pana || "—" },
                   ].map(item => (
                     <div key={item.label} style={{ display: "flex", justifyContent: "space-between" }}>
                       <span style={{ fontSize: "13px", color: "#9db89d", fontFamily: "Arial, sans-serif" }}>{item.label}</span>

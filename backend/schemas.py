@@ -1,6 +1,6 @@
 from pydantic import BaseModel, EmailStr
 from typing import Optional, List
-from datetime import datetime
+from datetime import datetime, date as DateType
 
 # ─────────────────────────────────────────
 # USER
@@ -37,6 +37,8 @@ class MachineryCreate(BaseModel):
     pret_zi: float
     descriere: Optional[str] = ""
     imagine_url: Optional[str] = ""
+    data_disponibil_de: Optional[DateType] = None    
+    data_disponibil_pana: Optional[DateType] = None  
 
 class MachineryOut(BaseModel):
     id: int
@@ -49,7 +51,9 @@ class MachineryOut(BaseModel):
     imagine_url: str
     disponibil: bool
     created_at: datetime
-    owner: UserOut          # returnează și datele proprietarului
+    data_disponibil_de: Optional[DateType]    
+    data_disponibil_pana: Optional[DateType]  
+    owner: UserOut         
 
     class Config:
         from_attributes = True

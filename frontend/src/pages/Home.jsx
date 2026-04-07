@@ -67,10 +67,18 @@ export default function Home() {
     return zileOcupate.includes(str);
   };
 
-  const esteInTrecut = (data) => {
+  const esteDisponibila = (data, utilaj) => {
     const azi = new Date();
     azi.setHours(0, 0, 0, 0);
-    return data < azi;
+    if (data < azi) return false;
+
+    if (utilaj.data_disponibil_de && utilaj.data_disponibil_pana) {
+      const de = new Date(utilaj.data_disponibil_de);
+      const pana = new Date(utilaj.data_disponibil_pana);
+      if (data < de || data > pana) return false;
+    }
+
+    return true;
   };
 
   const esteSelectata = (data) => {
@@ -86,7 +94,7 @@ export default function Home() {
   };
 
   const handleClickZi = (data) => {
-    if (esteOcupata(data) || esteInTrecut(data)) return;
+    if (esteOcupata(data) || !esteDisponibila(data, modalUtilaj)) return;
     const str = data.toISOString().split("T")[0];
     if (!dataStart || (dataStart && dataEnd)) {
       setDataStart(str);
@@ -415,10 +423,11 @@ export default function Home() {
                   {[
                     { color: "#27ae60", label: "Disponibil" },
                     { color: "#e74c3c", label: "Ocupat" },
+                    { color: "#f5f5f5", label: "Indisponibil" },
                     { color: "#1a2e1a", label: "Selectat" },
                   ].map(l => (
                     <div key={l.label} style={{ display: "flex", alignItems: "center", gap: "6px" }}>
-                      <div style={{ width: "14px", height: "14px", borderRadius: "3px", background: l.color }} />
+                      <div style={{ width: "14px", height: "14px", borderRadius: "3px", background: l.color, border: l.color === "#f5f5f5" ? "1px solid #ddd" : "none" }} />
                       <span style={{ color: "#555" }}>{l.label}</span>
                     </div>
                   ))}
@@ -453,13 +462,13 @@ export default function Home() {
                   {getDaysInMonth(lunaAfisata).map((data, i) => {
                     if (!data) return <div key={i} />;
                     const ocupata = esteOcupata(data);
-                    const trecut = esteInTrecut(data);
+                    const disponibila = esteDisponibila(data, modalUtilaj);
                     const selectata = esteSelectata(data);
-                    const disabled = ocupata || trecut;
+                    const disabled = ocupata || !disponibila;
 
                     let bg = "#e8f5e8";
                     let color = "#2d4a2d";
-                    if (trecut) { bg = "#f5f5f5"; color = "#ccc"; }
+                    if (!disponibila) { bg = "#f5f5f5"; color = "#ccc"; }
                     if (ocupata) { bg = "#fde8e8"; color = "#e74c3c"; }
                     if (selectata) { bg = "#1a2e1a"; color = "#e8d5a3"; }
 
