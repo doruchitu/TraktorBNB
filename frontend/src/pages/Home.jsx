@@ -190,6 +190,11 @@ export default function Home() {
             borderRadius: "6px", padding: "8px 16px", fontSize: "13px",
             cursor: "pointer", fontFamily: "inherit",
           }}>+ Adaugă Utilaj</button>
+          <button onClick={() => navigate("/rezervari")} style={{
+            background: "transparent", color: "#9db89d",
+            border: "1px solid #3a5a3a", borderRadius: "6px",
+            padding: "8px 14px", fontSize: "13px", cursor: "pointer", fontFamily: "inherit",
+          }}>📋 Rezervări</button>
           <button onClick={handleLogout} style={{
             background: "transparent", color: "#9db89d",
             border: "1px solid #3a5a3a", borderRadius: "6px",
