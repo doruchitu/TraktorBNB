@@ -109,7 +109,6 @@ def cancel_booking(
     return {"message": "Rezervare anulată"}
 
 
-# ← ENDPOINT NOU adăugat la final
 @router.get("/ocupate/{utilaj_id}")
 def get_zile_ocupate(utilaj_id: int, db: Session = Depends(get_db)):
     bookings = db.query(entities.Booking).filter(
