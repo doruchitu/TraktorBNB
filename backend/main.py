@@ -1,13 +1,10 @@
 from fastapi import FastAPI, Depends, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
-from fastapi.security import OAuth2PasswordRequestForm
 from sqlalchemy.orm import Session
-from database import SessionLocal, engine
-from auth import hash_password, verify_password, create_access_token, get_db
-from routers import machinery
-import entities, schemas
-from routers import machinery, bookings
+from database import engine
+from auth import hash_password, get_db
 from routers import machinery, bookings, contract
+import entities, schemas
 
 entities.Base.metadata.create_all(bind=engine)
 
@@ -21,7 +18,6 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-# inregistrare routeree
 app.include_router(machinery.router)
 app.include_router(bookings.router)
 app.include_router(contract.router)
@@ -49,21 +45,3 @@ def create_user(user: schemas.UserCreate, db: Session = Depends(get_db)):
     db.commit()
     db.refresh(new_user)
     return new_user
-
-@app.post("/login")
-def login(form: OAuth2PasswordRequestForm = Depends(), db: Session = Depends(get_db)):
-    print(f"🔑 Login attempt: {form.username}")
-    db_user = db.query(entities.User).filter(entities.User.email == form.username).first()
-    print(f"👤 User found: {db_user}")
-    if not db_user:
-        print("❌ User not found")
-        raise HTTPException(status_code=401, detail="Email sau parolă incorectă")
-    
-    password_ok = verify_password(form.password, db_user.password_hash)
-    print(f"🔐 Password ok: {password_ok}")
-    
-    if not password_ok:
-        raise HTTPException(status_code=401, detail="Email sau parolă incorectă")
-
-    token = create_access_token({"sub": db_user.email})
-    return {"access_token": token, "token_type": "bearer"}
