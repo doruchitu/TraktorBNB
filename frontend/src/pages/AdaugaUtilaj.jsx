@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import { auth } from '../firebase';
@@ -23,6 +23,11 @@ export default function AdaugaUtilaj() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
   const [success, setSuccess] = useState(false);
+  const [dragOver, setDragOver] = useState(false);
+  const [imagePreview, setImagePreview] = useState(null);
+  const [imageFile, setImageFile] = useState(null);
+  const [uploadingImage, setUploadingImage] = useState(false);
+  const fileInputRef = useRef(null);
 
   const [formData, setFormData] = useState({
     marca: "",
@@ -40,6 +45,55 @@ export default function AdaugaUtilaj() {
   const handleChange = (field) => (e) => {
     setFormData({ ...formData, [field]: e.target.value });
     setError("");
+  };
+
+  const handleImageFile = (file) => {
+    if (!file) return;
+    if (!file.type.startsWith("image/")) {
+      setError("Fișierul trebuie să fie o imagine.");
+      return;
+    }
+    if (file.size > 5 * 1024 * 1024) {
+      setError("Imaginea trebuie să fie mai mică de 5MB.");
+      return;
+    }
+    setImageFile(file);
+    setImagePreview(URL.createObjectURL(file));
+    setError("");
+  };
+
+  const handleDrop = (e) => {
+    e.preventDefault();
+    setDragOver(false);
+    const file = e.dataTransfer.files[0];
+    handleImageFile(file);
+  };
+
+  const handleDragOver = (e) => {
+    e.preventDefault();
+    setDragOver(true);
+  };
+
+  const handleDragLeave = () => setDragOver(false);
+
+  const uploadImageToCloudinary = async () => {
+    if (!imageFile) return null;
+    setUploadingImage(true);
+    try {
+      const data = new FormData();
+      data.append("file", imageFile);
+      data.append("upload_preset", import.meta.env.VITE_CLOUDINARY_UPLOAD_PRESET);
+      const res = await axios.post(
+        `https://api.cloudinary.com/v1_1/${import.meta.env.VITE_CLOUDINARY_CLOUD_NAME}/image/upload`,
+        data
+      );
+      return res.data.secure_url;
+    } catch (err) {
+      setError("Eroare la încărcarea imaginii.");
+      return null;
+    } finally {
+      setUploadingImage(false);
+    }
   };
 
   const validateStep1 = () => {
@@ -71,9 +125,18 @@ export default function AdaugaUtilaj() {
     setLoading(true);
     setError("");
     try {
+      // Upload imagine dacă există
+      let imagine_url = formData.imagine_url;
+      if (imageFile) {
+        const uploadedUrl = await uploadImageToCloudinary();
+        if (!uploadedUrl) { setLoading(false); return; }
+        imagine_url = uploadedUrl;
+      }
+
       const token = await auth.currentUser.getIdToken();
       await axios.post("http://localhost:8000/machinery/", {
         ...formData,
+        imagine_url,
         putere_cp: formData.putere_cp ? parseInt(formData.putere_cp) : null,
         pret_zi: parseFloat(formData.pret_zi),
         data_disponibil_de: formData.data_disponibil_de || null,
@@ -90,28 +153,17 @@ export default function AdaugaUtilaj() {
   };
 
   const inputStyle = {
-    width: "100%",
-    padding: "12px 16px",
-    borderRadius: "8px",
-    border: "1.5px solid #d4e8d4",
-    fontSize: "15px",
-    fontFamily: "Georgia, serif",
-    background: "#fafff8",
-    outline: "none",
-    color: "#1a2e1a",
-    boxSizing: "border-box",
+    width: "100%", padding: "12px 16px", borderRadius: "8px",
+    border: "1.5px solid #d4e8d4", fontSize: "15px",
+    fontFamily: "Georgia, serif", background: "#fafff8",
+    outline: "none", color: "#1a2e1a", boxSizing: "border-box",
     transition: "border-color 0.2s",
   };
 
   const labelStyle = {
-    display: "block",
-    fontSize: "12px",
-    fontFamily: "Arial, sans-serif",
-    letterSpacing: "1.5px",
-    textTransform: "uppercase",
-    color: "#5a7a5a",
-    marginBottom: "6px",
-    fontWeight: "bold",
+    display: "block", fontSize: "12px", fontFamily: "Arial, sans-serif",
+    letterSpacing: "1.5px", textTransform: "uppercase", color: "#5a7a5a",
+    marginBottom: "6px", fontWeight: "bold",
   };
 
   if (success) {
@@ -124,7 +176,7 @@ export default function AdaugaUtilaj() {
             Utilajul tău este acum disponibil pentru închiriere.
           </p>
           <div style={{ display: "flex", gap: "12px", justifyContent: "center" }}>
-            <button onClick={() => { setSuccess(false); setStep(1); setFormData({ marca: "", model: "", tip: "", putere_cp: "", judet: "", pret_zi: "", descriere: "", imagine_url: "", data_disponibil_de: "", data_disponibil_pana: "" }); }}
+            <button onClick={() => { setSuccess(false); setStep(1); setImagePreview(null); setImageFile(null); setFormData({ marca: "", model: "", tip: "", putere_cp: "", judet: "", pret_zi: "", descriere: "", imagine_url: "", data_disponibil_de: "", data_disponibil_pana: "" }); }}
               style={{ padding: "12px 24px", background: "white", border: "1.5px solid #1a2e1a", borderRadius: "8px", color: "#1a2e1a", fontSize: "14px", cursor: "pointer", fontFamily: "Georgia, serif" }}>
               Adaugă alt utilaj
             </button>
@@ -161,8 +213,7 @@ export default function AdaugaUtilaj() {
       {/* Header */}
       <div style={{
         background: "linear-gradient(135deg, #1a2e1a 0%, #2d4a2d 100%)",
-        padding: "3rem 2rem 2rem",
-        textAlign: "center",
+        padding: "3rem 2rem 2rem", textAlign: "center",
       }}>
         <p style={{ color: "#9db89d", fontSize: "12px", letterSpacing: "3px", textTransform: "uppercase", marginBottom: "12px", fontFamily: "Arial, sans-serif" }}>
           Pune-ți utilajul la treabă
@@ -172,11 +223,11 @@ export default function AdaugaUtilaj() {
         </h1>
 
         {/* Progress steps */}
-        <div style={{ display: "flex", justifyContent: "center", alignItems: "center", gap: "0" }}>
+        <div style={{ display: "flex", justifyContent: "center", alignItems: "center" }}>
           {[
             { num: 1, label: "Detalii utilaj" },
             { num: 2, label: "Locație & Preț" },
-            { num: 3, label: "Descriere" },
+            { num: 3, label: "Poză & Descriere" },
           ].map((s, i) => (
             <React.Fragment key={s.num}>
               <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: "6px" }}>
@@ -298,7 +349,6 @@ export default function AdaugaUtilaj() {
                 </div>
               </div>
 
-              {/* Interval disponibilitate */}
               <div style={{ background: "#f0f7f0", borderRadius: "10px", padding: "1rem", marginBottom: "1.2rem", border: "1px solid #d4e8d4" }}>
                 <p style={{ fontSize: "12px", color: "#5a7a5a", fontFamily: "Arial, sans-serif", marginBottom: "12px", letterSpacing: "1px", textTransform: "uppercase", fontWeight: "bold" }}>
                   📅 Interval disponibilitate — opțional
@@ -306,26 +356,18 @@ export default function AdaugaUtilaj() {
                 <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "1rem" }}>
                   <div>
                     <label style={labelStyle}>Disponibil de la</label>
-                    <input
-                      type="date"
-                      style={inputStyle}
-                      value={formData.data_disponibil_de}
+                    <input type="date" style={inputStyle} value={formData.data_disponibil_de}
                       onChange={handleChange("data_disponibil_de")}
                       onFocus={e => e.target.style.borderColor = "#4a7c4a"}
-                      onBlur={e => e.target.style.borderColor = "#d4e8d4"}
-                    />
+                      onBlur={e => e.target.style.borderColor = "#d4e8d4"} />
                   </div>
                   <div>
                     <label style={labelStyle}>Disponibil până la</label>
-                    <input
-                      type="date"
-                      style={inputStyle}
-                      value={formData.data_disponibil_pana}
+                    <input type="date" style={inputStyle} value={formData.data_disponibil_pana}
                       min={formData.data_disponibil_de || ""}
                       onChange={handleChange("data_disponibil_pana")}
                       onFocus={e => e.target.style.borderColor = "#4a7c4a"}
-                      onBlur={e => e.target.style.borderColor = "#d4e8d4"}
-                    />
+                      onBlur={e => e.target.style.borderColor = "#d4e8d4"} />
                   </div>
                 </div>
                 {formData.data_disponibil_de && formData.data_disponibil_pana && (
@@ -339,11 +381,7 @@ export default function AdaugaUtilaj() {
                 <div style={{ background: "#f0f7f0", borderRadius: "10px", padding: "1rem", marginBottom: "1.5rem", border: "1px solid #d4e8d4" }}>
                   <p style={{ fontSize: "12px", color: "#5a7a5a", fontFamily: "Arial, sans-serif", marginBottom: "8px", letterSpacing: "1px", textTransform: "uppercase" }}>Estimare venituri</p>
                   <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr 1fr", gap: "8px" }}>
-                    {[
-                      { label: "Săptămânal", zile: 7 },
-                      { label: "Lunar", zile: 30 },
-                      { label: "Sezonier", zile: 90 },
-                    ].map(e => (
+                    {[{ label: "Săptămânal", zile: 7 }, { label: "Lunar", zile: 30 }, { label: "Sezonier", zile: 90 }].map(e => (
                       <div key={e.label} style={{ textAlign: "center" }}>
                         <p style={{ fontSize: "16px", fontWeight: "bold", color: "#2d4a2d", margin: 0 }}>
                           {(Number(formData.pret_zi) * e.zile).toLocaleString()} lei
@@ -361,21 +399,69 @@ export default function AdaugaUtilaj() {
           {step === 3 && (
             <div>
               <h2 style={{ color: "#1a2e1a", fontSize: "20px", marginBottom: "1.5rem", borderBottom: "2px solid #e8f5e8", paddingBottom: "12px" }}>
-                📝 Descriere — opțional
+                📸 Poză & Descriere
               </h2>
+
+              {/* Drag & Drop */}
+              <div style={{ marginBottom: "1.2rem" }}>
+                <label style={labelStyle}>Fotografie utilaj — opțional</label>
+
+                {imagePreview ? (
+                  <div style={{ position: "relative", borderRadius: "10px", overflow: "hidden", border: "1.5px solid #d4e8d4" }}>
+                    <img src={imagePreview} alt="Preview" style={{ width: "100%", height: "200px", objectFit: "cover", display: "block" }} />
+                    <button onClick={() => { setImagePreview(null); setImageFile(null); }} style={{
+                      position: "absolute", top: "10px", right: "10px",
+                      background: "rgba(0,0,0,0.6)", color: "white",
+                      border: "none", borderRadius: "50%",
+                      width: "30px", height: "30px", cursor: "pointer",
+                      fontSize: "16px", display: "flex", alignItems: "center", justifyContent: "center",
+                    }}>✕</button>
+                    <div style={{
+                      position: "absolute", bottom: "10px", left: "10px",
+                      background: "rgba(74,124,74,0.9)", color: "white",
+                      padding: "4px 10px", borderRadius: "4px",
+                      fontSize: "12px", fontFamily: "Arial, sans-serif",
+                    }}>✅ Imagine selectată</div>
+                  </div>
+                ) : (
+                  <div
+                    onDrop={handleDrop}
+                    onDragOver={handleDragOver}
+                    onDragLeave={handleDragLeave}
+                    onClick={() => fileInputRef.current.click()}
+                    style={{
+                      border: `2px dashed ${dragOver ? "#4a7c4a" : "#d4e8d4"}`,
+                      borderRadius: "10px",
+                      padding: "2.5rem",
+                      textAlign: "center",
+                      cursor: "pointer",
+                      background: dragOver ? "#f0f7f0" : "#fafff8",
+                      transition: "all 0.2s",
+                    }}>
+                    <div style={{ fontSize: "40px", marginBottom: "12px" }}>📸</div>
+                    <p style={{ color: "#2d4a2d", fontSize: "15px", margin: "0 0 6px", fontWeight: "bold" }}>
+                      Trage poza aici
+                    </p>
+                    <p style={{ color: "#aaa", fontSize: "13px", margin: 0, fontFamily: "Arial, sans-serif" }}>
+                      sau click pentru a selecta · JPG, PNG, max 5MB
+                    </p>
+                  </div>
+                )}
+
+                <input
+                  ref={fileInputRef}
+                  type="file"
+                  accept="image/*"
+                  style={{ display: "none" }}
+                  onChange={e => handleImageFile(e.target.files[0])}
+                />
+              </div>
 
               <div style={{ marginBottom: "1.2rem" }}>
                 <label style={labelStyle}>Descriere utilaj</label>
                 <textarea style={{ ...inputStyle, minHeight: "120px", resize: "vertical", lineHeight: 1.6 }}
                   placeholder="Descrie starea utilajului, dotările speciale, condiții de utilizare..."
                   value={formData.descriere} onChange={handleChange("descriere")}
-                  onFocus={e => e.target.style.borderColor = "#4a7c4a"}
-                  onBlur={e => e.target.style.borderColor = "#d4e8d4"} />
-              </div>
-
-              <div style={{ marginBottom: "1.5rem" }}>
-                <label style={labelStyle}>URL Imagine — opțional</label>
-                <input style={inputStyle} placeholder="https://..." value={formData.imagine_url} onChange={handleChange("imagine_url")}
                   onFocus={e => e.target.style.borderColor = "#4a7c4a"}
                   onBlur={e => e.target.style.borderColor = "#d4e8d4"} />
               </div>
@@ -391,6 +477,7 @@ export default function AdaugaUtilaj() {
                     { label: "Preț/zi", value: `${formData.pret_zi} RON` },
                     { label: "Disponibil de la", value: formData.data_disponibil_de || "—" },
                     { label: "Disponibil până la", value: formData.data_disponibil_pana || "—" },
+                    { label: "Fotografie", value: imageFile ? `✅ ${imageFile.name}` : "—" },
                   ].map(item => (
                     <div key={item.label} style={{ display: "flex", justifyContent: "space-between" }}>
                       <span style={{ fontSize: "13px", color: "#9db89d", fontFamily: "Arial, sans-serif" }}>{item.label}</span>
@@ -416,18 +503,19 @@ export default function AdaugaUtilaj() {
               <button onClick={handleNext} style={{
                 padding: "12px 28px", background: "#1a2e1a",
                 border: "none", borderRadius: "8px",
-                color: "#e8d5a3", fontSize: "14px", cursor: "pointer", fontFamily: "Georgia, serif",
-                fontWeight: "bold",
+                color: "#e8d5a3", fontSize: "14px", cursor: "pointer",
+                fontFamily: "Georgia, serif", fontWeight: "bold",
               }}>Continuă →</button>
             ) : (
-              <button onClick={handleSubmit} disabled={loading} style={{
+              <button onClick={handleSubmit} disabled={loading || uploadingImage} style={{
                 padding: "12px 28px",
-                background: loading ? "#ccc" : "#4a7c4a",
+                background: (loading || uploadingImage) ? "#ccc" : "#4a7c4a",
                 border: "none", borderRadius: "8px",
-                color: "white", fontSize: "14px", cursor: loading ? "not-allowed" : "pointer",
+                color: "white", fontSize: "14px",
+                cursor: (loading || uploadingImage) ? "not-allowed" : "pointer",
                 fontFamily: "Georgia, serif", fontWeight: "bold",
               }}>
-                {loading ? "Se salvează..." : "🚜 Publică utilajul"}
+                {uploadingImage ? "Se încarcă poza..." : loading ? "Se salvează..." : "🚜 Publică utilajul"}
               </button>
             )}
           </div>

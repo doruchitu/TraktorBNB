@@ -71,13 +71,11 @@ export default function Home() {
     const azi = new Date();
     azi.setHours(0, 0, 0, 0);
     if (data < azi) return false;
-
     if (utilaj.data_disponibil_de && utilaj.data_disponibil_pana) {
       const de = new Date(utilaj.data_disponibil_de);
       const pana = new Date(utilaj.data_disponibil_pana);
       if (data < de || data > pana) return false;
     }
-
     return true;
   };
 
@@ -312,13 +310,22 @@ export default function Home() {
                 onMouseEnter={e => { e.currentTarget.style.transform = "translateY(-4px)"; e.currentTarget.style.boxShadow = "0 8px 24px rgba(0,0,0,0.1)"; }}
                 onMouseLeave={e => { e.currentTarget.style.transform = "translateY(0)"; e.currentTarget.style.boxShadow = "none"; }}
               >
+                {/* Card image — poza reala sau fallback emoji */}
                 <div style={{
                   height: "160px",
-                  background: "linear-gradient(135deg, #2d4a2d, #4a7c4a)",
+                  background: u.imagine_url ? "none" : "linear-gradient(135deg, #2d4a2d, #4a7c4a)",
                   display: "flex", alignItems: "center", justifyContent: "center",
-                  fontSize: "64px", position: "relative",
+                  fontSize: "64px", position: "relative", overflow: "hidden",
                 }}>
-                  🚜
+                  {u.imagine_url ? (
+                    <img
+                      src={u.imagine_url}
+                      alt={`${u.marca} ${u.model}`}
+                      style={{ width: "100%", height: "100%", objectFit: "cover", display: "block" }}
+                    />
+                  ) : (
+                    <span>🚜</span>
+                  )}
                   <div style={{
                     position: "absolute", top: "12px", right: "12px",
                     background: u.disponibil ? "#27ae60" : "#c0392b",
