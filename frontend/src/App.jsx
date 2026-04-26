@@ -5,6 +5,7 @@ import Login from './pages/Login';
 import Home from './pages/Home';
 import AdaugaUtilaj from './pages/AdaugaUtilaj';
 import Rezervari from './pages/Rezervari';
+import Landing from './pages/Landing';
 
 // Componentă care verifică dacă userul e logat
 function ProtectedRoute({ children }) {
@@ -16,7 +17,7 @@ function App() {
   return (
     <Router>
       <Routes>
-        <Route path="/" element={<Navigate to="/login" />} />
+        <Route path="/" element={<Landing />} />
         <Route path="/login" element={<Login />} />
         <Route path="/signup" element={<Signup />} />
         <Route path="/home" element={<ProtectedRoute><Home /></ProtectedRoute>} />
