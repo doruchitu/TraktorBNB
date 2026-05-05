@@ -41,6 +41,7 @@ jobs:
       - name: Run tests
         env:
           DATABASE_URL: postgresql://user_TraktorBNB:password_TraktorBNB@localhost:5432/TraktorBNB_db
+          PYTHONPATH: /home/runner/work/TraktorBNB/TraktorBNB/backend
         run: |
           cd backend
           python -m pytest tests/ -v
