@@ -1,6 +1,7 @@
+from entities import User
 
-def test_atomicitate_user_invalid(db_session):
-    # Daca userul e invalid, nimic nu se salveaza
+
+def test_atomicitate_user_invalid(client, db_session):
     initial_count = db_session.query(User).count()
     
     response = client.post("/users/", json={
@@ -10,10 +11,10 @@ def test_atomicitate_user_invalid(db_session):
     })
     
     final_count = db_session.query(User).count()
-    assert final_count == initial_count  # nimic nu s-a adaugat
+    assert final_count == initial_count
 
-def test_consistenta_email_unic(db_session):
-    # Baza de date nu permite doua emailuri identice
+
+def test_consistenta_email_unic(client, db_session):
     client.post("/users/", json={
         "nume": "Ion", "prenume": "Pop",
         "email": "unic@test.com",
@@ -23,38 +24,36 @@ def test_consistenta_email_unic(db_session):
     count = db_session.query(User).filter(
         User.email == "unic@test.com"
     ).count()
-    assert count == 1  # exact un user cu acest email
+    assert count == 1
 
-def test_izolare_tranzactii(db_session):
-    # O tranzactie esuata nu afecteaza datele existente
+
+def test_izolare_tranzactii(client, db_session):
     client.post("/users/", json={
         "nume": "Ion", "prenume": "Pop",
         "email": "existent@test.com",
         "telefon": "0712345678", "password": "parola123"
     })
     
-    # Incercam sa adaugam un duplicat
     client.post("/users/", json={
         "nume": "Alt", "prenume": "User",
         "email": "existent@test.com",
         "telefon": "0799999999", "password": "parola456"
     })
     
-    # Userul original trebuie sa fie intact
     user = db_session.query(User).filter(
         User.email == "existent@test.com"
     ).first()
-    assert user.nume == "Ion"  # datele originale neschimbate
+    assert user.nume == "Ion"
 
-def test_durabilitate_date_salvate(db_session):
-    # Datele salvate persista dupa commit
+
+def test_durabilitate_date_salvate(client, db_session):
     client.post("/users/", json={
         "nume": "Persistent", "prenume": "User",
         "email": "persistent@test.com",
         "telefon": "0712345678", "password": "parola123"
     })
     
-    db_session.expire_all()  # golim cache-ul sesiunii
+    db_session.expire_all()
     
     user = db_session.query(User).filter(
         User.email == "persistent@test.com"

@@ -1,6 +1,8 @@
+from datetime import datetime
+from entities import Booking
 
-def test_zile_ocupate_returnate_corect(db_session):
-    # Cream un booking aprobat
+
+def test_zile_ocupate_returnate_corect(client, db_session):
     booking = Booking(
         utilaj_id=1, client_id=2,
         data_start=datetime(2026, 6, 1),
@@ -14,12 +16,12 @@ def test_zile_ocupate_returnate_corect(db_session):
     zile = response.json()["zile_ocupate"]
 
     assert "2026-06-01" in zile
-    assert "2026-06-03" in zile  # zi din mijloc
+    assert "2026-06-03" in zile
     assert "2026-06-05" in zile
-    assert "2026-06-06" not in zile  # ziua de după
+    assert "2026-06-06" not in zile
 
-def test_booking_pending_blocheaza_zilele(db_session):
-    # Booking pending tot trebuie să blocheze zilele
+
+def test_booking_pending_blocheaza_zilele(client, db_session):
     booking = Booking(
         utilaj_id=1, client_id=2,
         data_start=datetime(2026, 7, 1),
@@ -33,8 +35,8 @@ def test_booking_pending_blocheaza_zilele(db_session):
     zile = response.json()["zile_ocupate"]
     assert "2026-07-01" in zile
 
-def test_booking_rejected_nu_blocheaza_zilele(db_session):
-    # Booking respins NU trebuie să blocheze zilele
+
+def test_booking_rejected_nu_blocheaza_zilele(client, db_session):
     booking = Booking(
         utilaj_id=1, client_id=2,
         data_start=datetime(2026, 8, 1),
@@ -48,7 +50,8 @@ def test_booking_rejected_nu_blocheaza_zilele(db_session):
     zile = response.json()["zile_ocupate"]
     assert "2026-08-01" not in zile
 
-def test_booking_cancelled_nu_blocheaza_zilele(db_session):
+
+def test_booking_cancelled_nu_blocheaza_zilele(client, db_session):
     booking = Booking(
         utilaj_id=1, client_id=2,
         data_start=datetime(2026, 9, 1),
