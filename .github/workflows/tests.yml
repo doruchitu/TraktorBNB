@@ -43,4 +43,4 @@ jobs:
           DATABASE_URL: postgresql://user_TraktorBNB:password_TraktorBNB@localhost:5432/TraktorBNB_db
         run: |
           cd backend
-          pytest tests/ -v
+          python -m pytest tests/ -v
