@@ -1,0 +1,47 @@
+name: Backend Tests
+
+on:
+  push:
+    branches: [test]
+  pull_request:
+    branches: [main]
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+
+    services:
+      postgres:
+        image: postgres:15
+        env:
+          POSTGRES_USER: user_TraktorBNB
+          POSTGRES_PASSWORD: password_TraktorBNB
+          POSTGRES_DB: TraktorBNB_db
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Set up Python 3.11
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.11'
+
+      - name: Install dependencies
+        run: |
+          cd backend
+          pip install -r requirements.txt
+          pip install pytest httpx
+
+      - name: Run tests
+        env:
+          DATABASE_URL: postgresql://user_TraktorBNB:password_TraktorBNB@localhost:5432/TraktorBNB_db
+        run: |
+          cd backend
+          pytest tests/ -v
