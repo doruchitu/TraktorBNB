@@ -8,5 +8,9 @@ export default defineConfig({
     viewportHeight: 720,
     video: false,
     screenshotOnRunFailure: true,
+    env: {
+      EMAIL: process.env.CYPRESS_EMAIL,
+      PASSWORD: process.env.CYPRESS_PASSWORD,
+    }
   },
 })
