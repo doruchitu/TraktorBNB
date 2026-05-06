@@ -1,11 +1,15 @@
+import sys
+import os
+sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+
 import pytest
 from fastapi.testclient import TestClient
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
-from database import Base, get_db
+from database import Base          
+from auth import get_db            
 from main import app
 import entities
-import os
 
 TEST_DATABASE_URL = os.getenv(
     "DATABASE_URL",
@@ -44,5 +48,4 @@ def client():
 
 @pytest.fixture
 def auth_headers():
-    # Mock headers pentru teste — bypass Firebase
     return {"Authorization": "Bearer test_token"}
