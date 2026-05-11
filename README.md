@@ -11,7 +11,7 @@ Platformă digitală care conectează proprietarii de echipamente agricole cu fe
 TraktorBNB este o platformă web fullstack care revolutionează modul în care fermerii accesează echipamentele agricole. Similar cu Airbnb, TraktorBNB permite proprietarilor să-și listeze echipamentele și fermierilor să le închirieze.
 
 ### Problemă rezolvată
-- ❌ **Înainte:** Fermieri caută manual echipamente, contacturi dificile
+- ❌ **Înainte:** Fermierii cautau manual echipamente, contacte dificile
 - ✅ **Acum:** Platformă centralizată, booking online, evaluări transparente
 
 ---
@@ -21,20 +21,16 @@ TraktorBNB este o platformă web fullstack care revolutionează modul în care f
 ### Pentru fermieri
 - 🔍 Căutare avansată cu filtrare
 - 📅 Booking ușor cu selectare date
-- ⭐ Evaluări transparente
 - 📱 Responsive design
 
 ### Pentru proprietari
 - 📊 Dashboard complet
-- 📈 Analytics și statistici
-- 🔔 Notificări pentru noi rezervări
 - 📸 Upload imagini cu Cloudinary
 
 ### General
 - 🔐 Autentificare Firebase sigură
 - ✅ Teste automate (toate passing)
 - 🐳 Docker containerized
-- ⚡ Performance optimizat
 
 ---
 
@@ -44,17 +40,20 @@ TraktorBNB este o platformă web fullstack care revolutionează modul în care f
 **Backend:** FastAPI, PostgreSQL  
 **Auth:** Firebase Authentication  
 **Storage:** Cloudinary  
-**Infrastructure:** Docker & Docker Compose
+**Infrastructure:** Docker
 
 ---
 
 ## 📸 Screenshots
 
+### 📸 LandingPage
+![LandingPage](./screenshots/LandingPage.png)
+
 ### 🏠 Homepage
-![Homepage](./screenshots/homepage.png)
+![Homepage](./screenshots/HomePage.png)
 
 ### 🔍 Equipment Listing
-![Listing](./screenshots/listing.png)
+![Listing](./screenshots/HomePage2.png)
 
 ### 📅 Booking Flow
 ![Booking](./screenshots/booking.png)
@@ -77,28 +76,10 @@ cd TraktorBNB
 docker-compose up
 
 # Accesează:
-# Frontend: http://localhost:3000
-# Backend: http://localhost:8000
-# API Docs: http://localhost:8000/docs
+# Frontend: http://localhost:5173
+# Backend: http://localhost:8080
 ```
 
-### Manual (fără Docker)
-
-#### Backend
-```bash
-cd backend
-python -m venv venv
-source venv/bin/activate
-pip install -r requirements.txt
-python main.py
-```
-
-#### Frontend
-```bash
-cd frontend
-npm install
-npm start
-```
 
 ---
 
