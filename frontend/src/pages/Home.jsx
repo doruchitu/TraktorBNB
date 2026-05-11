@@ -352,7 +352,7 @@ export default function Home() {
                   <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", borderTop: "1px solid #f0ebe0", paddingTop: "12px" }}>
                     <div>
                       <span style={{ fontSize: "22px", fontWeight: "bold", color: "#2d4a2d" }}>{u.pret_zi} lei</span>
-                      <span style={{ fontSize: "12px", color: "#aaa", fontFamily: "Arial, sans-serif" }}> / zi</span>
+                      <span style={{ fontSize: "14px", color: "#5a7a5a", fontFamily: "Arial, sans-serif", fontWeight: "600" }}> / zi</span>
                     </div>
                     <button
                       disabled={!u.disponibil}
