@@ -21,6 +21,7 @@ export default function Home() {
   const [bookingLoading, setBookingLoading] = useState(false);
   const [bookingError, setBookingError] = useState("");
   const [bookingSuccess, setBookingSuccess] = useState(false);
+  const [currentUserEmail, setCurrentUserEmail] = useState(null);
 
   useEffect(() => {
     const token = localStorage.getItem("token");
@@ -29,6 +30,9 @@ export default function Home() {
     if (stored) setUser(JSON.parse(stored));
     else setUser({ nume: "Fermier" });
     setTimeout(() => setVisible(true), 50);
+
+    const firebaseUser = auth.currentUser;
+    if (firebaseUser) setCurrentUserEmail(firebaseUser.email);
 
     axios.get("http://localhost:8000/machinery/")
       .then(res => {
@@ -45,6 +49,19 @@ export default function Home() {
     localStorage.removeItem("token");
     localStorage.removeItem("user");
     navigate("/login");
+  };
+
+  const handleSterge = async (utilajId) => {
+    if (!window.confirm("Ești sigur că vrei să ștergi acest utilaj?")) return;
+    try {
+      const token = await auth.currentUser.getIdToken();
+      await axios.delete(`http://localhost:8000/machinery/${utilajId}`, {
+        headers: { Authorization: `Bearer ${token}` }
+      });
+      setUtilaje(utilaje.filter(u => u.id !== utilajId));
+    } catch (err) {
+      alert("Eroare la ștergerea utilajului.");
+    }
   };
 
   const deschideModal = async (utilaj) => {
@@ -310,7 +327,7 @@ export default function Home() {
                 onMouseEnter={e => { e.currentTarget.style.transform = "translateY(-4px)"; e.currentTarget.style.boxShadow = "0 8px 24px rgba(0,0,0,0.1)"; }}
                 onMouseLeave={e => { e.currentTarget.style.transform = "translateY(0)"; e.currentTarget.style.boxShadow = "none"; }}
               >
-                {/* Card image — poza reala sau fallback emoji */}
+                {/* Card image */}
                 <div style={{
                   height: "160px",
                   background: u.imagine_url ? "none" : "linear-gradient(135deg, #2d4a2d, #4a7c4a)",
@@ -318,11 +335,8 @@ export default function Home() {
                   fontSize: "64px", position: "relative", overflow: "hidden",
                 }}>
                   {u.imagine_url ? (
-                    <img
-                      src={u.imagine_url}
-                      alt={`${u.marca} ${u.model}`}
-                      style={{ width: "100%", height: "100%", objectFit: "cover", display: "block" }}
-                    />
+                    <img src={u.imagine_url} alt={`${u.marca} ${u.model}`}
+                      style={{ width: "100%", height: "100%", objectFit: "cover", display: "block" }} />
                   ) : (
                     <span>🚜</span>
                   )}
@@ -354,19 +368,33 @@ export default function Home() {
                       <span style={{ fontSize: "22px", fontWeight: "bold", color: "#2d4a2d" }}>{u.pret_zi} lei</span>
                       <span style={{ fontSize: "14px", color: "#5a7a5a", fontFamily: "Arial, sans-serif", fontWeight: "600" }}> / zi</span>
                     </div>
-                    <button
-                      disabled={!u.disponibil}
-                      onClick={() => deschideModal(u)}
-                      style={{
-                        background: u.disponibil ? "#1a2e1a" : "#ccc",
-                        color: u.disponibil ? "#e8d5a3" : "#888",
-                        border: "none", borderRadius: "6px",
-                        padding: "9px 18px", fontSize: "13px",
-                        cursor: u.disponibil ? "pointer" : "not-allowed",
-                        fontFamily: "inherit",
-                      }}>
-                      {u.disponibil ? "Rezervă" : "Indisponibil"}
-                    </button>
+                    <div style={{ display: "flex", gap: "8px" }}>
+                      {u.owner?.email === currentUserEmail && (
+                        <button
+                          onClick={(e) => { e.stopPropagation(); handleSterge(u.id); }}
+                          style={{
+                            background: "white", color: "#dc2626",
+                            border: "1px solid #dc2626", borderRadius: "6px",
+                            padding: "9px 14px", fontSize: "13px",
+                            cursor: "pointer", fontFamily: "inherit",
+                          }}>
+                          🗑️
+                        </button>
+                      )}
+                      <button
+                        disabled={!u.disponibil}
+                        onClick={() => deschideModal(u)}
+                        style={{
+                          background: u.disponibil ? "#1a2e1a" : "#ccc",
+                          color: u.disponibil ? "#e8d5a3" : "#888",
+                          border: "none", borderRadius: "6px",
+                          padding: "9px 18px", fontSize: "13px",
+                          cursor: u.disponibil ? "pointer" : "not-allowed",
+                          fontFamily: "inherit",
+                        }}>
+                        {u.disponibil ? "Rezervă" : "Indisponibil"}
+                      </button>
+                    </div>
                   </div>
                 </div>
               </div>
@@ -415,7 +443,6 @@ export default function Home() {
               </div>
             ) : (
               <>
-                {/* Header modal */}
                 <div style={{ display: "flex", justifyContent: "space-between", alignItems: "start", marginBottom: "1.5rem" }}>
                   <div>
                     <h3 style={{ color: "#1a2e1a", margin: "0 0 4px", fontSize: "20px" }}>
@@ -430,7 +457,6 @@ export default function Home() {
                   }}>✕</button>
                 </div>
 
-                {/* Legenda */}
                 <div style={{ display: "flex", gap: "16px", marginBottom: "1rem", fontFamily: "Arial, sans-serif", fontSize: "12px" }}>
                   {[
                     { color: "#27ae60", label: "Disponibil" },
@@ -445,7 +471,6 @@ export default function Home() {
                   ))}
                 </div>
 
-                {/* Calendar header */}
                 <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "1rem" }}>
                   <button onClick={() => setLunaAfisata(new Date(lunaAfisata.getFullYear(), lunaAfisata.getMonth() - 1))}
                     style={{ background: "none", border: "1px solid #ddd", borderRadius: "6px", padding: "6px 12px", cursor: "pointer", fontSize: "16px" }}>
@@ -460,7 +485,6 @@ export default function Home() {
                   </button>
                 </div>
 
-                {/* Zile saptamana */}
                 <div style={{ display: "grid", gridTemplateColumns: "repeat(7, 1fr)", gap: "4px", marginBottom: "4px" }}>
                   {["D", "L", "M", "M", "J", "V", "S"].map((z, i) => (
                     <div key={i} style={{ textAlign: "center", fontSize: "11px", fontFamily: "Arial, sans-serif", color: "#aaa", padding: "4px 0", fontWeight: "bold" }}>
@@ -469,7 +493,6 @@ export default function Home() {
                   ))}
                 </div>
 
-                {/* Zile calendar */}
                 <div style={{ display: "grid", gridTemplateColumns: "repeat(7, 1fr)", gap: "4px", marginBottom: "1.5rem" }}>
                   {getDaysInMonth(lunaAfisata).map((data, i) => {
                     if (!data) return <div key={i} />;
@@ -500,7 +523,6 @@ export default function Home() {
                   })}
                 </div>
 
-                {/* Interval selectat */}
                 {(dataStart || dataEnd) && (
                   <div style={{ background: "#f0f7f0", borderRadius: "8px", padding: "12px", marginBottom: "1rem", border: "1px solid #d4e8d4", fontFamily: "Arial, sans-serif", fontSize: "13px" }}>
                     <div style={{ display: "flex", justifyContent: "space-between" }}>
