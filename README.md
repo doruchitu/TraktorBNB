@@ -55,11 +55,8 @@ TraktorBNB este o platformă web fullstack care revolutionează modul în care f
 ### 🔍 Equipment Listing
 ![Listing](./screenshots/HomePage2.png)
 
-### 📅 Booking Flow
-![Booking](./screenshots/booking.png)
-
-### 📊 Owner Dashboard
-![Dashboard](./screenshots/dashboard.png)
+### 📅 Add Equipment
+![Add](./screenshots/AddUtilaj.png)
 
 ---
 
