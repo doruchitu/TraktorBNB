@@ -2,10 +2,7 @@ from pydantic import BaseModel, EmailStr
 from typing import Optional, List
 from datetime import datetime, date as DateType
 
-# ─────────────────────────────────────────
 # USER
-# ─────────────────────────────────────────
-
 class UserCreate(BaseModel):
     nume: str
     prenume: str
@@ -24,10 +21,7 @@ class UserOut(BaseModel):
     class Config:
         from_attributes = True
 
-
-# ─────────────────────────────────────────
 # MACHINERY
-# ─────────────────────────────────────────
 
 class MachineryCreate(BaseModel):
     marca: str
@@ -59,9 +53,8 @@ class MachineryOut(BaseModel):
         from_attributes = True
 
 
-# ─────────────────────────────────────────
 # BOOKING
-# ─────────────────────────────────────────
+
 
 class BookingCreate(BaseModel):
     utilaj_id: int
@@ -81,9 +74,8 @@ class BookingOut(BaseModel):
         from_attributes = True
 
 
-# ─────────────────────────────────────────
 # TOKEN (pentru login)
-# ─────────────────────────────────────────
+
 
 class Token(BaseModel):
     access_token: str

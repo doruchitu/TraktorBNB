@@ -39,7 +39,6 @@ class Machinery(Base):
     rezervari = relationship("Booking", back_populates="utilaj")
 
 
-# Status-urile posibile definite ca constante — evită typo-uri
 class BookingStatus:
     PENDING = "pending"
     APPROVED = "approved"

@@ -32,7 +32,6 @@ export default function Landing() {
   return (
     <div style={{ minHeight: "100vh", background: "#0d1a0d", fontFamily: "Georgia, serif", overflowX: "hidden" }}>
 
-      {/* Navbar */}
       <nav style={{
         position: "fixed", top: 0, left: 0, right: 0, zIndex: 100,
         background: scrollY > 50 ? "rgba(13,26,13,0.95)" : "transparent",
@@ -72,7 +71,6 @@ export default function Landing() {
         </div>
       </nav>
 
-      {/* Hero Section */}
       <div style={{
         minHeight: "100vh",
         background: "linear-gradient(160deg, #0d1a0d 0%, #1a2e1a 40%, #0d1a0d 100%)",
@@ -82,7 +80,6 @@ export default function Landing() {
         position: "relative", overflow: "hidden",
       }}>
 
-        {/* Decorative circles */}
         <div style={{
           position: "absolute", width: "600px", height: "600px",
           borderRadius: "50%", border: "1px solid rgba(232,213,163,0.05)",
@@ -94,7 +91,6 @@ export default function Landing() {
           top: "50%", left: "50%", transform: "translate(-50%, -50%)",
         }} />
 
-        {/* Badge */}
         <div style={{
           display: "inline-flex", alignItems: "center", gap: "8px",
           background: "rgba(74,124,74,0.2)", border: "1px solid rgba(74,124,74,0.4)",
@@ -108,7 +104,6 @@ export default function Landing() {
           </span>
         </div>
 
-        {/* Title */}
         <h1 style={{
           color: "#e8d5a3",
           fontSize: "clamp(2.5rem, 7vw, 5rem)",
@@ -127,7 +122,6 @@ export default function Landing() {
           </span>
         </h1>
 
-        {/* Subtitle */}
         <p style={{
           color: "#9db89d", fontSize: "clamp(1rem, 2vw, 1.2rem)",
           maxWidth: "560px", lineHeight: 1.8, marginBottom: "3rem",
@@ -140,7 +134,6 @@ export default function Landing() {
           sau îți pui utilajul la muncă când nu îl folosești.
         </p>
 
-        {/* CTA Buttons */}
         <div style={{
           display: "flex", gap: "16px", flexWrap: "wrap", justifyContent: "center",
           opacity: visible ? 1 : 0,
@@ -172,7 +165,6 @@ export default function Landing() {
           </button>
         </div>
 
-        {/* Stats */}
         <div style={{
           display: "flex", gap: "clamp(1.5rem, 5vw, 4rem)",
           marginTop: "5rem", flexWrap: "wrap", justifyContent: "center",
@@ -187,7 +179,6 @@ export default function Landing() {
           ))}
         </div>
 
-        {/* Scroll indicator */}
         <div style={{
           position: "absolute", bottom: "2rem",
           display: "flex", flexDirection: "column", alignItems: "center", gap: "8px",
@@ -199,7 +190,6 @@ export default function Landing() {
         </div>
       </div>
 
-      {/* Features Section */}
       <div style={{ background: "#f7f5f0", padding: "6rem 2rem" }}>
         <div style={{ maxWidth: "1100px", margin: "0 auto" }}>
           <h2 style={{
@@ -239,7 +229,6 @@ export default function Landing() {
         </div>
       </div>
 
-      {/* How it works */}
       <div style={{ background: "#1a2e1a", padding: "6rem 2rem" }}>
         <div style={{ maxWidth: "900px", margin: "0 auto", textAlign: "center" }}>
           <h2 style={{ color: "#e8d5a3", fontSize: "clamp(1.8rem, 4vw, 2.5rem)", marginBottom: "4rem" }}>
@@ -269,7 +258,6 @@ export default function Landing() {
         </div>
       </div>
 
-      {/* CTA Final */}
       <div style={{ background: "#f7f5f0", padding: "6rem 2rem", textAlign: "center" }}>
         <h2 style={{ color: "#1a2e1a", fontSize: "clamp(1.8rem, 4vw, 2.5rem)", marginBottom: "1rem" }}>
           Gata să începi?
@@ -303,7 +291,6 @@ export default function Landing() {
         </div>
       </div>
 
-      {/* Footer */}
       <footer style={{
         background: "#0d1a0d", color: "#5a7a5a",
         textAlign: "center", padding: "2rem",

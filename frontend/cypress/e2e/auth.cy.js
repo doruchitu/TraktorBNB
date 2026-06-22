@@ -1,6 +1,6 @@
 describe('Validare formulare Auth', () => {
 
-  // ─── SIGNUP ───
+  //  SIGNUP
   describe('Signup', () => {
     beforeEach(() => {
       cy.visit('/signup')
@@ -49,7 +49,7 @@ describe('Validare formulare Auth', () => {
     })
   })
 
-  // ─── LOGIN ───
+  //LOGIN
   describe('Login', () => {
     beforeEach(() => {
       cy.visit('/login')

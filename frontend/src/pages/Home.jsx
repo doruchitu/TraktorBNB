@@ -186,7 +186,6 @@ export default function Home() {
   return (
     <div style={{ minHeight: "100vh", background: "#f7f5f0", fontFamily: "'Georgia', serif" }}>
 
-      {/* Navbar */}
       <nav style={{
         background: "#1a2e1a", padding: "0 2rem",
         display: "flex", alignItems: "center", justifyContent: "space-between",
@@ -218,7 +217,6 @@ export default function Home() {
         </div>
       </nav>
 
-      {/* Hero */}
       <div style={{
         background: "linear-gradient(135deg, #1a2e1a 0%, #2d4a2d 50%, #1a2e1a 100%)",
         padding: "4rem 2rem 3rem", textAlign: "center",
@@ -258,7 +256,6 @@ export default function Home() {
         </div>
       </div>
 
-      {/* Stats bar */}
       <div style={{
         background: "#e8d5a3", padding: "1.2rem 2rem",
         display: "flex", justifyContent: "center",
@@ -278,7 +275,6 @@ export default function Home() {
         ))}
       </div>
 
-      {/* Main content */}
       <div style={{ maxWidth: "1200px", margin: "0 auto", padding: "2rem" }}>
 
         {/* Filters */}
@@ -303,7 +299,6 @@ export default function Home() {
           </span>
         </div>
 
-        {/* Cards */}
         {loadingUtilaje ? (
           <div style={{ textAlign: "center", padding: "4rem", color: "#aaa", fontFamily: "Arial, sans-serif" }}>
             <div style={{ fontSize: "48px", marginBottom: "16px" }}>🚜</div>
@@ -403,7 +398,6 @@ export default function Home() {
         )}
       </div>
 
-      {/* Footer */}
       <footer style={{
         background: "#1a2e1a", color: "#9db89d",
         textAlign: "center", padding: "2rem", marginTop: "4rem",
@@ -413,7 +407,6 @@ export default function Home() {
         <p style={{ margin: 0, opacity: 0.6 }}>© 2026 TraktorBNB · Platforma fermierilor români</p>
       </footer>
 
-      {/* Modal calendar */}
       {modalUtilaj && (
         <div style={{
           position: "fixed", top: 0, left: 0, right: 0, bottom: 0,

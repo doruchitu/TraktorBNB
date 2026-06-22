@@ -92,7 +92,6 @@ export default function Rezervari() {
   return (
     <div style={{ minHeight: "100vh", background: "#f7f5f0", fontFamily: "Georgia, serif" }}>
 
-      {/* Navbar */}
       <nav style={{
         background: "#1a2e1a", padding: "0 2rem",
         display: "flex", alignItems: "center", justifyContent: "space-between",
@@ -109,7 +108,6 @@ export default function Rezervari() {
         }}>← Înapoi</button>
       </nav>
 
-      {/* Header */}
       <div style={{
         background: "linear-gradient(135deg, #1a2e1a 0%, #2d4a2d 100%)",
         padding: "2.5rem 2rem 2rem", textAlign: "center",
@@ -118,7 +116,6 @@ export default function Rezervari() {
           📋 Rezervările mele
         </h1>
 
-        {/* Tabs */}
         <div style={{ display: "flex", justifyContent: "center", gap: "8px" }}>
           {[
             { key: "client", label: "🌾 Rezervările mele", count: rezervariMele.length },
@@ -146,7 +143,6 @@ export default function Rezervari() {
         </div>
       </div>
 
-      {/* Content */}
       <div style={{ maxWidth: "900px", margin: "0 auto", padding: "2rem" }}>
 
         {loading ? (
@@ -156,7 +152,7 @@ export default function Rezervari() {
           </div>
         ) : (
           <>
-            {/* Tab Client */}
+
             {tab === "client" && (
               <div>
                 {rezervariMele.length === 0 ? (
@@ -244,7 +240,6 @@ export default function Rezervari() {
               </div>
             )}
 
-            {/* Tab Proprietar */}
             {tab === "proprietar" && (
               <div>
                 {rezervariPrimite.length === 0 ? (

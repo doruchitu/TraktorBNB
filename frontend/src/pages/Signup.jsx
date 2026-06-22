@@ -30,10 +30,10 @@ function Signup() {
 
     setLoading(true);
     try {
-      // Creăm userul în Firebase
+      // Create userul in Firebase
       const userCredential = await createUserWithEmailAndPassword(auth, formData.email, formData.password);
       
-      // Setăm numele în Firebase
+      // Set numele în Firebase
       await updateProfile(userCredential.user, {
         displayName: `${formData.nume} ${formData.prenume}`
       });

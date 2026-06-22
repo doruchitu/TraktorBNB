@@ -222,7 +222,6 @@ export default function AdaugaUtilaj() {
           Adaugă un utilaj nou
         </h1>
 
-        {/* Progress steps */}
         <div style={{ display: "flex", justifyContent: "center", alignItems: "center" }}>
           {[
             { num: 1, label: "Detalii utilaj" },
@@ -257,7 +256,6 @@ export default function AdaugaUtilaj() {
         </div>
       </div>
 
-      {/* Form card */}
       <div style={{ maxWidth: "600px", margin: "0 auto", padding: "2rem" }}>
         <div style={{
           background: "white", borderRadius: "16px",
@@ -271,7 +269,6 @@ export default function AdaugaUtilaj() {
             </div>
           )}
 
-          {/* Step 1 */}
           {step === 1 && (
             <div>
               <h2 style={{ color: "#1a2e1a", fontSize: "20px", marginBottom: "1.5rem", borderBottom: "2px solid #e8f5e8", paddingBottom: "12px" }}>
@@ -320,7 +317,6 @@ export default function AdaugaUtilaj() {
             </div>
           )}
 
-          {/* Step 2 */}
           {step === 2 && (
             <div>
               <h2 style={{ color: "#1a2e1a", fontSize: "20px", marginBottom: "1.5rem", borderBottom: "2px solid #e8f5e8", paddingBottom: "12px" }}>
@@ -395,14 +391,12 @@ export default function AdaugaUtilaj() {
             </div>
           )}
 
-          {/* Step 3 */}
           {step === 3 && (
             <div>
               <h2 style={{ color: "#1a2e1a", fontSize: "20px", marginBottom: "1.5rem", borderBottom: "2px solid #e8f5e8", paddingBottom: "12px" }}>
                 📸 Poză & Descriere
               </h2>
 
-              {/* Drag & Drop */}
               <div style={{ marginBottom: "1.2rem" }}>
                 <label style={labelStyle}>Fotografie utilaj — opțional</label>
 
@@ -489,7 +483,6 @@ export default function AdaugaUtilaj() {
             </div>
           )}
 
-          {/* Navigation buttons */}
           <div style={{ display: "flex", justifyContent: "space-between", gap: "12px" }}>
             {step > 1 ? (
               <button onClick={() => setStep(step - 1)} style={{

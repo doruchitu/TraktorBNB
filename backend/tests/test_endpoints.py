@@ -75,6 +75,5 @@ def test_contract_fara_auth(client):
     assert response.status_code == 401
 
 def test_contract_rezervare_inexistenta(client):
-    # Fara auth tokenul e invalid — testam doar ca endpoint-ul e protejat
     response = client.get("/contract/99999")
     assert response.status_code == 401
