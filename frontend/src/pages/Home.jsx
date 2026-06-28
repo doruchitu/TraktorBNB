@@ -23,6 +23,7 @@ export default function Home() {
   const [bookingSuccess, setBookingSuccess] = useState(false);
   const [currentUserEmail, setCurrentUserEmail] = useState(null);
   const [stats, setStats] = useState({ total_utilaje: 0, total_useri: 0 });
+  const [modalDetalii, setModalDetalii] = useState(null);
 
   useEffect(() => {
     const token = localStorage.getItem("token");
@@ -317,13 +318,15 @@ export default function Home() {
         ) : (
           <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(300px, 1fr))", gap: "1.5rem" }}>
             {utilajeFiltrate.map((u, i) => (
-              <div key={u.id} style={{
-                background: "white", borderRadius: "12px",
-                overflow: "hidden", border: "1px solid #e8e0d0", cursor: "pointer",
-                opacity: visible ? 1 : 0,
-                transform: visible ? "translateY(0)" : "translateY(20px)",
-                transition: `opacity 0.5s ease ${0.1 * i + 0.4}s, transform 0.5s ease ${0.1 * i + 0.4}s`,
-              }}
+              <div key={u.id}
+                onClick={() => setModalDetalii(u)}
+                style={{
+                  background: "white", borderRadius: "12px",
+                  overflow: "hidden", border: "1px solid #e8e0d0", cursor: "pointer",
+                  opacity: visible ? 1 : 0,
+                  transform: visible ? "translateY(0)" : "translateY(20px)",
+                  transition: `opacity 0.5s ease ${0.1 * i + 0.4}s, transform 0.5s ease ${0.1 * i + 0.4}s`,
+                }}
                 onMouseEnter={e => { e.currentTarget.style.transform = "translateY(-4px)"; e.currentTarget.style.boxShadow = "0 8px 24px rgba(0,0,0,0.1)"; }}
                 onMouseLeave={e => { e.currentTarget.style.transform = "translateY(0)"; e.currentTarget.style.boxShadow = "none"; }}
               >
@@ -381,9 +384,9 @@ export default function Home() {
                           🗑️
                         </button>
                       )}
-                      <button
+                     <button
                         disabled={!u.disponibil}
-                        onClick={() => deschideModal(u)}
+                        onClick={(e) => { e.stopPropagation(); deschideModal(u); }}
                         style={{
                           background: u.disponibil ? "#1a2e1a" : "#ccc",
                           color: u.disponibil ? "#e8d5a3" : "#888",
@@ -412,6 +415,98 @@ export default function Home() {
         <p style={{ margin: 0, opacity: 0.6 }}>© 2026 TraktorBNB · Platforma fermierilor români</p>
       </footer>
 
+      {modalDetalii && (
+  <div style={{
+    position: "fixed", top: 0, left: 0, right: 0, bottom: 0,
+    background: "rgba(0,0,0,0.7)", zIndex: 1000,
+    display: "flex", alignItems: "center", justifyContent: "center",
+    padding: "1rem",
+  }} onClick={() => setModalDetalii(null)}>
+    <div style={{
+      background: "white", borderRadius: "16px",
+      maxWidth: "600px", width: "100%",
+      maxHeight: "90vh", overflowY: "auto",
+      boxShadow: "0 20px 60px rgba(0,0,0,0.3)",
+    }} onClick={e => e.stopPropagation()}>
+
+      <div style={{ height: "320px", position: "relative" }}>
+        {modalDetalii.imagine_url ? (
+          <img src={modalDetalii.imagine_url} alt={`${modalDetalii.marca} ${modalDetalii.model}`}
+            style={{ width: "100%", height: "100%", objectFit: "cover", borderRadius: "16px 16px 0 0", display: "block" }} />
+        ) : (
+          <div style={{
+            width: "100%", height: "100%",
+            background: "linear-gradient(135deg, #2d4a2d, #4a7c4a)",
+            display: "flex", alignItems: "center", justifyContent: "center",
+            fontSize: "80px", borderRadius: "16px 16px 0 0",
+          }}>🚜</div>
+        )}
+        <button onClick={() => setModalDetalii(null)} style={{
+          position: "absolute", top: "16px", right: "16px",
+          background: "rgba(0,0,0,0.5)", color: "white",
+          border: "none", borderRadius: "50%",
+          width: "36px", height: "36px", fontSize: "18px", cursor: "pointer",
+        }}>✕</button>
+        <div style={{
+          position: "absolute", top: "16px", left: "16px",
+          background: modalDetalii.disponibil ? "#27ae60" : "#c0392b",
+          color: "white", padding: "5px 12px", borderRadius: "4px",
+          fontSize: "12px", fontFamily: "Arial, sans-serif",
+        }}>
+          {modalDetalii.disponibil ? "Disponibil" : "Indisponibil"}
+        </div>
+      </div>
+
+      <div style={{ padding: "1.5rem" }}>
+        <h2 style={{ color: "#1a2e1a", margin: "0 0 8px", fontSize: "24px" }}>
+          {modalDetalii.marca} {modalDetalii.model}
+        </h2>
+        <p style={{ color: "#888", fontFamily: "Arial, sans-serif", margin: "0 0 16px", fontSize: "14px" }}>
+          📍 {modalDetalii.judet} · ⚡ {modalDetalii.putere_cp ? `${modalDetalii.putere_cp} CP` : "Putere nespecificată"}
+        </p>
+
+        <div style={{ display: "flex", alignItems: "baseline", marginBottom: "20px", borderBottom: "1px solid #f0ebe0", paddingBottom: "16px" }}>
+          <span style={{ fontSize: "26px", fontWeight: "bold", color: "#2d4a2d" }}>{modalDetalii.pret_zi} lei</span>
+          <span style={{ fontSize: "14px", color: "#5a7a5a", marginLeft: "4px", fontWeight: "600" }}>/ zi</span>
+        </div>
+
+        {modalDetalii.descriere && (
+          <div style={{ marginBottom: "20px" }}>
+            <h4 style={{ color: "#1a2e1a", fontSize: "14px", marginBottom: "6px", fontFamily: "Arial, sans-serif" }}>📝 Descriere</h4>
+            <p style={{ color: "#555", fontFamily: "Arial, sans-serif", fontSize: "14px", lineHeight: 1.6, margin: 0 }}>
+              {modalDetalii.descriere}
+            </p>
+          </div>
+        )}
+
+        {(modalDetalii.data_disponibil_de || modalDetalii.data_disponibil_pana) && (
+          <div style={{ marginBottom: "20px" }}>
+            <h4 style={{ color: "#1a2e1a", fontSize: "14px", marginBottom: "6px", fontFamily: "Arial, sans-serif" }}>📅 Disponibil în perioada</h4>
+            <p style={{ color: "#555", fontFamily: "Arial, sans-serif", fontSize: "14px", margin: 0 }}>
+              {modalDetalii.data_disponibil_de} → {modalDetalii.data_disponibil_pana}
+            </p>
+          </div>
+        )}
+
+        {/* Aici vom adăuga secțiunea de rating/review-uri */}
+
+        <button
+          disabled={!modalDetalii.disponibil}
+          onClick={() => { const u = modalDetalii; setModalDetalii(null); deschideModal(u); }}
+          style={{
+            width: "100%",
+            background: modalDetalii.disponibil ? "#1a2e1a" : "#ccc",
+            color: modalDetalii.disponibil ? "#e8d5a3" : "#888",
+            border: "none", borderRadius: "8px", padding: "13px",
+            fontSize: "15px", cursor: modalDetalii.disponibil ? "pointer" : "not-allowed",
+            fontFamily: "Georgia, serif", fontWeight: "bold",
+          }}>
+          {modalDetalii.disponibil ? "🚜 Rezervă acest utilaj" : "Indisponibil momentan"}
+        </button>
+      </div>
+    </div>
+  </div>
+)}
       {modalUtilaj && (
         <div style={{
           position: "fixed", top: 0, left: 0, right: 0, bottom: 0,
