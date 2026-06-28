@@ -17,17 +17,17 @@ export default function Landing() {
     { icon: "🚜", title: "Închiriază utilaje", desc: "Găsește tractoare, combine și echipamente agricole disponibile în județul tău." },
     { icon: "📅", title: "Calendar inteligent", desc: "Vezi disponibilitatea în timp real și rezervă cu câteva clickuri." },
     { icon: "✅", title: "Aprobare rapidă", desc: "Proprietarul aprobă cererea, primești confirmarea instant." },
-    { icon: "📄", title: "Contract automat", desc: "La aprobare se generează automat un contract PDF între cele două părți." },
+    { icon: "📄", title: "Model de contract automat", desc: "La aprobare se generează automat un model de contract PDF între cele două părți." },
     { icon: "🔒", title: "Securizat", desc: "Autentificare prin Firebase, date protejate, tranzacții sigure." },
     { icon: "🌾", title: "100% românesc", desc: "Construit pentru fermierii români, cu focus pe simplicitate și eficiență." },
   ];
 
-  const stats = [
-    { val: "1,240+", label: "Utilaje listate" },
-    { val: "380+", label: "Fermieri activi" },
-    { val: "41", label: "Județe" },
-    { val: "4.8★", label: "Rating mediu" },
-  ];
+  //const stats = [
+  //  { val: "1,240+", label: "Utilaje listate" },
+  //  { val: "380+", label: "Fermieri activi" },
+  //  { val: "41", label: "Județe" },
+  //  { val: "4.8★", label: "Rating mediu" },
+  //];
 
   return (
     <div style={{ minHeight: "100vh", background: "#0d1a0d", fontFamily: "Georgia, serif", overflowX: "hidden" }}>
@@ -166,21 +166,23 @@ export default function Landing() {
         </div>
 
         <div style={{
-          display: "flex", gap: "clamp(1.5rem, 5vw, 4rem)",
-          marginTop: "5rem", flexWrap: "wrap", justifyContent: "center",
+          marginTop: "5rem",
           opacity: visible ? 1 : 0,
           transition: "opacity 0.8s ease 0.5s",
         }}>
-          {stats.map((s, i) => (
-            <div key={i} style={{ textAlign: "center" }}>
-              <div style={{ fontSize: "clamp(1.5rem, 3vw, 2rem)", fontWeight: "bold", color: "#e8d5a3" }}>{s.val}</div>
-              <div style={{ fontSize: "12px", color: "#5a7a5a", fontFamily: "Arial, sans-serif", letterSpacing: "1px", textTransform: "uppercase", marginTop: "4px" }}>{s.label}</div>
-            </div>
-          ))}
+          <p style={{
+            color: "#e8d5a3",
+            fontSize: "clamp(1rem, 2.2vw, 1.3rem)",
+            fontWeight: "bold",
+            fontFamily: "Georgia, serif",
+            textAlign: "center",
+          }}>
+            🚀 Fii printre primii care se conectează și postează sau închiriază un utilaj!
+          </p>
         </div>
 
         <div style={{
-          position: "absolute", bottom: "2rem",
+          position: "absolute", bottom: "0.5rem",
           display: "flex", flexDirection: "column", alignItems: "center", gap: "8px",
           opacity: visible ? 0.5 : 0, transition: "opacity 0.8s ease 1s",
           animation: "bounce 2s infinite",

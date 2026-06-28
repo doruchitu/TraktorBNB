@@ -228,7 +228,7 @@ export default function Rezervari() {
                                 padding: "8px 20px", fontSize: "13px",
                                 cursor: "pointer", fontFamily: "Georgia, serif",
                               }}>
-                                📄 Descarcă contract
+                                📄 Descarcă model de contract
                               </button>
                             )}
                           </div>
