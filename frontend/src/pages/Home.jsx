@@ -22,6 +22,7 @@ export default function Home() {
   const [bookingError, setBookingError] = useState("");
   const [bookingSuccess, setBookingSuccess] = useState(false);
   const [currentUserEmail, setCurrentUserEmail] = useState(null);
+  const [stats, setStats] = useState({ total_utilaje: 0, total_useri: 0 });
 
   useEffect(() => {
     const token = localStorage.getItem("token");
@@ -43,6 +44,10 @@ export default function Home() {
         console.error(err);
         setLoadingUtilaje(false);
       });
+
+    axios.get("http://localhost:8000/stats/")
+      .then(res => setStats(res.data))
+      .catch(err => {});
   }, []);
 
   const handleLogout = () => {
@@ -264,7 +269,7 @@ export default function Home() {
       }}>
         {[
           { val: utilaje.length + "+", label: "Utilaje disponibile" },
-          { val: "380+", label: "Fermieri activi" },
+          { val: stats.total_useri + "+", label: "Fermieri înregistrați" },
           { val: "41", label: "Județe acoperite" },
           { val: "4.8★", label: "Rating mediu" },
         ].map((s, i) => (

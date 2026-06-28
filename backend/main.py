@@ -3,7 +3,7 @@ from fastapi.middleware.cors import CORSMiddleware
 from sqlalchemy.orm import Session
 from database import engine
 from auth import hash_password, get_db
-from routers import machinery, bookings, contract
+from routers import machinery, bookings, contract, public_stats
 import entities, schemas
 
 entities.Base.metadata.create_all(bind=engine)
@@ -21,6 +21,7 @@ app.add_middleware(
 app.include_router(machinery.router)
 app.include_router(bookings.router)
 app.include_router(contract.router)
+app.include_router(public_stats.router)
 
 
 @app.get("/")

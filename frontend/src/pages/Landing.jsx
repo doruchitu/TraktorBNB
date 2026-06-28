@@ -204,7 +204,7 @@ export default function Landing() {
             fontFamily: "Arial, sans-serif", fontSize: "16px",
             marginBottom: "4rem", maxWidth: "500px", margin: "0 auto 4rem",
           }}>
-            De la căutare până la contract, totul e simplu și rapid.
+            De la căutare până la model de contract, totul e simplu și rapid.
           </p>
 
           <div style={{
