@@ -17,11 +17,17 @@ def get_db():
         db.close()
 
 class ContractPDF(FPDF):
+    def __init__(self):
+        super().__init__()
+        self.add_font("DejaVu", "", "fonts/DejaVuSans.ttf")
+        self.add_font("DejaVu", "B", "fonts/DejaVuSans.ttf")
+        self.add_font("DejaVu", "I", "fonts/DejaVuSans.ttf")
+
     def header(self):
-        self.set_font("Helvetica", "B", 20)
+        self.set_font("DejaVu", "B", 20)
         self.set_text_color(26, 46, 26)
         self.cell(0, 15, "TraktorBNB", align="C", new_x="LMARGIN", new_y="NEXT")
-        self.set_font("Helvetica", "", 11)
+        self.set_font("DejaVu", "", 11)
         self.set_text_color(100, 100, 100)
         self.cell(0, 8, "Contract de inchiriere utilaj agricol", align="C", new_x="LMARGIN", new_y="NEXT")
         self.ln(4)
@@ -32,7 +38,7 @@ class ContractPDF(FPDF):
 
     def footer(self):
         self.set_y(-15)
-        self.set_font("Helvetica", "I", 8)
+        self.set_font("DejaVu", "I", 8)
         self.set_text_color(150, 150, 150)
         self.cell(0, 10, f"TraktorBNB - Platforma fermierilor romani | Pagina {self.page_no()}", align="C")
 
@@ -64,36 +70,36 @@ def download_contract(
     pdf.set_auto_page_break(auto=True, margin=15)
 
     # Nr contract si data
-    pdf.set_font("Helvetica", "", 10)
+    pdf.set_font("DejaVu", "", 10)
     pdf.set_text_color(100, 100, 100)
     pdf.cell(0, 6, f"Nr. contract: TBN-{booking.id:04d} | Data: {date.today().strftime('%d.%m.%Y')}", new_x="LMARGIN", new_y="NEXT")
     pdf.ln(6)
 
     def section_title(title):
-        pdf.set_font("Helvetica", "B", 12)
+        pdf.set_font("DejaVu", "B", 12)
         pdf.set_text_color(26, 46, 26)
         pdf.set_fill_color(232, 245, 232)
         pdf.cell(0, 9, f"  {title}", fill=True, new_x="LMARGIN", new_y="NEXT")
         pdf.ln(3)
 
     def row(label, value):
-        pdf.set_font("Helvetica", "B", 10)
+        pdf.set_font("DejaVu", "B", 10)
         pdf.set_text_color(80, 80, 80)
         pdf.cell(60, 7, label + ":", new_x="RIGHT", new_y="TOP")
-        pdf.set_font("Helvetica", "", 10)
+        pdf.set_font("DejaVu", "", 10)
         pdf.set_text_color(30, 30, 30)
         pdf.cell(0, 7, str(value), new_x="LMARGIN", new_y="NEXT")
 
     # Parti contractante
     section_title("PARTI CONTRACTANTE")
-    pdf.set_font("Helvetica", "B", 10)
+    pdf.set_font("DejaVu", "B", 10)
     pdf.set_text_color(26, 46, 26)
     pdf.cell(0, 7, "PROPRIETAR (Locator):", new_x="LMARGIN", new_y="NEXT")
     row("  Nume complet", f"{proprietar.nume} {proprietar.prenume}")
     row("  Email", proprietar.email)
     row("  Telefon", proprietar.telefon or "—")
     pdf.ln(3)
-    pdf.set_font("Helvetica", "B", 10)
+    pdf.set_font("DejaVu", "B", 10)
     pdf.set_text_color(26, 46, 26)
     pdf.cell(0, 7, "CLIENT (Locatar):", new_x="LMARGIN", new_y="NEXT")
     row("  Nume complet", f"{client.nume} {client.prenume}")
@@ -119,7 +125,7 @@ def download_contract(
     row("Numar zile", str(zile))
     row("Pret pe zi", f"{utilaj.pret_zi:.2f} RON")
     pdf.ln(2)
-    pdf.set_font("Helvetica", "B", 12)
+    pdf.set_font("DejaVu", "B", 12)
     pdf.set_text_color(26, 46, 26)
     pdf.set_fill_color(232, 213, 163)
     pdf.cell(0, 10, f"  TOTAL DE PLATA: {total:.2f} RON", fill=True, new_x="LMARGIN", new_y="NEXT")
@@ -136,7 +142,7 @@ def download_contract(
         "6. Contractul intra in vigoare la data aprobarii rezervarii pe platforma TraktorBNB.",
         "7. Litigiile se solutioneaza pe cale amiabila sau prin instantele competente din Romania.",
     ]
-    pdf.set_font("Helvetica", "", 9)
+    pdf.set_font("DejaVu", "", 9)
     pdf.set_text_color(60, 60, 60)
     for clauza in clauze:
         pdf.multi_cell(0, 6, clauza, new_x="LMARGIN", new_y="NEXT")
@@ -146,7 +152,7 @@ def download_contract(
     # Semnaturi
     section_title("SEMNATURI")
     pdf.ln(4)
-    pdf.set_font("Helvetica", "", 10)
+    pdf.set_font("DejaVu", "", 10)
     pdf.set_text_color(60, 60, 60)
     pdf.cell(85, 6, "PROPRIETAR", align="C", new_x="RIGHT", new_y="TOP")
     pdf.cell(0, 6, "CLIENT", align="C", new_x="LMARGIN", new_y="NEXT")
@@ -155,7 +161,7 @@ def download_contract(
     pdf.line(20, pdf.get_y(), 95, pdf.get_y())
     pdf.line(105, pdf.get_y(), 180, pdf.get_y())
     pdf.ln(4)
-    pdf.set_font("Helvetica", "", 9)
+    pdf.set_font("DejaVu", "", 9)
     pdf.cell(85, 5, f"{proprietar.nume} {proprietar.prenume}", align="C", new_x="RIGHT", new_y="TOP")
     pdf.cell(0, 5, f"{client.nume} {client.prenume}", align="C", new_x="LMARGIN", new_y="NEXT")
 

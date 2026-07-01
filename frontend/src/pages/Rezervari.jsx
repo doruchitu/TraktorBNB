@@ -53,22 +53,44 @@ export default function Rezervari() {
   };
 
   const handleDescarcaContract = async (bookingId) => {
-    try {
-      const token = await auth.currentUser.getIdToken();
-      const res = await fetch(`http://localhost:8000/contract/${bookingId}`, {
-        headers: { Authorization: `Bearer ${token}` }
-      });
-      const blob = await res.blob();
-      const url = window.URL.createObjectURL(blob);
-      const a = document.createElement("a");
-      a.href = url;
-      a.download = `contract_TBN_${String(bookingId).padStart(4, "0")}.pdf`;
-      a.click();
-      window.URL.revokeObjectURL(url);
-    } catch (err) {
-      console.error(err);
-    }
-  };
+  try {
+    const token = await auth.currentUser.getIdToken();
+    const res = await axios.get(`http://localhost:8000/contract/${bookingId}`, {
+      headers: { Authorization: `Bearer ${token}` },
+      responseType: "blob",
+    });
+
+    const blob = new Blob([res.data], { type: "application/pdf" });
+    const url = window.URL.createObjectURL(blob);
+    const link = document.createElement("a");
+    link.href = url;
+    link.setAttribute("download", `contract_TBN_${String(bookingId).padStart(4, "0")}.pdf`);
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+    setTimeout(() => window.URL.revokeObjectURL(url), 1000);
+
+  } catch (err) {
+    alert("Eroare la descărcarea contractului.");
+  }
+};
+//  const handleDescarcaContract = async (bookingId) => {
+//    try {
+//      const token = await auth.currentUser.getIdToken();
+//      const res = await fetch(`http://localhost:8000/contract/${bookingId}`, {
+//        headers: { Authorization: `Bearer ${token}` }
+//      });
+//      const blob = await res.blob();
+//      const url = window.URL.createObjectURL(blob);
+//      const a = document.createElement("a");
+//      a.href = url;
+//      a.download = `contract_TBN_${String(bookingId).padStart(4, "0")}.pdf`;
+//      a.click();
+//      window.URL.revokeObjectURL(url);
+//    } catch (err) {
+//      console.error(err);
+//    }
+//  };
 
   const statusColor = (status) => {
     switch (status) {
