@@ -24,6 +24,8 @@ services:
       - "8000:8000"
     volumes:
       - ./backend:/app
+    env_file:
+      - ./backend/.env
     environment:
       DATABASE_URL: postgresql://user_TraktorBNB:password_TraktorBNB@db:5432/TraktorBNB_db
     depends_on:
