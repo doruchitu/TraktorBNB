@@ -7,6 +7,7 @@ import AdaugaUtilaj from './pages/AdaugaUtilaj';
 import Rezervari from './pages/Rezervari';
 import Landing from './pages/Landing';
 import CumFunctioneaza from "./pages/CumFunctioneaza";
+import Ghiduri from "./pages/Ghiduri";
 
 // verf daca user is logat
 function ProtectedRoute({ children }) {
@@ -25,6 +26,7 @@ function App() {
         <Route path="/adauga-utilaj" element={<ProtectedRoute><AdaugaUtilaj /></ProtectedRoute>} />
         <Route path="/rezervari" element={<ProtectedRoute><Rezervari /></ProtectedRoute>} />
         <Route path="/cum-functioneaza" element={<CumFunctioneaza />} />
+        <Route path="/ghiduri" element={<Ghiduri />} />
       </Routes>
     </Router>
   );
