@@ -37,6 +37,7 @@ class Machinery(Base):
 
     owner = relationship("User", back_populates="utilaje_proprii")
     rezervari = relationship("Booking", back_populates="utilaj")
+    reviews = relationship("Review", back_populates="utilaj")
 
 
 class BookingStatus:
@@ -60,3 +61,17 @@ class Booking(Base):
 
     utilaj = relationship("Machinery", back_populates="rezervari")
     client = relationship("User", back_populates="rezervari_facute")
+
+
+class Review(Base):
+    __tablename__ = "reviews"
+    id = Column(Integer, primary_key=True, index=True)
+    utilaj_id = Column(Integer, ForeignKey("machinery.id"), nullable=False)
+    client_id = Column(Integer, ForeignKey("users.id"), nullable=False)
+    booking_id = Column(Integer, ForeignKey("bookings.id"), nullable=False, unique=True)
+    rating = Column(Integer, nullable=False)
+    comentariu = Column(String, nullable=True)
+    created_at = Column(DateTime, default=datetime.datetime.utcnow)
+
+    utilaj = relationship("Machinery", back_populates="reviews")
+    client = relationship("User")
