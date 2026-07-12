@@ -299,7 +299,7 @@ export default function Landing() {
       fontFamily: "Arial, sans-serif", fontSize: "13px",
     }}>
       <div style={{ maxWidth: "1100px", margin: "0 auto" }}>
-    
+
         <div style={{
           display: "grid",
           gridTemplateColumns: "repeat(auto-fit, minmax(220px, 1fr))",
@@ -339,7 +339,6 @@ export default function Landing() {
             <div style={{ display: "flex", flexDirection: "column", gap: "10px" }}>
               <a href="/ghiduri" style={{ color: "#5a7a5a", textDecoration: "none" }}>Ghiduri pentru fermieri</a>
               <a href="/utilaje-judete" style={{ color: "#5a7a5a", textDecoration: "none" }}>Utilaje pe județe</a>
-              <a href="/intrebari-frecvente" style={{ color: "#5a7a5a", textDecoration: "none" }}>Întrebări frecvente</a>
             </div>
           </div>
       
