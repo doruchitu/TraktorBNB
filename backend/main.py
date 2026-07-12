@@ -6,7 +6,7 @@ from fastapi.middleware.cors import CORSMiddleware
 from sqlalchemy.orm import Session
 from database import engine
 from auth import hash_password, get_db
-from routers import machinery, bookings, contract, public_stats, contact_message
+from routers import machinery, bookings, contract, public_stats, contact_message, reviews
 import entities, schemas
 
 entities.Base.metadata.create_all(bind=engine)
@@ -26,6 +26,7 @@ app.include_router(bookings.router)
 app.include_router(contract.router)
 app.include_router(public_stats.router)
 app.include_router(contact_message.router)
+app.include_router(reviews.router)
 
 
 @app.get("/")
