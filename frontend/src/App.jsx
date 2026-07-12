@@ -8,6 +8,7 @@ import Rezervari from './pages/Rezervari';
 import Landing from './pages/Landing';
 import CumFunctioneaza from "./pages/CumFunctioneaza";
 import Ghiduri from "./pages/Ghiduri";
+import Contact from "./pages/Contact";
 
 // verf daca user is logat
 function ProtectedRoute({ children }) {
@@ -27,6 +28,7 @@ function App() {
         <Route path="/rezervari" element={<ProtectedRoute><Rezervari /></ProtectedRoute>} />
         <Route path="/cum-functioneaza" element={<CumFunctioneaza />} />
         <Route path="/ghiduri" element={<Ghiduri />} />
+        <Route path="/contact" element={<Contact />} />
       </Routes>
     </Router>
   );
