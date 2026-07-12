@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import Footer from "../components/Footer";
 
 export default function CumFunctioneaza() {
   const navigate = useNavigate();
@@ -293,14 +294,8 @@ export default function CumFunctioneaza() {
         </button>
       </div>
 
-      <footer style={{
-        background: "#0d1a0d", color: "#5a7a5a",
-        textAlign: "center", padding: "2rem",
-        fontFamily: "Arial, sans-serif", fontSize: "13px",
-      }}>
-        <div style={{ fontSize: "20px", marginBottom: "8px" }}>🚜 TraktorBNB</div>
-        <p style={{ margin: 0 }}>© 2026 TraktorBNB · Platforma fermierilor români</p>
-      </footer>
+      <Footer />
+      
     </div>
   );
 }
