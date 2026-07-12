@@ -351,8 +351,6 @@ export default function Landing() {
               contact@traktorbnb.ro
             </a>
             <div style={{ display: "flex", flexDirection: "column", gap: "10px" }}>
-              <a href="/termeni" style={{ color: "#5a7a5a", textDecoration: "none" }}>Termeni și condiții</a>
-              <a href="/confidentialitate" style={{ color: "#5a7a5a", textDecoration: "none" }}>Confidențialitate</a>
             </div>
           </div>
       
@@ -362,9 +360,18 @@ export default function Landing() {
           borderTop: "1px solid rgba(232,213,163,0.1)",
           paddingTop: "1.5rem",
           textAlign: "center",
-          color: "#4a6a4a",
         }}>
-          © 2026 TraktorBNB. Toate drepturile rezervate.
+          <div style={{ display: "flex", justifyContent: "center", gap: "20px", marginBottom: "10px" }}>
+            <a href="/termeni" style={{ color: "#5a7a5a", textDecoration: "none", fontSize: "12px" }}>
+              Termeni și condiții
+            </a>
+            <a href="/confidentialitate" style={{ color: "#5a7a5a", textDecoration: "none", fontSize: "12px" }}>
+              Confidențialitate
+            </a>
+          </div>
+          <div style={{ color: "#4a6a4a" }}>
+            © 2026 TraktorBNB. Toate drepturile rezervate.
+          </div>
         </div>
       
       </div>
