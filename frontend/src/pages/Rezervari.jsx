@@ -10,6 +10,12 @@ export default function Rezervari() {
   const [rezervariPrimite, setRezervariPrimite] = useState([]);
   const [loading, setLoading] = useState(true);
   const [actionLoading, setActionLoading] = useState(null);
+  const [modalRating, setModalRating] = useState(null);
+  const [ratingValue, setRatingValue] = useState(0);
+  const [comentariu, setComentariu] = useState("");
+  const [ratingLoading, setRatingLoading] = useState(false);
+  const [ratingError, setRatingError] = useState("");
+  const [reviewedBookings, setReviewedBookings] = useState([]);
 
   useEffect(() => {
     const token = localStorage.getItem("token");
@@ -53,44 +59,54 @@ export default function Rezervari() {
   };
 
   const handleDescarcaContract = async (bookingId) => {
-  try {
-    const token = await auth.currentUser.getIdToken();
-    const res = await axios.get(`http://localhost:8000/contract/${bookingId}`, {
-      headers: { Authorization: `Bearer ${token}` },
-      responseType: "blob",
-    });
+    try {
+      const token = await auth.currentUser.getIdToken();
+      const res = await axios.get(`http://localhost:8000/contract/${bookingId}`, {
+        headers: { Authorization: `Bearer ${token}` },
+        responseType: "blob",
+      });
 
-    const blob = new Blob([res.data], { type: "application/pdf" });
-    const url = window.URL.createObjectURL(blob);
-    const link = document.createElement("a");
-    link.href = url;
-    link.setAttribute("download", `contract_TBN_${String(bookingId).padStart(4, "0")}.pdf`);
-    document.body.appendChild(link);
-    link.click();
-    document.body.removeChild(link);
-    setTimeout(() => window.URL.revokeObjectURL(url), 1000);
+      const blob = new Blob([res.data], { type: "application/pdf" });
+      const url = window.URL.createObjectURL(blob);
+      const link = document.createElement("a");
+      link.href = url;
+      link.setAttribute("download", `contract_TBN_${String(bookingId).padStart(4, "0")}.pdf`);
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+      setTimeout(() => window.URL.revokeObjectURL(url), 1000);
 
-  } catch (err) {
-    alert("Eroare la descărcarea contractului.");
-  }
-};
-//  const handleDescarcaContract = async (bookingId) => {
-//    try {
-//      const token = await auth.currentUser.getIdToken();
-//      const res = await fetch(`http://localhost:8000/contract/${bookingId}`, {
-//        headers: { Authorization: `Bearer ${token}` }
-//      });
-//      const blob = await res.blob();
-//      const url = window.URL.createObjectURL(blob);
-//      const a = document.createElement("a");
-//      a.href = url;
-//      a.download = `contract_TBN_${String(bookingId).padStart(4, "0")}.pdf`;
-//      a.click();
-//      window.URL.revokeObjectURL(url);
-//    } catch (err) {
-//      console.error(err);
-//    }
-//  };
+    } catch (err) {
+      alert("Eroare la descărcarea contractului.");
+    }
+  };
+
+  const handleTrimiteRating = async () => {
+    if (ratingValue === 0) {
+      setRatingError("Selectează un rating.");
+      return;
+    }
+    setRatingLoading(true);
+    setRatingError("");
+    try {
+      const token = await auth.currentUser.getIdToken();
+      await axios.post("http://localhost:8000/reviews/", {
+        booking_id: modalRating.id,
+        rating: ratingValue,
+        comentariu: comentariu.trim() || null,
+      }, {
+        headers: { Authorization: `Bearer ${token}` }
+      });
+      setReviewedBookings([...reviewedBookings, modalRating.id]);
+      setModalRating(null);
+      setRatingValue(0);
+      setComentariu("");
+    } catch (err) {
+      setRatingError(err.response?.data?.detail || "Eroare la trimiterea evaluării.");
+    } finally {
+      setRatingLoading(false);
+    }
+  };
 
   const statusColor = (status) => {
     switch (status) {
@@ -244,14 +260,26 @@ export default function Rezervari() {
                               </button>
                             )}
                             {r.status === "approved" && (
-                              <button onClick={() => handleDescarcaContract(r.id)} style={{
-                                background: "#1a2e1a", color: "#e8d5a3",
-                                border: "none", borderRadius: "6px",
-                                padding: "8px 20px", fontSize: "13px",
-                                cursor: "pointer", fontFamily: "Georgia, serif",
-                              }}>
-                                📄 Descarcă model de contract
-                              </button>
+                              <>
+                                <button onClick={() => handleDescarcaContract(r.id)} style={{
+                                  background: "#1a2e1a", color: "#e8d5a3",
+                                  border: "none", borderRadius: "6px",
+                                  padding: "8px 20px", fontSize: "13px",
+                                  cursor: "pointer", fontFamily: "Georgia, serif",
+                                }}>
+                                  📄 Descarcă model de contract
+                                </button>
+                                {!reviewedBookings.includes(r.id) && (
+                                  <button onClick={() => { setModalRating(r); setRatingValue(0); setComentariu(""); setRatingError(""); }} style={{
+                                    background: "white", color: "#1a2e1a",
+                                    border: "1px solid #1a2e1a", borderRadius: "6px",
+                                    padding: "8px 20px", fontSize: "13px",
+                                    cursor: "pointer", fontFamily: "Georgia, serif",
+                                  }}>
+                                    ⭐ Evaluează
+                                  </button>
+                                )}
+                              </>
                             )}
                           </div>
                         </div>
@@ -358,6 +386,74 @@ export default function Rezervari() {
           </>
         )}
       </div>
+
+      {modalRating && (
+        <div style={{
+          position: "fixed", top: 0, left: 0, right: 0, bottom: 0,
+          background: "rgba(0,0,0,0.6)", zIndex: 1000,
+          display: "flex", alignItems: "center", justifyContent: "center",
+          padding: "1rem",
+        }} onClick={() => setModalRating(null)}>
+          <div style={{
+            background: "white", borderRadius: "16px",
+            padding: "2rem", maxWidth: "420px", width: "100%",
+            boxShadow: "0 20px 60px rgba(0,0,0,0.3)",
+          }} onClick={e => e.stopPropagation()}>
+
+            <h3 style={{ color: "#1a2e1a", margin: "0 0 4px", fontSize: "20px" }}>
+              Evaluează {modalRating.utilaj.marca} {modalRating.utilaj.model}
+            </h3>
+            <p style={{ color: "#888", fontFamily: "Arial, sans-serif", fontSize: "13px", marginBottom: "1.5rem" }}>
+              Cum a fost experiența ta cu acest utilaj?
+            </p>
+
+            <div style={{ display: "flex", gap: "8px", justifyContent: "center", marginBottom: "1.5rem" }}>
+              {[1, 2, 3, 4, 5].map(star => (
+                <span key={star} onClick={() => setRatingValue(star)} style={{
+                  fontSize: "36px", cursor: "pointer",
+                  color: star <= ratingValue ? "#e8d5a3" : "#e0e0e0",
+                  filter: star <= ratingValue ? "drop-shadow(0 0 1px #c9a961)" : "none",
+                }}>
+                  ★
+                </span>
+              ))}
+            </div>
+
+            <textarea
+              value={comentariu}
+              onChange={e => setComentariu(e.target.value)}
+              placeholder="Lasă un comentariu (opțional)..."
+              rows={3}
+              style={{
+                width: "100%", padding: "12px", borderRadius: "8px",
+                border: "1px solid #ddd", fontSize: "14px", fontFamily: "Arial, sans-serif",
+                outline: "none", resize: "vertical", boxSizing: "border-box", marginBottom: "1rem",
+              }}
+            />
+
+            {ratingError && (
+              <div style={{
+                marginBottom: "1rem", padding: "10px", background: "#fef2f2",
+                border: "1px solid #fca5a5", borderRadius: "8px",
+                color: "#dc2626", fontSize: "13px", fontFamily: "Arial, sans-serif",
+              }}>
+                {ratingError}
+              </div>
+            )}
+
+            <button onClick={handleTrimiteRating} disabled={ratingLoading} style={{
+              width: "100%",
+              background: ratingLoading ? "#ccc" : "#1a2e1a",
+              color: ratingLoading ? "#888" : "#e8d5a3",
+              border: "none", borderRadius: "8px", padding: "13px",
+              fontSize: "15px", cursor: ratingLoading ? "not-allowed" : "pointer",
+              fontFamily: "Georgia, serif", fontWeight: "bold",
+            }}>
+              {ratingLoading ? "Se trimite..." : "Trimite evaluarea"}
+            </button>
+          </div>
+        </div>
+      )}
     </div>
   );
 }
