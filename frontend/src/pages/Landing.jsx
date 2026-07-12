@@ -347,8 +347,8 @@ export default function Landing() {
             <h4 style={{ color: "#e8d5a3", fontSize: "14px", marginBottom: "14px", fontFamily: "Georgia, serif" }}>
               Contact
             </h4>
-            <a href="mailto:contact@traktorbnb.ro" style={{ color: "#5a7a5a", textDecoration: "none", display: "block", marginBottom: "12px" }}>
-              contact@traktorbnb.ro
+            <a href="mailto:admin.traktorbnb@gmail.com" style={{ color: "#5a7a5a", textDecoration: "none", display: "block", marginBottom: "12px" }}>
+              admin.traktorbnb@gmail.com
             </a>
             <div style={{ display: "flex", flexDirection: "column", gap: "10px" }}>
             </div>
