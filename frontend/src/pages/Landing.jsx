@@ -338,7 +338,6 @@ export default function Landing() {
             </h4>
             <div style={{ display: "flex", flexDirection: "column", gap: "10px" }}>
               <a href="/ghiduri" style={{ color: "#5a7a5a", textDecoration: "none" }}>Ghiduri pentru fermieri</a>
-              <a href="/utilaje-judete" style={{ color: "#5a7a5a", textDecoration: "none" }}>Utilaje pe județe</a>
             </div>
           </div>
       
