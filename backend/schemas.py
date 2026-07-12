@@ -80,3 +80,20 @@ class BookingOut(BaseModel):
 class Token(BaseModel):
     access_token: str
     token_type: str
+
+# review
+
+class ReviewCreate(BaseModel):
+    booking_id: int
+    rating: int
+    comentariu: str | None = None
+
+class ReviewOut(BaseModel):
+    id: int
+    rating: int
+    comentariu: str | None
+    created_at: datetime
+    client: UserOut
+
+    class Config:
+        from_attributes = True
