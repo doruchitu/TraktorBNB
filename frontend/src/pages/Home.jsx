@@ -22,7 +22,7 @@ export default function Home() {
   const [bookingError, setBookingError] = useState("");
   const [bookingSuccess, setBookingSuccess] = useState(false);
   const [currentUserEmail, setCurrentUserEmail] = useState(null);
-  const [stats, setStats] = useState({ total_utilaje: 0, total_useri: 0 });
+  const [stats, setStats] = useState({ total_utilaje: 0, total_useri: 0, rating_general: null, rating_count: 0 });
   const [modalDetalii, setModalDetalii] = useState(null);
   const [ratings, setRatings] = useState({});
   const [reviewsDetalii, setReviewsDetalii] = useState(null);
@@ -56,7 +56,11 @@ export default function Home() {
       });
 
     axios.get("http://localhost:8000/stats/")
-      .then(res => setStats(res.data))
+      .then(res => setStats(prev => ({ ...prev, ...res.data })))
+      .catch(err => {});
+
+    axios.get("http://localhost:8000/stats/rating-general")
+      .then(res => setStats(prev => ({ ...prev, rating_general: res.data.average, rating_count: res.data.count })))
       .catch(err => {});
   }, []);
 
@@ -281,7 +285,7 @@ export default function Home() {
           { val: utilaje.length + "+", label: "Utilaje disponibile" },
           { val: stats.total_useri + "+", label: "Fermieri înregistrați" },
           { val: "41", label: "Județe acoperite" },
-          { val: "4.8★", label: "Rating mediu" },
+          { val: stats.rating_general ? `${stats.rating_general}★` : "—", label: stats.rating_general ? `Rating mediu (${stats.rating_count})` : "Fără recenzii încă" },
         ].map((s, i) => (
           <div key={i} style={{ textAlign: "center" }}>
             <div style={{ fontSize: "22px", fontWeight: "bold", color: "#1a2e1a" }}>{s.val}</div>
