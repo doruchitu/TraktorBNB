@@ -24,6 +24,8 @@ export default function Home() {
   const [currentUserEmail, setCurrentUserEmail] = useState(null);
   const [stats, setStats] = useState({ total_utilaje: 0, total_useri: 0 });
   const [modalDetalii, setModalDetalii] = useState(null);
+  const [ratings, setRatings] = useState({});
+  const [reviewsDetalii, setReviewsDetalii] = useState(null);
 
   useEffect(() => {
     const token = localStorage.getItem("token");
@@ -40,6 +42,13 @@ export default function Home() {
       .then(res => {
         setUtilaje(res.data);
         setLoadingUtilaje(false);
+        res.data.forEach(u => {
+          axios.get(`http://localhost:8000/reviews/machinery/${u.id}`)
+            .then(r => {
+              setRatings(prev => ({ ...prev, [u.id]: { average: r.data.average, count: r.data.count } }));
+            })
+            .catch(() => {});
+        });
       })
       .catch(err => {
         console.error(err);
@@ -319,7 +328,13 @@ export default function Home() {
           <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(300px, 1fr))", gap: "1.5rem" }}>
             {utilajeFiltrate.map((u, i) => (
               <div key={u.id}
-                onClick={() => setModalDetalii(u)}
+                onClick={() => {
+                  setModalDetalii(u);
+                  setReviewsDetalii(null);
+                  axios.get(`http://localhost:8000/reviews/machinery/${u.id}`)
+                    .then(res => setReviewsDetalii(res.data))
+                    .catch(() => setReviewsDetalii({ average: null, count: 0, reviews: [] }));
+                }}
                 style={{
                   background: "white", borderRadius: "12px",
                   overflow: "hidden", border: "1px solid #e8e0d0", cursor: "pointer",
@@ -363,8 +378,15 @@ export default function Home() {
                   <h3 style={{ margin: "0 0 4px", fontSize: "18px", color: "#1a2e1a", fontWeight: "bold" }}>
                     {u.marca} {u.model}
                   </h3>
-                  <p style={{ margin: "0 0 12px", fontSize: "13px", color: "#888", fontFamily: "Arial, sans-serif" }}>
+                  <p style={{ margin: "0 0 6px", fontSize: "13px", color: "#888", fontFamily: "Arial, sans-serif" }}>
                     ⚡ {u.putere_cp ? `${u.putere_cp} CP` : "—"}
+                  </p>
+                  <p style={{ margin: "0 0 12px", fontSize: "13px", fontFamily: "Arial, sans-serif" }}>
+                    {ratings[u.id]?.average ? (
+                      <span style={{ color: "#d4a017" }}>⭐ {ratings[u.id].average} <span style={{ color: "#aaa" }}>({ratings[u.id].count})</span></span>
+                    ) : (
+                      <span style={{ color: "#bbb" }}>Fără recenzii încă</span>
+                    )}
                   </p>
                   <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", borderTop: "1px solid #f0ebe0", paddingTop: "12px" }}>
                     <div>
@@ -416,97 +438,132 @@ export default function Home() {
       </footer>
 
       {modalDetalii && (
-  <div style={{
-    position: "fixed", top: 0, left: 0, right: 0, bottom: 0,
-    background: "rgba(0,0,0,0.7)", zIndex: 1000,
-    display: "flex", alignItems: "center", justifyContent: "center",
-    padding: "1rem",
-  }} onClick={() => setModalDetalii(null)}>
-    <div style={{
-      background: "white", borderRadius: "16px",
-      maxWidth: "600px", width: "100%",
-      maxHeight: "90vh", overflowY: "auto",
-      boxShadow: "0 20px 60px rgba(0,0,0,0.3)",
-    }} onClick={e => e.stopPropagation()}>
-
-      <div style={{ height: "320px", position: "relative" }}>
-        {modalDetalii.imagine_url ? (
-          <img src={modalDetalii.imagine_url} alt={`${modalDetalii.marca} ${modalDetalii.model}`}
-            style={{ width: "100%", height: "100%", objectFit: "cover", borderRadius: "16px 16px 0 0", display: "block" }} />
-        ) : (
-          <div style={{
-            width: "100%", height: "100%",
-            background: "linear-gradient(135deg, #2d4a2d, #4a7c4a)",
-            display: "flex", alignItems: "center", justifyContent: "center",
-            fontSize: "80px", borderRadius: "16px 16px 0 0",
-          }}>🚜</div>
-        )}
-        <button onClick={() => setModalDetalii(null)} style={{
-          position: "absolute", top: "16px", right: "16px",
-          background: "rgba(0,0,0,0.5)", color: "white",
-          border: "none", borderRadius: "50%",
-          width: "36px", height: "36px", fontSize: "18px", cursor: "pointer",
-        }}>✕</button>
         <div style={{
-          position: "absolute", top: "16px", left: "16px",
-          background: modalDetalii.disponibil ? "#27ae60" : "#c0392b",
-          color: "white", padding: "5px 12px", borderRadius: "4px",
-          fontSize: "12px", fontFamily: "Arial, sans-serif",
-        }}>
-          {modalDetalii.disponibil ? "Disponibil" : "Indisponibil"}
-        </div>
-      </div>
+          position: "fixed", top: 0, left: 0, right: 0, bottom: 0,
+          background: "rgba(0,0,0,0.7)", zIndex: 1000,
+          display: "flex", alignItems: "center", justifyContent: "center",
+          padding: "1rem",
+        }} onClick={() => setModalDetalii(null)}>
+          <div style={{
+            background: "white", borderRadius: "16px",
+            maxWidth: "600px", width: "100%",
+            maxHeight: "90vh", overflowY: "auto",
+            boxShadow: "0 20px 60px rgba(0,0,0,0.3)",
+          }} onClick={e => e.stopPropagation()}>
 
-      <div style={{ padding: "1.5rem" }}>
-        <h2 style={{ color: "#1a2e1a", margin: "0 0 8px", fontSize: "24px" }}>
-          {modalDetalii.marca} {modalDetalii.model}
-        </h2>
-        <p style={{ color: "#888", fontFamily: "Arial, sans-serif", margin: "0 0 16px", fontSize: "14px" }}>
-          📍 {modalDetalii.judet} · ⚡ {modalDetalii.putere_cp ? `${modalDetalii.putere_cp} CP` : "Putere nespecificată"}
-        </p>
+            <div style={{ height: "320px", position: "relative" }}>
+              {modalDetalii.imagine_url ? (
+                <img src={modalDetalii.imagine_url} alt={`${modalDetalii.marca} ${modalDetalii.model}`}
+                  style={{ width: "100%", height: "100%", objectFit: "cover", borderRadius: "16px 16px 0 0", display: "block" }} />
+              ) : (
+                <div style={{
+                  width: "100%", height: "100%",
+                  background: "linear-gradient(135deg, #2d4a2d, #4a7c4a)",
+                  display: "flex", alignItems: "center", justifyContent: "center",
+                  fontSize: "80px", borderRadius: "16px 16px 0 0",
+                }}>🚜</div>
+              )}
+              <button onClick={() => setModalDetalii(null)} style={{
+                position: "absolute", top: "16px", right: "16px",
+                background: "rgba(0,0,0,0.5)", color: "white",
+                border: "none", borderRadius: "50%",
+                width: "36px", height: "36px", fontSize: "18px", cursor: "pointer",
+              }}>✕</button>
+              <div style={{
+                position: "absolute", top: "16px", left: "16px",
+                background: modalDetalii.disponibil ? "#27ae60" : "#c0392b",
+                color: "white", padding: "5px 12px", borderRadius: "4px",
+                fontSize: "12px", fontFamily: "Arial, sans-serif",
+              }}>
+                {modalDetalii.disponibil ? "Disponibil" : "Indisponibil"}
+              </div>
+            </div>
 
-        <div style={{ display: "flex", alignItems: "baseline", marginBottom: "20px", borderBottom: "1px solid #f0ebe0", paddingBottom: "16px" }}>
-          <span style={{ fontSize: "26px", fontWeight: "bold", color: "#2d4a2d" }}>{modalDetalii.pret_zi} lei</span>
-          <span style={{ fontSize: "14px", color: "#5a7a5a", marginLeft: "4px", fontWeight: "600" }}>/ zi</span>
-        </div>
+            <div style={{ padding: "1.5rem" }}>
+              <h2 style={{ color: "#1a2e1a", margin: "0 0 8px", fontSize: "24px" }}>
+                {modalDetalii.marca} {modalDetalii.model}
+              </h2>
+              <p style={{ color: "#888", fontFamily: "Arial, sans-serif", margin: "0 0 16px", fontSize: "14px" }}>
+                📍 {modalDetalii.judet} · ⚡ {modalDetalii.putere_cp ? `${modalDetalii.putere_cp} CP` : "Putere nespecificată"}
+              </p>
 
-        {modalDetalii.descriere && (
-          <div style={{ marginBottom: "20px" }}>
-            <h4 style={{ color: "#1a2e1a", fontSize: "14px", marginBottom: "6px", fontFamily: "Arial, sans-serif" }}>📝 Descriere</h4>
-            <p style={{ color: "#555", fontFamily: "Arial, sans-serif", fontSize: "14px", lineHeight: 1.6, margin: 0 }}>
-              {modalDetalii.descriere}
-            </p>
+              <div style={{ display: "flex", alignItems: "baseline", marginBottom: "20px", borderBottom: "1px solid #f0ebe0", paddingBottom: "16px" }}>
+                <span style={{ fontSize: "26px", fontWeight: "bold", color: "#2d4a2d" }}>{modalDetalii.pret_zi} lei</span>
+                <span style={{ fontSize: "14px", color: "#5a7a5a", marginLeft: "4px", fontWeight: "600" }}>/ zi</span>
+              </div>
+
+              {modalDetalii.descriere && (
+                <div style={{ marginBottom: "20px" }}>
+                  <h4 style={{ color: "#1a2e1a", fontSize: "14px", marginBottom: "6px", fontFamily: "Arial, sans-serif" }}>📝 Descriere</h4>
+                  <p style={{ color: "#555", fontFamily: "Arial, sans-serif", fontSize: "14px", lineHeight: 1.6, margin: 0 }}>
+                    {modalDetalii.descriere}
+                  </p>
+                </div>
+              )}
+
+              {(modalDetalii.data_disponibil_de || modalDetalii.data_disponibil_pana) && (
+                <div style={{ marginBottom: "20px" }}>
+                  <h4 style={{ color: "#1a2e1a", fontSize: "14px", marginBottom: "6px", fontFamily: "Arial, sans-serif" }}>📅 Disponibil în perioada</h4>
+                  <p style={{ color: "#555", fontFamily: "Arial, sans-serif", fontSize: "14px", margin: 0 }}>
+                    {modalDetalii.data_disponibil_de} → {modalDetalii.data_disponibil_pana}
+                  </p>
+                </div>
+              )}
+
+              <div style={{ marginBottom: "20px" }}>
+                <h4 style={{ color: "#1a2e1a", fontSize: "14px", marginBottom: "10px", fontFamily: "Arial, sans-serif" }}>
+                  ⭐ Recenzii {reviewsDetalii?.count > 0 && `(${reviewsDetalii.count})`}
+                </h4>
+                {!reviewsDetalii ? (
+                  <p style={{ color: "#aaa", fontFamily: "Arial, sans-serif", fontSize: "13px" }}>Se încarcă...</p>
+                ) : reviewsDetalii.count === 0 ? (
+                  <p style={{ color: "#aaa", fontFamily: "Arial, sans-serif", fontSize: "13px" }}>Niciun fermier nu a evaluat încă acest utilaj.</p>
+                ) : (
+                  <>
+                    <div style={{ display: "flex", alignItems: "center", gap: "8px", marginBottom: "12px" }}>
+                      <span style={{ fontSize: "22px", fontWeight: "bold", color: "#1a2e1a" }}>{reviewsDetalii.average}</span>
+                      <span style={{ color: "#d4a017", fontSize: "16px" }}>
+                        {"★".repeat(Math.round(reviewsDetalii.average))}{"☆".repeat(5 - Math.round(reviewsDetalii.average))}
+                      </span>
+                      <span style={{ color: "#888", fontSize: "13px", fontFamily: "Arial, sans-serif" }}>din {reviewsDetalii.count} recenzii</span>
+                    </div>
+                    <div style={{ display: "flex", flexDirection: "column", gap: "10px", maxHeight: "180px", overflowY: "auto" }}>
+                      {reviewsDetalii.reviews.map((rev, i) => (
+                        <div key={i} style={{ background: "#f7f5f0", borderRadius: "8px", padding: "10px 12px" }}>
+                          <div style={{ display: "flex", justifyContent: "space-between", marginBottom: "4px" }}>
+                            <span style={{ fontFamily: "Arial, sans-serif", fontSize: "12px", fontWeight: "bold", color: "#1a2e1a" }}>{rev.client_nume}</span>
+                            <span style={{ color: "#d4a017", fontSize: "12px" }}>{"★".repeat(rev.rating)}{"☆".repeat(5 - rev.rating)}</span>
+                          </div>
+                          {rev.comentariu && (
+                            <p style={{ margin: 0, fontFamily: "Arial, sans-serif", fontSize: "13px", color: "#555", lineHeight: 1.5 }}>
+                              {rev.comentariu}
+                            </p>
+                          )}
+                        </div>
+                      ))}
+                    </div>
+                  </>
+                )}
+              </div>
+
+              <button
+                disabled={!modalDetalii.disponibil}
+                onClick={() => { const u = modalDetalii; setModalDetalii(null); deschideModal(u); }}
+                style={{
+                  width: "100%",
+                  background: modalDetalii.disponibil ? "#1a2e1a" : "#ccc",
+                  color: modalDetalii.disponibil ? "#e8d5a3" : "#888",
+                  border: "none", borderRadius: "8px", padding: "13px",
+                  fontSize: "15px", cursor: modalDetalii.disponibil ? "pointer" : "not-allowed",
+                  fontFamily: "Georgia, serif", fontWeight: "bold",
+                }}>
+                {modalDetalii.disponibil ? "🚜 Rezervă acest utilaj" : "Indisponibil momentan"}
+              </button>
+            </div>
           </div>
-        )}
+        </div>
+      )}
 
-        {(modalDetalii.data_disponibil_de || modalDetalii.data_disponibil_pana) && (
-          <div style={{ marginBottom: "20px" }}>
-            <h4 style={{ color: "#1a2e1a", fontSize: "14px", marginBottom: "6px", fontFamily: "Arial, sans-serif" }}>📅 Disponibil în perioada</h4>
-            <p style={{ color: "#555", fontFamily: "Arial, sans-serif", fontSize: "14px", margin: 0 }}>
-              {modalDetalii.data_disponibil_de} → {modalDetalii.data_disponibil_pana}
-            </p>
-          </div>
-        )}
-
-        {/* Aici vom adăuga secțiunea de rating/review-uri */}
-
-        <button
-          disabled={!modalDetalii.disponibil}
-          onClick={() => { const u = modalDetalii; setModalDetalii(null); deschideModal(u); }}
-          style={{
-            width: "100%",
-            background: modalDetalii.disponibil ? "#1a2e1a" : "#ccc",
-            color: modalDetalii.disponibil ? "#e8d5a3" : "#888",
-            border: "none", borderRadius: "8px", padding: "13px",
-            fontSize: "15px", cursor: modalDetalii.disponibil ? "pointer" : "not-allowed",
-            fontFamily: "Georgia, serif", fontWeight: "bold",
-          }}>
-          {modalDetalii.disponibil ? "🚜 Rezervă acest utilaj" : "Indisponibil momentan"}
-        </button>
-      </div>
-    </div>
-  </div>
-)}
       {modalUtilaj && (
         <div style={{
           position: "fixed", top: 0, left: 0, right: 0, bottom: 0,
