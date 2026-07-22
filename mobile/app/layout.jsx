@@ -11,6 +11,7 @@ export default function RootLayout() {
         <Stack.Screen name="landing" />
         <Stack.Screen name="tabs" />
         <Stack.Screen name="utilaj/[id]" />
+        <Stack.Screen name="adauga-utilaj" />
       </Stack>
     </>
   );
