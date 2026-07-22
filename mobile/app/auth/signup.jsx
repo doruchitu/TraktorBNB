@@ -1,4 +1,8 @@
 import React, { useState } from "react";
+import { createUserWithEmailAndPassword, updateProfile } from "firebase/auth";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import { auth } from "../../services/firebase";
+import api from "../../services/api";
 import {
   View,
   Text,
@@ -45,20 +49,49 @@ export default function Signup() {
     return null;
   };
 
-  const handleSignup = async () => {
-    const validationError = validate();
-    if (validationError) {
-      setError(validationError);
-      return;
+const handleSignup = async () => {
+  const validationError = validate();
+  if (validationError) {
+    setError(validationError);
+    return;
+  }
+  setError("");
+  setLoading(true);
+  try {
+    const userCredential = await createUserWithEmailAndPassword(
+      auth,
+      formData.email,
+      formData.password
+    );
+
+    await updateProfile(userCredential.user, {
+      displayName: `${formData.prenume} ${formData.nume}`,
+    });
+
+    await api.post("/users/", {
+      nume: formData.nume,
+      prenume: formData.prenume,
+      email: formData.email,
+      telefon: formData.telefon,
+      password: formData.password,
+    });
+
+    const token = await userCredential.user.getIdToken();
+    await AsyncStorage.setItem("token", token);
+
+    router.replace("/tabs/home");
+  } catch (err) {
+    if (err.code === "auth/email-already-in-use") {
+      setError("Există deja un cont cu acest email.");
+    } else if (err.code === "auth/weak-password") {
+      setError("Parola este prea slabă.");
+    } else {
+      setError(err.response?.data?.detail || "Eroare la crearea contului.");
     }
-    setError("");
-    setLoading(true);
-    // TODO: conectare reală cu Firebase Auth + POST /users/ aici
-    setTimeout(() => {
-      setLoading(false);
-      router.replace("/tabs/home");
-    }, 700);
-  };
+  } finally {
+    setLoading(false);
+  }
+};
 
   return (
     <KeyboardAvoidingView

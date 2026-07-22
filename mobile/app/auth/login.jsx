@@ -1,4 +1,7 @@
 import React, { useState } from "react";
+import { signInWithEmailAndPassword } from "firebase/auth";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import { auth } from "../../services/firebase";
 import {
   View,
   Text,
@@ -19,19 +22,24 @@ export default function Login() {
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
 
-  const handleLogin = async () => {
-    setError("");
-    if (!email.trim() || !password.trim()) {
-      setError("Completează email și parolă.");
-      return;
-    }
-    setLoading(true);
-    // TODO: conectare reală cu Firebase Auth aici
-    setTimeout(() => {
-      setLoading(false);
-      router.replace("/tabs/home");
-    }, 700);
-  };
+const handleLogin = async () => {
+  setError("");
+  if (!email.trim() || !password.trim()) {
+    setError("Completează email și parolă.");
+    return;
+  }
+  setLoading(true);
+  try {
+    const userCredential = await signInWithEmailAndPassword(auth, email, password);
+    const token = await userCredential.user.getIdToken();
+    await AsyncStorage.setItem("token", token);
+    router.replace("/tabs/home");
+  } catch (err) {
+    setError("Email sau parolă incorectă.");
+  } finally {
+    setLoading(false);
+  }
+};
 
   return (
     <KeyboardAvoidingView
