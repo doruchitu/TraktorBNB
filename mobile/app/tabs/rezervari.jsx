@@ -18,6 +18,7 @@ import api from "../../services/api";
 import StatusBadge from "../../components/StatusBadge";
 import RatingStars from "../../components/RatingStars";
 import { COLORS, SPACING, RADIUS } from "../../constants/theme";
+import BackButton from "../../components/BackButton";
 
 export default function Rezervari() {
   const [tab, setTab] = useState("client");
@@ -277,7 +278,11 @@ export default function Rezervari() {
   return (
     <View style={styles.flex}>
       <View style={styles.header}>
-        <Text style={styles.headerTitle}>📋 Rezervările mele</Text>
+        <View style={styles.headerTop}>
+          <BackButton />
+          <Text style={styles.headerTitle}>📋 Rezervările mele</Text>
+          <View style={{ width: 40 }} />
+        </View>
         <View style={styles.tabsRow}>
           <TouchableOpacity
             style={[styles.tabButton, tab === "client" && styles.tabButtonActive]}
@@ -332,11 +337,16 @@ const styles = StyleSheet.create({
     paddingBottom: SPACING.md,
     paddingHorizontal: SPACING.md,
   },
+  headerTop: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
+    marginBottom: SPACING.md,
+  },
   headerTitle: {
     color: COLORS.gold,
     fontSize: 20,
     fontWeight: "bold",
-    marginBottom: SPACING.md,
     textAlign: "center",
   },
   tabsRow: { flexDirection: "row", gap: SPACING.xs },
