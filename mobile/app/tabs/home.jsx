@@ -13,6 +13,7 @@ import { useRouter } from "expo-router";
 import api from "../../services/api";
 import UtilajCard from "../../components/UtilajCard";
 import { COLORS, SPACING, RADIUS } from "../../constants/theme";
+import MenuDropdown from "../../components/MenuDropdown";
 
 const judete = ["Toate", "Cluj", "Timiș", "Brașov", "Iași", "Sibiu", "Mureș", "Alba", "Galați", "Suceava", "Dolj"];
 
@@ -73,15 +74,18 @@ export default function Home() {
   return (
     <View style={styles.flex}>
       <View style={styles.header}>
-        <Text style={styles.headerTitle}>🚜 TraktorBNB</Text>
-        <TextInput
-          style={styles.search}
-          placeholder="Caută marcă, model, județ..."
-          placeholderTextColor="#aaa"
-          value={searchQuery}
-          onChangeText={setSearchQuery}
-        />
-      </View>
+          <View style={styles.headerTop}>
+            <Text style={styles.headerTitle}>🚜 TraktorBNB</Text>
+            <MenuDropdown />
+          </View>
+          <TextInput
+            style={styles.search}
+            placeholder="Caută marcă, model, județ..."
+            placeholderTextColor="#aaa"
+            value={searchQuery}
+            onChangeText={setSearchQuery}
+          />
+        </View>
 
       <View style={styles.filtersBox}>
         <FlatList
@@ -157,11 +161,18 @@ const styles = StyleSheet.create({
     paddingBottom: SPACING.md,
     paddingHorizontal: SPACING.md,
   },
+
+  headerTop: {
+  flexDirection: "row",
+  justifyContent: "space-between",
+  alignItems: "center",
+  marginBottom: SPACING.md,
+  },
+
   headerTitle: {
     color: COLORS.gold,
     fontSize: 20,
     fontWeight: "bold",
-    marginBottom: SPACING.md,
   },
   search: {
     backgroundColor: "rgba(255,255,255,0.95)",
