@@ -5,7 +5,7 @@ from fastapi import FastAPI, Depends, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
 from sqlalchemy.orm import Session
 from database import engine
-from auth import hash_password, get_db
+from auth import hash_password, get_db, get_current_user
 from routers import machinery, bookings, contract, public_stats, contact_message, reviews
 import entities, schemas
 
@@ -51,3 +51,13 @@ def create_user(user: schemas.UserCreate, db: Session = Depends(get_db)):
     db.commit()
     db.refresh(new_user)
     return new_user
+
+@app.get("/users/me")
+def get_my_profile(current_user: entities.User = Depends(get_current_user)):
+    return {
+        "id": current_user.id,
+        "nume": current_user.nume,
+        "prenume": current_user.prenume,
+        "email": current_user.email,
+        "telefon": current_user.telefon,
+    }
