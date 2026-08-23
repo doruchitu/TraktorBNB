@@ -7,7 +7,6 @@ export default defineConfig({
     react(),
     VitePWA({
       registerType: 'autoUpdate',
-      includeAssets: ['favicon.ico', 'apple-touch-icon.png'],
       manifest: {
         name: 'TraktorBNB',
         short_name: 'TraktorBNB',
