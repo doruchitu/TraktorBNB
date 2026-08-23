@@ -7,6 +7,9 @@ export default defineConfig({
     react(),
     VitePWA({
       registerType: 'autoUpdate',
+      devOptions: {
+        enabled: true
+      },
       manifest: {
         name: 'TraktorBNB',
         short_name: 'TraktorBNB',
