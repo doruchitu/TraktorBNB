@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import axios from "axios";
+import api from "../services/api";
 import { auth } from "../firebase";
 
 export default function Rezervari() {
@@ -30,8 +30,8 @@ export default function Rezervari() {
       const headers = { Authorization: `Bearer ${token}` };
 
       const [mele, primite] = await Promise.all([
-        axios.get("http://localhost:8000/bookings/my", { headers }),
-        axios.get("http://localhost:8000/bookings/incoming", { headers }),
+        api.get("/bookings/my", { headers }),
+        api.get("/bookings/incoming", { headers }),
       ]);
 
       setRezervariMele(mele.data);
@@ -47,7 +47,7 @@ export default function Rezervari() {
     setActionLoading(bookingId + action);
     try {
       const token = await auth.currentUser.getIdToken();
-      await axios.put(`http://localhost:8000/bookings/${bookingId}/${action}`, {}, {
+      await api.put(`/bookings/${bookingId}/${action}`, {}, {
         headers: { Authorization: `Bearer ${token}` }
       });
       fetchData();
@@ -61,7 +61,7 @@ export default function Rezervari() {
   const handleDescarcaContract = async (bookingId) => {
     try {
       const token = await auth.currentUser.getIdToken();
-      const res = await axios.get(`http://localhost:8000/contract/${bookingId}`, {
+      const res = await api.get(`/contract/${bookingId}`, {
         headers: { Authorization: `Bearer ${token}` },
         responseType: "blob",
       });
@@ -90,7 +90,7 @@ export default function Rezervari() {
     setRatingError("");
     try {
       const token = await auth.currentUser.getIdToken();
-      await axios.post("http://localhost:8000/reviews/", {
+      await api.post("/reviews/", {
         booking_id: modalRating.id,
         rating: ratingValue,
         comentariu: comentariu.trim() || null,
@@ -372,7 +372,7 @@ export default function Rezervari() {
                                 padding: "8px 20px", fontSize: "13px",
                                 cursor: "pointer", fontFamily: "Georgia, serif",
                               }}>
-                                📄 Descarcă contract
+                                📄 Descarcă model de contract
                               </button>
                             )}
                           </div>

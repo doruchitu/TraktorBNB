@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import axios from "axios";
+import api from "../services/api";
 import { auth } from "../firebase";
 
 const judete = ["Toate", "Cluj", "Timiș", "Brașov", "Iași", "Sibiu", "Mureș", "Alba", "Galați", "Suceava", "Dolj"];
@@ -38,12 +38,12 @@ export default function Home() {
     const firebaseUser = auth.currentUser;
     if (firebaseUser) setCurrentUserEmail(firebaseUser.email);
 
-    axios.get("http://localhost:8000/machinery/")
+    api.get("/machinery/")
       .then(res => {
         setUtilaje(res.data);
         setLoadingUtilaje(false);
         res.data.forEach(u => {
-          axios.get(`http://localhost:8000/reviews/machinery/${u.id}`)
+          api.get(`/reviews/machinery/${u.id}`)
             .then(r => {
               setRatings(prev => ({ ...prev, [u.id]: { average: r.data.average, count: r.data.count } }));
             })
@@ -55,11 +55,11 @@ export default function Home() {
         setLoadingUtilaje(false);
       });
 
-    axios.get("http://localhost:8000/stats/")
+    api.get("/stats/")
       .then(res => setStats(prev => ({ ...prev, ...res.data })))
       .catch(err => {});
 
-    axios.get("http://localhost:8000/stats/rating-general")
+    api.get("/stats/rating-general")
       .then(res => setStats(prev => ({ ...prev, rating_general: res.data.average, rating_count: res.data.count })))
       .catch(err => {});
   }, []);
@@ -74,7 +74,7 @@ export default function Home() {
     if (!window.confirm("Ești sigur că vrei să ștergi acest utilaj?")) return;
     try {
       const token = await auth.currentUser.getIdToken();
-      await axios.delete(`http://localhost:8000/machinery/${utilajId}`, {
+      await api.delete(`/machinery/${utilajId}`, {
         headers: { Authorization: `Bearer ${token}` }
       });
       setUtilaje(utilaje.filter(u => u.id !== utilajId));
@@ -91,7 +91,7 @@ export default function Home() {
     setBookingSuccess(false);
     setLunaAfisata(new Date());
     try {
-      const res = await axios.get(`http://localhost:8000/bookings/ocupate/${utilaj.id}`);
+      const res = await api.get(`/bookings/ocupate/${utilaj.id}`);
       setZileOcupate(res.data.zile_ocupate);
     } catch (err) {
       setZileOcupate([]);
@@ -165,7 +165,7 @@ export default function Home() {
     setBookingError("");
     try {
       const token = await auth.currentUser.getIdToken();
-      await axios.post("http://localhost:8000/bookings/", {
+      await api.post("/bookings/", {
         utilaj_id: modalUtilaj.id,
         data_start: new Date(dataStart).toISOString(),
         data_end: new Date(dataEnd).toISOString(),
@@ -335,7 +335,7 @@ export default function Home() {
                 onClick={() => {
                   setModalDetalii(u);
                   setReviewsDetalii(null);
-                  axios.get(`http://localhost:8000/reviews/machinery/${u.id}`)
+                  api.get(`/reviews/machinery/${u.id}`)
                     .then(res => setReviewsDetalii(res.data))
                     .catch(() => setReviewsDetalii({ average: null, count: 0, reviews: [] }));
                 }}

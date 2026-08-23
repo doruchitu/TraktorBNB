@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { auth } from '../firebase';
 import { createUserWithEmailAndPassword, updateProfile } from 'firebase/auth';
-import axios from 'axios';
+import api from '../services/api';
 
 function Signup() {
   const [formData, setFormData] = useState({
@@ -30,16 +30,13 @@ function Signup() {
 
     setLoading(true);
     try {
-      // Create userul in Firebase
       const userCredential = await createUserWithEmailAndPassword(auth, formData.email, formData.password);
-      
-      // Set numele în Firebase
+
       await updateProfile(userCredential.user, {
         displayName: `${formData.nume} ${formData.prenume}`
       });
 
-      // Salvăm și în baza noastră de date
-      await axios.post("http://localhost:8000/users/", {
+      await api.post("/users/", {
         nume: formData.nume,
         prenume: formData.prenume,
         email: formData.email,

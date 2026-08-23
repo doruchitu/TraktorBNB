@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import axios from "axios";
+import api from "../services/api";
 import Footer from "../components/Footer";
 
 export default function Contact() {
@@ -33,7 +33,7 @@ export default function Contact() {
 
     setLoading(true);
     try {
-      await axios.post("http://localhost:8000/contact/", { nume, email, mesaj });
+      await api.post("/contact/", { nume, email, mesaj });
       setSuccess(true);
       setNume("");
       setEmail("");
