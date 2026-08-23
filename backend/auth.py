@@ -38,18 +38,15 @@ def create_access_token(data: dict) -> str:
 
 def verify_firebase_token(token: str) -> dict:
     try:
-        # Obținem cheile publice Firebase
         keys_url = "https://www.googleapis.com/robot/v1/metadata/x509/securetoken@system.gserviceaccount.com"
         keys = requests.get(keys_url).json()
         
-        # Decodăm header-ul să găsim kid-ul
         header = jwt.get_unverified_header(token)
         kid = header.get("kid")
         
         if kid not in keys:
             raise HTTPException(status_code=401, detail="Token invalid")
         
-        # Verificăm tokenul
         payload = jwt.decode(
             token,
             keys[kid],
