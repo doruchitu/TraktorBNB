@@ -203,135 +203,108 @@ export default function Home() {
   });
 
   return (
-    <div style={{ minHeight: "100vh", background: "#f7f5f0", fontFamily: "'Georgia', serif" }}>
+    <div className="min-h-screen bg-[#f7f5f0] font-serif">
 
-      <nav style={{
-        background: "#1a2e1a", padding: "0 2rem",
-        display: "flex", alignItems: "center", justifyContent: "space-between",
-        height: "64px", position: "sticky", top: 0, zIndex: 100,
-      }}>
-        <div style={{ display: "flex", alignItems: "center", gap: "10px" }}>
-          <span style={{ fontSize: "22px" }}>🚜</span>
-          <span style={{ color: "#e8d5a3", fontSize: "20px", fontWeight: "bold", letterSpacing: "0.5px" }}>TraktorShare</span>
+      {/* NAVBAR */}
+      <nav className="sticky top-0 z-[100] h-16 bg-[#1a2e1a] px-4 md:px-8 flex items-center justify-between shadow-md">
+        <div className="flex items-center gap-2.5">
+          <div className="w-[26px] h-[26px] bg-[#e8d5a3] [mask-image:url('/FAVICON.png')] [mask-size:contain] [mask-repeat:no-repeat] [mask-position:center]" />
+          <span className="text-[#e8d5a3] text-[20px] font-bold tracking-[0.5px]">TraktorShare</span>
         </div>
-        <div style={{ display: "flex", alignItems: "center", gap: "20px" }}>
-          <span style={{ color: "#9db89d", fontSize: "14px" }}>
-            Bună, <span style={{ color: "#e8d5a3", fontWeight: "bold" }}>{user?.nume}</span>
+        <div className="flex items-center gap-3 md:gap-5">
+          <span className="hidden sm:inline text-[#9db89d] text-[14px] font-sans">
+            Bună, <span className="text-[#e8d5a3] font-bold">{user?.nume}</span>
           </span>
-          <button onClick={() => navigate("/adauga-utilaj")} style={{
-            background: "#4a7c4a", color: "white", border: "none",
-            borderRadius: "6px", padding: "8px 16px", fontSize: "13px",
-            cursor: "pointer", fontFamily: "inherit",
-          }}>+ Adaugă Utilaj</button>
-          <button onClick={() => navigate("/rezervari")} style={{
-            background: "transparent", color: "#9db89d",
-            border: "1px solid #3a5a3a", borderRadius: "6px",
-            padding: "8px 14px", fontSize: "13px", cursor: "pointer", fontFamily: "inherit",
-          }}>📋 Rezervări</button>
-          <button onClick={handleLogout} style={{
-            background: "transparent", color: "#9db89d",
-            border: "1px solid #3a5a3a", borderRadius: "6px",
-            padding: "8px 14px", fontSize: "13px", cursor: "pointer", fontFamily: "inherit",
-          }}>Ieși</button>
+          <button onClick={() => navigate("/adauga-utilaj")} className="bg-[#4a7c4a] hover:bg-[#3a5a3a] text-white border-none rounded-md px-3 md:px-4 py-2 text-[12px] md:text-[13px] transition-colors font-sans font-medium">
+            + Adaugă Utilaj
+          </button>
+          <button onClick={() => navigate("/rezervari")} className="bg-transparent hover:bg-[#2d4a2d] text-[#9db89d] border border-[#3a5a3a] rounded-md px-3 md:px-4 py-2 text-[12px] md:text-[13px] transition-colors font-sans">
+            📋 Rezervări
+          </button>
+          <button onClick={handleLogout} className="hidden sm:block bg-transparent hover:bg-[#2d4a2d] text-[#9db89d] border border-[#3a5a3a] rounded-md px-3 md:px-4 py-2 text-[12px] md:text-[13px] transition-colors font-sans">
+            Ieși
+          </button>
         </div>
       </nav>
 
-      <div style={{
-        background: "linear-gradient(135deg, #1a2e1a 0%, #2d4a2d 50%, #1a2e1a 100%)",
-        padding: "4rem 2rem 3rem", textAlign: "center",
-        position: "relative", overflow: "hidden",
-        opacity: visible ? 1 : 0,
-        transform: visible ? "translateY(0)" : "translateY(20px)",
-        transition: "opacity 0.7s ease, transform 0.7s ease",
-      }}>
-        <div style={{
-          position: "absolute", top: "50%", left: "50%",
-          transform: "translate(-50%, -50%)",
-          fontSize: "200px", opacity: 0.04, color: "white",
-          userSelect: "none", whiteSpace: "nowrap", fontWeight: "bold",
-        }}>🌾</div>
-        <p style={{ color: "#9db89d", fontSize: "13px", letterSpacing: "3px", textTransform: "uppercase", marginBottom: "16px", fontFamily: "Arial, sans-serif" }}>
+      <div className={`relative overflow-hidden bg-gradient-to-br from-[#1a2e1a] via-[#2d4a2d] to-[#1a2e1a] pt-16 pb-12 px-8 text-center transition-all duration-700 ${visible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-5"}`}>
+        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[300px] h-[300px] bg-white opacity-5 [mask-image:url('/FAVICON.png')] [mask-size:contain] [mask-repeat:no-repeat] [mask-position:center]" />
+        
+        <p className="text-[#9db89d] text-[13px] tracking-[3px] uppercase mb-4 font-sans relative z-10">
           Platforma #1 de închirieri agricole din România
         </p>
-        <h1 style={{ color: "#e8d5a3", fontSize: "clamp(2rem, 5vw, 3.5rem)", fontWeight: "bold", marginBottom: "16px", lineHeight: 1.2 }}>
+        <h1 className="text-[#e8d5a3] text-[clamp(2rem,5vw,3.5rem)] font-bold mb-4 leading-[1.2] relative z-10">
           Găsește utilajul potrivit,<br />
-          <span style={{ color: "#7dc47d" }}>în județul tău.</span>
+          <span className="text-[#7dc47d]">în județul tău.</span>
         </h1>
-        <p style={{ color: "#9db89d", fontSize: "16px", maxWidth: "500px", margin: "0 auto 2rem", lineHeight: 1.7, fontFamily: "Arial, sans-serif" }}>
+        <p className="text-[#9db89d] text-base max-w-[500px] mx-auto mb-8 leading-[1.7] font-sans relative z-10">
           Conectăm fermierii români. Închiriezi sau îți pui utilajul la muncă când nu îl folosești.
         </p>
-        <div style={{ display: "flex", maxWidth: "500px", margin: "0 auto", gap: "8px" }}>
+        <div className="flex max-w-[500px] mx-auto gap-2 relative z-10">
           <input
             placeholder="Caută marcă, model, județ..."
             value={searchQuery}
             onChange={e => setSearchQuery(e.target.value)}
-            style={{
-              flex: 1, padding: "14px 18px", borderRadius: "8px",
-              border: "none", fontSize: "15px", fontFamily: "Arial, sans-serif",
-              background: "rgba(255,255,255,0.95)", outline: "none",
-            }}
+            className="flex-1 px-4 py-3 rounded-lg border-none text-[15px] font-sans bg-white/95 focus:outline-none focus:ring-2 focus:ring-[#7dc47d] transition-shadow"
           />
-          <button style={{ background: "#4a7c4a", color: "white", border: "none", borderRadius: "8px", padding: "14px 20px", fontSize: "15px", cursor: "pointer" }}>🔍</button>
+          <button className="bg-[#4a7c4a] hover:bg-[#3a5a3a] text-white rounded-lg px-5 py-3 text-[15px] transition-colors">
+            🔍
+          </button>
         </div>
       </div>
 
-      <div style={{
-        background: "#e8d5a3", padding: "1.2rem 2rem",
-        display: "flex", justifyContent: "center",
-        gap: "clamp(1rem, 5vw, 4rem)", flexWrap: "wrap",
-        opacity: visible ? 1 : 0, transition: "opacity 0.7s ease 0.2s",
-      }}>
+      <div className={`bg-[#e8d5a3] py-5 px-8 flex justify-center gap-[clamp(1rem,5vw,4rem)] flex-wrap transition-all duration-700 delay-200 ${visible ? "opacity-100" : "opacity-0"}`}>
         {[
           { val: utilaje.length + "+", label: "Utilaje disponibile" },
           { val: stats.total_useri + "+", label: "Fermieri înregistrați" },
           { val: "41", label: "Județe acoperite" },
           { val: stats.rating_general ? `${stats.rating_general}★` : "—", label: stats.rating_general ? `Rating mediu (${stats.rating_count})` : "Fără recenzii încă" },
         ].map((s, i) => (
-          <div key={i} style={{ textAlign: "center" }}>
-            <div style={{ fontSize: "22px", fontWeight: "bold", color: "#1a2e1a" }}>{s.val}</div>
-            <div style={{ fontSize: "12px", color: "#5a6e4a", fontFamily: "Arial, sans-serif", letterSpacing: "0.5px" }}>{s.label}</div>
+          <div key={i} className="text-center">
+            <div className="text-[22px] font-bold text-[#1a2e1a]">{s.val}</div>
+            <div className="text-[12px] text-[#5a6e4a] font-sans tracking-[0.5px]">{s.label}</div>
           </div>
         ))}
       </div>
 
-      <div style={{ maxWidth: "1200px", margin: "0 auto", padding: "2rem" }}>
+      <div className="max-w-[1200px] mx-auto p-8">
 
-        {/* Filters */}
-        <div style={{
-          display: "flex", gap: "8px", flexWrap: "wrap",
-          marginBottom: "2rem", alignItems: "center",
-          opacity: visible ? 1 : 0, transition: "opacity 0.7s ease 0.3s",
-        }}>
-          <span style={{ fontSize: "13px", color: "#666", fontFamily: "Arial, sans-serif", marginRight: "4px" }}>Județ:</span>
+        {/* FILTERS */}
+        <div className={`flex flex-wrap items-center gap-2 mb-8 transition-all duration-700 delay-300 ${visible ? "opacity-100" : "opacity-0"}`}>
+          <span className="text-[13px] text-gray-500 font-sans mr-1">Județ:</span>
           {judete.map(j => (
-            <button key={j} onClick={() => setJudetFiltrat(j)} style={{
-              padding: "7px 16px", borderRadius: "20px",
-              border: judetFiltrat === j ? "none" : "1px solid #ccc",
-              background: judetFiltrat === j ? "#1a2e1a" : "white",
-              color: judetFiltrat === j ? "#e8d5a3" : "#555",
-              fontSize: "13px", cursor: "pointer",
-              fontFamily: "Arial, sans-serif", transition: "all 0.2s",
-            }}>{j}</button>
+            <button 
+              key={j} 
+              onClick={() => setJudetFiltrat(j)} 
+              className={`px-4 py-1.5 rounded-full text-[13px] font-sans transition-colors ${
+                judetFiltrat === j 
+                  ? "bg-[#1a2e1a] text-[#e8d5a3] border-transparent" 
+                  : "bg-white text-gray-600 border border-gray-300 hover:bg-gray-50"
+              }`}
+            >
+              {j}
+            </button>
           ))}
-          <span style={{ marginLeft: "auto", fontSize: "13px", color: "#888", fontFamily: "Arial, sans-serif" }}>
+          <span className="ml-auto text-[13px] text-gray-500 font-sans">
             {utilajeFiltrate.length} utilaje găsite
           </span>
         </div>
 
         {loadingUtilaje ? (
-          <div style={{ textAlign: "center", padding: "4rem", color: "#aaa", fontFamily: "Arial, sans-serif" }}>
-            <div style={{ fontSize: "48px", marginBottom: "16px" }}>🚜</div>
+          <div className="text-center py-16 text-gray-400 font-sans">
+            <div className="w-[60px] h-[60px] bg-gray-300 mx-auto mb-4 [mask-image:url('/FAVICON.png')] [mask-size:contain] [mask-repeat:no-repeat] [mask-position:center]" />
             <p>Se încarcă utilajele...</p>
           </div>
         ) : utilajeFiltrate.length === 0 ? (
-          <div style={{ textAlign: "center", padding: "4rem", color: "#aaa", fontFamily: "Arial, sans-serif" }}>
-            <div style={{ fontSize: "48px", marginBottom: "16px" }}>🔍</div>
+          <div className="text-center py-16 text-gray-400 font-sans">
+            <div className="text-5xl mb-4">🔍</div>
             <p>Niciun utilaj găsit pentru criteriile selectate.</p>
           </div>
         ) : (
-          <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(300px, 1fr))", gap: "1.5rem" }}>
+          <div className="grid grid-cols-[repeat(auto-fill,minmax(300px,1fr))] gap-6">
             {utilajeFiltrate.map((u, i) => (
-              <div key={u.id}
+              <div 
+                key={u.id}
                 onClick={() => {
                   setModalDetalii(u);
                   setReviewsDetalii(null);
@@ -339,88 +312,58 @@ export default function Home() {
                     .then(res => setReviewsDetalii(res.data))
                     .catch(() => setReviewsDetalii({ average: null, count: 0, reviews: [] }));
                 }}
-                style={{
-                  background: "white", borderRadius: "12px",
-                  overflow: "hidden", border: "1px solid #e8e0d0", cursor: "pointer",
-                  opacity: visible ? 1 : 0,
-                  transform: visible ? "translateY(0)" : "translateY(20px)",
-                  transition: `opacity 0.5s ease ${0.1 * i + 0.4}s, transform 0.5s ease ${0.1 * i + 0.4}s`,
-                }}
-                onMouseEnter={e => { e.currentTarget.style.transform = "translateY(-4px)"; e.currentTarget.style.boxShadow = "0 8px 24px rgba(0,0,0,0.1)"; }}
-                onMouseLeave={e => { e.currentTarget.style.transform = "translateY(0)"; e.currentTarget.style.boxShadow = "none"; }}
+                className={`bg-white rounded-xl overflow-hidden border border-[#e8e0d0] cursor-pointer transition-all duration-500 hover:-translate-y-1 hover:shadow-xl ${visible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-5'}`}
+                style={{ transitionDelay: `${0.1 * i + 0.4}s` }}
               >
-                {/* Card image */}
-                <div style={{
-                  height: "160px",
-                  background: u.imagine_url ? "none" : "linear-gradient(135deg, #2d4a2d, #4a7c4a)",
-                  display: "flex", alignItems: "center", justifyContent: "center",
-                  fontSize: "64px", position: "relative", overflow: "hidden",
-                }}>
+                <div className={`h-[160px] flex items-center justify-center relative overflow-hidden ${u.imagine_url ? 'bg-transparent' : 'bg-gradient-to-br from-[#2d4a2d] to-[#4a7c4a]'}`}>
                   {u.imagine_url ? (
-                    <img src={u.imagine_url} alt={`${u.marca} ${u.model}`}
-                      style={{ width: "100%", height: "100%", objectFit: "cover", display: "block" }} />
+                    <img src={u.imagine_url} alt={`${u.marca} ${u.model}`} className="w-full h-full object-cover block" />
                   ) : (
-                    <span>🚜</span>
+                    <div className="w-[60px] h-[60px] bg-white/30 [mask-image:url('/FAVICON.png')] [mask-size:contain] [mask-repeat:no-repeat] [mask-position:center]" />
                   )}
-                  <div style={{
-                    position: "absolute", top: "12px", right: "12px",
-                    background: u.disponibil ? "#27ae60" : "#c0392b",
-                    color: "white", padding: "4px 10px", borderRadius: "4px",
-                    fontSize: "11px", fontFamily: "Arial, sans-serif",
-                  }}>
+                  <div className={`absolute top-3 right-3 text-white px-2.5 py-1 rounded text-[11px] font-sans ${u.disponibil ? 'bg-[#27ae60]' : 'bg-[#c0392b]'}`}>
                     {u.disponibil ? "Disponibil" : "Indisponibil"}
                   </div>
-                  <div style={{
-                    position: "absolute", bottom: "12px", left: "12px",
-                    background: "rgba(0,0,0,0.5)", color: "#e8d5a3",
-                    padding: "4px 10px", borderRadius: "4px",
-                    fontSize: "12px", fontFamily: "Arial, sans-serif",
-                  }}>📍 {u.judet}</div>
+                  <div className="absolute bottom-3 left-3 bg-black/50 text-[#e8d5a3] px-2.5 py-1 rounded text-[12px] font-sans">
+                    📍 {u.judet}
+                  </div>
                 </div>
 
-                <div style={{ padding: "1.2rem" }}>
-                  <h3 style={{ margin: "0 0 4px", fontSize: "18px", color: "#1a2e1a", fontWeight: "bold" }}>
+                <div className="p-5">
+                  <h3 className="m-0 mb-1 text-[18px] text-[#1a2e1a] font-bold">
                     {u.marca} {u.model}
                   </h3>
-                  <p style={{ margin: "0 0 6px", fontSize: "13px", color: "#888", fontFamily: "Arial, sans-serif" }}>
+                  <p className="m-0 mb-1.5 text-[13px] text-gray-500 font-sans">
                     ⚡ {u.putere_cp ? `${u.putere_cp} CP` : "—"}
                   </p>
-                  <p style={{ margin: "0 0 12px", fontSize: "13px", fontFamily: "Arial, sans-serif" }}>
+                  <p className="m-0 mb-3 text-[13px] font-sans">
                     {ratings[u.id]?.average ? (
-                      <span style={{ color: "#d4a017" }}>⭐ {ratings[u.id].average} <span style={{ color: "#aaa" }}>({ratings[u.id].count})</span></span>
+                      <span className="text-[#d4a017]">⭐ {ratings[u.id].average} <span className="text-gray-400">({ratings[u.id].count})</span></span>
                     ) : (
-                      <span style={{ color: "#bbb" }}>Fără recenzii încă</span>
+                      <span className="text-gray-400">Fără recenzii încă</span>
                     )}
                   </p>
-                  <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", borderTop: "1px solid #f0ebe0", paddingTop: "12px" }}>
+                  <div className="flex items-center justify-between border-t border-[#f0ebe0] pt-3">
                     <div>
-                      <span style={{ fontSize: "22px", fontWeight: "bold", color: "#2d4a2d" }}>{u.pret_zi} lei</span>
-                      <span style={{ fontSize: "14px", color: "#5a7a5a", fontFamily: "Arial, sans-serif", fontWeight: "600" }}> / zi</span>
+                      <span className="text-[22px] font-bold text-[#2d4a2d]">{u.pret_zi} lei</span>
+                      <span className="text-[14px] text-[#5a7a5a] font-sans font-semibold"> / zi</span>
                     </div>
-                    <div style={{ display: "flex", gap: "8px" }}>
+                    <div className="flex gap-2">
                       {u.owner?.email === currentUserEmail && (
                         <button
                           onClick={(e) => { e.stopPropagation(); handleSterge(u.id); }}
-                          style={{
-                            background: "white", color: "#dc2626",
-                            border: "1px solid #dc2626", borderRadius: "6px",
-                            padding: "9px 14px", fontSize: "13px",
-                            cursor: "pointer", fontFamily: "inherit",
-                          }}>
+                          className="bg-white text-red-600 border border-red-600 rounded-md px-3.5 py-2 text-[13px] hover:bg-red-50 transition-colors font-sans"
+                        >
                           🗑️
                         </button>
                       )}
-                     <button
+                      <button
                         disabled={!u.disponibil}
                         onClick={(e) => { e.stopPropagation(); deschideModal(u); }}
-                        style={{
-                          background: u.disponibil ? "#1a2e1a" : "#ccc",
-                          color: u.disponibil ? "#e8d5a3" : "#888",
-                          border: "none", borderRadius: "6px",
-                          padding: "9px 18px", fontSize: "13px",
-                          cursor: u.disponibil ? "pointer" : "not-allowed",
-                          fontFamily: "inherit",
-                        }}>
+                        className={`rounded-md px-4 py-2 text-[13px] font-sans transition-colors ${
+                          u.disponibil ? 'bg-[#1a2e1a] hover:bg-[#2d4a2d] text-[#e8d5a3] cursor-pointer' : 'bg-gray-300 text-gray-500 cursor-not-allowed'
+                        }`}
+                      >
                         {u.disponibil ? "Rezervă" : "Indisponibil"}
                       </button>
                     </div>
@@ -432,114 +375,98 @@ export default function Home() {
         )}
       </div>
 
-      <footer style={{
-        background: "#1a2e1a", color: "#9db89d",
-        textAlign: "center", padding: "2rem", marginTop: "4rem",
-        fontSize: "13px", fontFamily: "Arial, sans-serif",
-      }}>
-        <div style={{ fontSize: "20px", marginBottom: "8px" }}>🚜 TraktorShare</div>
-        <p style={{ margin: 0, opacity: 0.6 }}>© 2026 TraktorShare · Platforma fermierilor români</p>
+      {/* FOOTER */}
+      <footer className="bg-[#1a2e1a] text-[#9db89d] text-center p-8 mt-16 text-[13px] font-sans">
+        <div className="flex items-center justify-center gap-2 mb-2">
+          <div className="w-6 h-6 bg-[#e8d5a3] [mask-image:url('/FAVICON.png')] [mask-size:contain] [mask-repeat:no-repeat] [mask-position:center]" />
+          <div className="text-[20px] text-[#e8d5a3] font-bold font-serif">TraktorShare</div>
+        </div>
+        <p className="m-0 opacity-60">© 2026 TraktorShare · Platforma fermierilor români</p>
       </footer>
 
       {modalDetalii && (
-        <div style={{
-          position: "fixed", top: 0, left: 0, right: 0, bottom: 0,
-          background: "rgba(0,0,0,0.7)", zIndex: 1000,
-          display: "flex", alignItems: "center", justifyContent: "center",
-          padding: "1rem",
-        }} onClick={() => setModalDetalii(null)}>
-          <div style={{
-            background: "white", borderRadius: "16px",
-            maxWidth: "600px", width: "100%",
-            maxHeight: "90vh", overflowY: "auto",
-            boxShadow: "0 20px 60px rgba(0,0,0,0.3)",
-          }} onClick={e => e.stopPropagation()}>
-
-            <div style={{ height: "320px", position: "relative" }}>
+        <div 
+          className="fixed inset-0 bg-black/70 z-[1000] flex items-center justify-center p-4" 
+          onClick={() => setModalDetalii(null)}
+        >
+          <div 
+            className="bg-white rounded-2xl w-full max-w-[600px] max-h-[90vh] overflow-y-auto shadow-2xl" 
+            onClick={e => e.stopPropagation()}
+          >
+            <div className="h-[320px] relative">
               {modalDetalii.imagine_url ? (
-                <img src={modalDetalii.imagine_url} alt={`${modalDetalii.marca} ${modalDetalii.model}`}
-                  style={{ width: "100%", height: "100%", objectFit: "cover", borderRadius: "16px 16px 0 0", display: "block" }} />
+                <img src={modalDetalii.imagine_url} alt={`${modalDetalii.marca} ${modalDetalii.model}`} className="w-full h-full object-cover rounded-t-2xl block" />
               ) : (
-                <div style={{
-                  width: "100%", height: "100%",
-                  background: "linear-gradient(135deg, #2d4a2d, #4a7c4a)",
-                  display: "flex", alignItems: "center", justifyContent: "center",
-                  fontSize: "80px", borderRadius: "16px 16px 0 0",
-                }}>🚜</div>
+                <div className="w-full h-full bg-gradient-to-br from-[#2d4a2d] to-[#4a7c4a] flex items-center justify-center rounded-t-2xl">
+                  <div className="w-[80px] h-[80px] bg-white/30 [mask-image:url('/FAVICON.png')] [mask-size:contain] [mask-repeat:no-repeat] [mask-position:center]" />
+                </div>
               )}
-              <button onClick={() => setModalDetalii(null)} style={{
-                position: "absolute", top: "16px", right: "16px",
-                background: "rgba(0,0,0,0.5)", color: "white",
-                border: "none", borderRadius: "50%",
-                width: "36px", height: "36px", fontSize: "18px", cursor: "pointer",
-              }}>✕</button>
-              <div style={{
-                position: "absolute", top: "16px", left: "16px",
-                background: modalDetalii.disponibil ? "#27ae60" : "#c0392b",
-                color: "white", padding: "5px 12px", borderRadius: "4px",
-                fontSize: "12px", fontFamily: "Arial, sans-serif",
-              }}>
+              <button 
+                onClick={() => setModalDetalii(null)} 
+                className="absolute top-4 right-4 bg-black/50 hover:bg-black/70 text-white border-none rounded-full w-9 h-9 text-[18px] cursor-pointer flex items-center justify-center transition-colors"
+              >✕</button>
+              <div className={`absolute top-4 left-4 text-white px-3 py-1.5 rounded text-[12px] font-sans ${modalDetalii.disponibil ? 'bg-[#27ae60]' : 'bg-[#c0392b]'}`}>
                 {modalDetalii.disponibil ? "Disponibil" : "Indisponibil"}
               </div>
             </div>
 
-            <div style={{ padding: "1.5rem" }}>
-              <h2 style={{ color: "#1a2e1a", margin: "0 0 8px", fontSize: "24px" }}>
+            <div className="p-6">
+              <h2 className="text-[#1a2e1a] m-0 mb-2 text-[24px]">
                 {modalDetalii.marca} {modalDetalii.model}
               </h2>
-              <p style={{ color: "#888", fontFamily: "Arial, sans-serif", margin: "0 0 16px", fontSize: "14px" }}>
+              <p className="text-gray-500 font-sans m-0 mb-4 text-[14px]">
                 📍 {modalDetalii.judet} · ⚡ {modalDetalii.putere_cp ? `${modalDetalii.putere_cp} CP` : "Putere nespecificată"}
               </p>
 
-              <div style={{ display: "flex", alignItems: "baseline", marginBottom: "20px", borderBottom: "1px solid #f0ebe0", paddingBottom: "16px" }}>
-                <span style={{ fontSize: "26px", fontWeight: "bold", color: "#2d4a2d" }}>{modalDetalii.pret_zi} lei</span>
-                <span style={{ fontSize: "14px", color: "#5a7a5a", marginLeft: "4px", fontWeight: "600" }}>/ zi</span>
+              <div className="flex items-baseline mb-5 border-b border-[#f0ebe0] pb-4">
+                <span className="text-[26px] font-bold text-[#2d4a2d]">{modalDetalii.pret_zi} lei</span>
+                <span className="text-[14px] text-[#5a7a5a] ml-1 font-semibold">/ zi</span>
               </div>
 
               {modalDetalii.descriere && (
-                <div style={{ marginBottom: "20px" }}>
-                  <h4 style={{ color: "#1a2e1a", fontSize: "14px", marginBottom: "6px", fontFamily: "Arial, sans-serif" }}>📝 Descriere</h4>
-                  <p style={{ color: "#555", fontFamily: "Arial, sans-serif", fontSize: "14px", lineHeight: 1.6, margin: 0 }}>
+                <div className="mb-5">
+                  <h4 className="text-[#1a2e1a] text-[14px] mb-1.5 font-sans font-bold">📝 Descriere</h4>
+                  <p className="text-gray-600 font-sans text-[14px] leading-relaxed m-0">
                     {modalDetalii.descriere}
                   </p>
                 </div>
               )}
 
               {(modalDetalii.data_disponibil_de || modalDetalii.data_disponibil_pana) && (
-                <div style={{ marginBottom: "20px" }}>
-                  <h4 style={{ color: "#1a2e1a", fontSize: "14px", marginBottom: "6px", fontFamily: "Arial, sans-serif" }}>📅 Disponibil în perioada</h4>
-                  <p style={{ color: "#555", fontFamily: "Arial, sans-serif", fontSize: "14px", margin: 0 }}>
+                <div className="mb-5">
+                  <h4 className="text-[#1a2e1a] text-[14px] mb-1.5 font-sans font-bold">📅 Disponibil în perioada</h4>
+                  <p className="text-gray-600 font-sans text-[14px] m-0">
                     {modalDetalii.data_disponibil_de} → {modalDetalii.data_disponibil_pana}
                   </p>
                 </div>
               )}
 
-              <div style={{ marginBottom: "20px" }}>
-                <h4 style={{ color: "#1a2e1a", fontSize: "14px", marginBottom: "10px", fontFamily: "Arial, sans-serif" }}>
+              <div className="mb-5">
+                <h4 className="text-[#1a2e1a] text-[14px] mb-2.5 font-sans font-bold">
                   ⭐ Recenzii {reviewsDetalii?.count > 0 && `(${reviewsDetalii.count})`}
                 </h4>
                 {!reviewsDetalii ? (
-                  <p style={{ color: "#aaa", fontFamily: "Arial, sans-serif", fontSize: "13px" }}>Se încarcă...</p>
+                  <p className="text-gray-400 font-sans text-[13px]">Se încarcă...</p>
                 ) : reviewsDetalii.count === 0 ? (
-                  <p style={{ color: "#aaa", fontFamily: "Arial, sans-serif", fontSize: "13px" }}>Niciun fermier nu a evaluat încă acest utilaj.</p>
+                  <p className="text-gray-400 font-sans text-[13px]">Niciun fermier nu a evaluat încă acest utilaj.</p>
                 ) : (
                   <>
-                    <div style={{ display: "flex", alignItems: "center", gap: "8px", marginBottom: "12px" }}>
-                      <span style={{ fontSize: "22px", fontWeight: "bold", color: "#1a2e1a" }}>{reviewsDetalii.average}</span>
-                      <span style={{ color: "#d4a017", fontSize: "16px" }}>
+                    <div className="flex items-center gap-2 mb-3">
+                      <span className="text-[22px] font-bold text-[#1a2e1a]">{reviewsDetalii.average}</span>
+                      <span className="text-[#d4a017] text-[16px]">
                         {"★".repeat(Math.round(reviewsDetalii.average))}{"☆".repeat(5 - Math.round(reviewsDetalii.average))}
                       </span>
-                      <span style={{ color: "#888", fontSize: "13px", fontFamily: "Arial, sans-serif" }}>din {reviewsDetalii.count} recenzii</span>
+                      <span className="text-gray-500 text-[13px] font-sans">din {reviewsDetalii.count} recenzii</span>
                     </div>
-                    <div style={{ display: "flex", flexDirection: "column", gap: "10px", maxHeight: "180px", overflowY: "auto" }}>
+                    <div className="flex flex-col gap-2.5 max-h-[180px] overflow-y-auto pr-2">
                       {reviewsDetalii.reviews.map((rev, i) => (
-                        <div key={i} style={{ background: "#f7f5f0", borderRadius: "8px", padding: "10px 12px" }}>
-                          <div style={{ display: "flex", justifyContent: "space-between", marginBottom: "4px" }}>
-                            <span style={{ fontFamily: "Arial, sans-serif", fontSize: "12px", fontWeight: "bold", color: "#1a2e1a" }}>{rev.client_nume}</span>
-                            <span style={{ color: "#d4a017", fontSize: "12px" }}>{"★".repeat(rev.rating)}{"☆".repeat(5 - rev.rating)}</span>
+                        <div key={i} className="bg-[#f7f5f0] rounded-lg py-2.5 px-3">
+                          <div className="flex justify-between mb-1">
+                            <span className="font-sans text-[12px] font-bold text-[#1a2e1a]">{rev.client_nume}</span>
+                            <span className="text-[#d4a017] text-[12px]">{"★".repeat(rev.rating)}{"☆".repeat(5 - rev.rating)}</span>
                           </div>
                           {rev.comentariu && (
-                            <p style={{ margin: 0, fontFamily: "Arial, sans-serif", fontSize: "13px", color: "#555", lineHeight: 1.5 }}>
+                            <p className="m-0 font-sans text-[13px] text-gray-600 leading-relaxed">
                               {rev.comentariu}
                             </p>
                           )}
@@ -553,101 +480,96 @@ export default function Home() {
               <button
                 disabled={!modalDetalii.disponibil}
                 onClick={() => { const u = modalDetalii; setModalDetalii(null); deschideModal(u); }}
-                style={{
-                  width: "100%",
-                  background: modalDetalii.disponibil ? "#1a2e1a" : "#ccc",
-                  color: modalDetalii.disponibil ? "#e8d5a3" : "#888",
-                  border: "none", borderRadius: "8px", padding: "13px",
-                  fontSize: "15px", cursor: modalDetalii.disponibil ? "pointer" : "not-allowed",
-                  fontFamily: "Georgia, serif", fontWeight: "bold",
-                }}>
-                {modalDetalii.disponibil ? "🚜 Rezervă acest utilaj" : "Indisponibil momentan"}
+                className={`w-full flex justify-center items-center gap-2 border-none rounded-lg p-3 text-[15px] font-bold transition-colors ${
+                  modalDetalii.disponibil ? 'bg-[#1a2e1a] hover:bg-[#2d4a2d] text-[#e8d5a3] cursor-pointer' : 'bg-gray-300 text-gray-500 cursor-not-allowed'
+                }`}
+              >
+                {modalDetalii.disponibil ? (
+                  <>
+                    <div className="w-[18px] h-[18px] bg-[#e8d5a3] [mask-image:url('/FAVICON.png')] [mask-size:contain] [mask-repeat:no-repeat] [mask-position:center]" />
+                    Rezervă acest utilaj
+                  </>
+                ) : "Indisponibil momentan"}
               </button>
             </div>
           </div>
         </div>
       )}
 
+      {/* MODAL REZERVARE UTILAJ */}
       {modalUtilaj && (
-        <div style={{
-          position: "fixed", top: 0, left: 0, right: 0, bottom: 0,
-          background: "rgba(0,0,0,0.6)", zIndex: 1000,
-          display: "flex", alignItems: "center", justifyContent: "center",
-          padding: "1rem",
-        }} onClick={() => setModalUtilaj(null)}>
-          <div style={{
-            background: "white", borderRadius: "16px",
-            padding: "2rem", maxWidth: "480px", width: "100%",
-            boxShadow: "0 20px 60px rgba(0,0,0,0.3)",
-            maxHeight: "90vh", overflowY: "auto",
-          }} onClick={e => e.stopPropagation()}>
-
+        <div 
+          className="fixed inset-0 bg-black/60 z-[1000] flex items-center justify-center p-4" 
+          onClick={() => setModalUtilaj(null)}
+        >
+          <div 
+            className="bg-white rounded-2xl p-8 w-full max-w-[480px] shadow-2xl max-h-[90vh] overflow-y-auto" 
+            onClick={e => e.stopPropagation()}
+          >
             {bookingSuccess ? (
-              <div style={{ textAlign: "center", padding: "1rem" }}>
-                <div style={{ fontSize: "60px", marginBottom: "16px" }}>🎉</div>
-                <h3 style={{ color: "#1a2e1a", marginBottom: "8px" }}>Rezervare trimisă!</h3>
-                <p style={{ color: "#888", fontFamily: "Arial, sans-serif", fontSize: "14px", marginBottom: "24px" }}>
+              <div className="text-center p-4">
+                <div className="text-6xl mb-4">🎉</div>
+                <h3 className="text-[#1a2e1a] mb-2 font-bold text-xl">Rezervare trimisă!</h3>
+                <p className="text-gray-500 font-sans text-[14px] mb-6">
                   Proprietarul va aproba sau respinge cererea ta în curând.
                 </p>
-                <button onClick={() => setModalUtilaj(null)} style={{
-                  background: "#1a2e1a", color: "#e8d5a3", border: "none",
-                  borderRadius: "8px", padding: "10px 24px", cursor: "pointer",
-                  fontFamily: "Georgia, serif",
-                }}>Închide</button>
+                <button onClick={() => setModalUtilaj(null)} className="bg-[#1a2e1a] hover:bg-[#2d4a2d] text-[#e8d5a3] border-none rounded-lg px-6 py-2.5 cursor-pointer font-serif transition-colors">
+                  Închide
+                </button>
               </div>
             ) : (
               <>
-                <div style={{ display: "flex", justifyContent: "space-between", alignItems: "start", marginBottom: "1.5rem" }}>
+                <div className="flex justify-between items-start mb-6">
                   <div>
-                    <h3 style={{ color: "#1a2e1a", margin: "0 0 4px", fontSize: "20px" }}>
+                    <h3 className="text-[#1a2e1a] m-0 mb-1 text-[20px] font-bold">
                       {modalUtilaj.marca} {modalUtilaj.model}
                     </h3>
-                    <p style={{ color: "#888", margin: 0, fontFamily: "Arial, sans-serif", fontSize: "13px" }}>
+                    <p className="text-gray-500 m-0 font-sans text-[13px]">
                       📍 {modalUtilaj.judet} · {modalUtilaj.pret_zi} lei/zi
                     </p>
                   </div>
-                  <button onClick={() => setModalUtilaj(null)} style={{
-                    background: "none", border: "none", fontSize: "20px", cursor: "pointer", color: "#aaa",
-                  }}>✕</button>
+                  <button onClick={() => setModalUtilaj(null)} className="bg-transparent border-none text-[20px] cursor-pointer text-gray-400 hover:text-gray-700 transition-colors">
+                    ✕
+                  </button>
                 </div>
 
-                <div style={{ display: "flex", gap: "16px", marginBottom: "1rem", fontFamily: "Arial, sans-serif", fontSize: "12px" }}>
+                <div className="flex gap-4 mb-4 font-sans text-[12px]">
                   {[
-                    { color: "#27ae60", label: "Disponibil" },
-                    { color: "#e74c3c", label: "Ocupat" },
-                    { color: "#f5f5f5", label: "Indisponibil" },
-                    { color: "#1a2e1a", label: "Selectat" },
+                    { color: "bg-[#27ae60]", label: "Disponibil", border: "" },
+                    { color: "bg-[#e74c3c]", label: "Ocupat", border: "" },
+                    { color: "bg-[#f5f5f5]", label: "Indisponibil", border: "border border-gray-300" },
+                    { color: "bg-[#1a2e1a]", label: "Selectat", border: "" },
                   ].map(l => (
-                    <div key={l.label} style={{ display: "flex", alignItems: "center", gap: "6px" }}>
-                      <div style={{ width: "14px", height: "14px", borderRadius: "3px", background: l.color, border: l.color === "#f5f5f5" ? "1px solid #ddd" : "none" }} />
-                      <span style={{ color: "#555" }}>{l.label}</span>
+                    <div key={l.label} className="flex items-center gap-1.5">
+                      <div className={`w-3.5 h-3.5 rounded-[3px] ${l.color} ${l.border}`} />
+                      <span className="text-gray-600">{l.label}</span>
                     </div>
                   ))}
                 </div>
 
-                <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "1rem" }}>
+                <div className="flex justify-between items-center mb-4">
                   <button onClick={() => setLunaAfisata(new Date(lunaAfisata.getFullYear(), lunaAfisata.getMonth() - 1))}
-                    style={{ background: "none", border: "1px solid #ddd", borderRadius: "6px", padding: "6px 12px", cursor: "pointer", fontSize: "16px" }}>
+                    className="bg-transparent border border-gray-300 rounded-md px-3 py-1.5 cursor-pointer text-[16px] hover:bg-gray-50 transition-colors">
                     ‹
                   </button>
-                  <span style={{ fontWeight: "bold", color: "#1a2e1a", fontSize: "16px" }}>
+                  <span className="font-bold text-[#1a2e1a] text-[16px] capitalize">
                     {lunaAfisata.toLocaleString("ro-RO", { month: "long", year: "numeric" })}
                   </span>
                   <button onClick={() => setLunaAfisata(new Date(lunaAfisata.getFullYear(), lunaAfisata.getMonth() + 1))}
-                    style={{ background: "none", border: "1px solid #ddd", borderRadius: "6px", padding: "6px 12px", cursor: "pointer", fontSize: "16px" }}>
+                    className="bg-transparent border border-gray-300 rounded-md px-3 py-1.5 cursor-pointer text-[16px] hover:bg-gray-50 transition-colors">
                     ›
                   </button>
                 </div>
 
-                <div style={{ display: "grid", gridTemplateColumns: "repeat(7, 1fr)", gap: "4px", marginBottom: "4px" }}>
+                <div className="grid grid-cols-7 gap-1 mb-1">
                   {["D", "L", "M", "M", "J", "V", "S"].map((z, i) => (
-                    <div key={i} style={{ textAlign: "center", fontSize: "11px", fontFamily: "Arial, sans-serif", color: "#aaa", padding: "4px 0", fontWeight: "bold" }}>
+                    <div key={i} className="text-center text-[11px] font-sans text-gray-400 py-1 font-bold">
                       {z}
                     </div>
                   ))}
                 </div>
 
-                <div style={{ display: "grid", gridTemplateColumns: "repeat(7, 1fr)", gap: "4px", marginBottom: "1.5rem" }}>
+                <div className="grid grid-cols-7 gap-1 mb-6">
                   {getDaysInMonth(lunaAfisata).map((data, i) => {
                     if (!data) return <div key={i} />;
                     const ocupata = esteOcupata(data);
@@ -655,22 +577,26 @@ export default function Home() {
                     const selectata = esteSelectata(data);
                     const disabled = ocupata || !disponibila;
 
-                    let bg = "#e8f5e8";
-                    let color = "#2d4a2d";
-                    if (!disponibila) { bg = "#f5f5f5"; color = "#ccc"; }
-                    if (ocupata) { bg = "#fde8e8"; color = "#e74c3c"; }
-                    if (selectata) { bg = "#1a2e1a"; color = "#e8d5a3"; }
+                    let bgClass = "bg-[#e8f5e8]";
+                    let textClass = "text-[#2d4a2d]";
+                    let borderClass = "border-transparent";
+                    let fontClass = "font-normal";
+
+                    if (!disponibila) { bgClass = "bg-[#f5f5f5]"; textClass = "text-gray-300"; }
+                    if (ocupata) { bgClass = "bg-[#fde8e8]"; textClass = "text-[#e74c3c]"; }
+                    if (selectata) { 
+                      bgClass = "bg-[#1a2e1a]"; 
+                      textClass = "text-[#e8d5a3]"; 
+                      borderClass = "border-[#4a7c4a]"; 
+                      fontClass = "font-bold";
+                    }
 
                     return (
-                      <div key={i} onClick={() => handleClickZi(data)} style={{
-                        textAlign: "center", padding: "8px 4px",
-                        borderRadius: "6px", cursor: disabled ? "not-allowed" : "pointer",
-                        background: bg, color: color,
-                        fontSize: "13px", fontFamily: "Arial, sans-serif",
-                        fontWeight: selectata ? "bold" : "normal",
-                        transition: "all 0.15s",
-                        border: selectata ? "2px solid #4a7c4a" : "2px solid transparent",
-                      }}>
+                      <div 
+                        key={i} 
+                        onClick={() => handleClickZi(data)} 
+                        className={`text-center py-2 rounded-md border-2 text-[13px] font-sans transition-all ${bgClass} ${textClass} ${borderClass} ${fontClass} ${disabled ? 'cursor-not-allowed opacity-70' : 'cursor-pointer hover:opacity-80'}`}
+                      >
                         {data.getDate()}
                       </div>
                     );
@@ -678,13 +604,13 @@ export default function Home() {
                 </div>
 
                 {(dataStart || dataEnd) && (
-                  <div style={{ background: "#f0f7f0", borderRadius: "8px", padding: "12px", marginBottom: "1rem", border: "1px solid #d4e8d4", fontFamily: "Arial, sans-serif", fontSize: "13px" }}>
-                    <div style={{ display: "flex", justifyContent: "space-between" }}>
-                      <span style={{ color: "#5a7a5a" }}>Start: <strong style={{ color: "#1a2e1a" }}>{dataStart || "—"}</strong></span>
-                      <span style={{ color: "#5a7a5a" }}>End: <strong style={{ color: "#1a2e1a" }}>{dataEnd || "—"}</strong></span>
+                  <div className="bg-[#f0f7f0] rounded-lg p-3 mb-4 border border-[#d4e8d4] font-sans text-[13px]">
+                    <div className="flex justify-between">
+                      <span className="text-[#5a7a5a]">Start: <strong className="text-[#1a2e1a]">{dataStart || "—"}</strong></span>
+                      <span className="text-[#5a7a5a]">End: <strong className="text-[#1a2e1a]">{dataEnd || "—"}</strong></span>
                     </div>
                     {dataStart && dataEnd && (
-                      <p style={{ margin: "8px 0 0", color: "#2d4a2d", fontWeight: "bold" }}>
+                      <p className="mt-2 mb-0 text-[#2d4a2d] font-bold">
                         💰 Total: {Math.ceil((new Date(dataEnd) - new Date(dataStart)) / (1000 * 60 * 60 * 24) + 1) * modalUtilaj.pret_zi} lei
                         ({Math.ceil((new Date(dataEnd) - new Date(dataStart)) / (1000 * 60 * 60 * 24) + 1)} zile)
                       </p>
@@ -693,20 +619,26 @@ export default function Home() {
                 )}
 
                 {bookingError && (
-                  <div style={{ marginBottom: "1rem", padding: "10px", background: "#fef2f2", border: "1px solid #fca5a5", borderRadius: "8px", color: "#dc2626", fontSize: "13px", fontFamily: "Arial, sans-serif" }}>
+                  <div className="mb-4 p-2.5 bg-red-50 border border-red-300 rounded-lg text-red-600 text-[13px] font-sans">
                     {bookingError}
                   </div>
                 )}
 
-                <button onClick={handleRezerva} disabled={bookingLoading || !dataStart || !dataEnd} style={{
-                  width: "100%",
-                  background: (!dataStart || !dataEnd || bookingLoading) ? "#ccc" : "#1a2e1a",
-                  color: "#e8d5a3", border: "none", borderRadius: "8px",
-                  padding: "13px", fontSize: "15px",
-                  cursor: (!dataStart || !dataEnd || bookingLoading) ? "not-allowed" : "pointer",
-                  fontFamily: "Georgia, serif", fontWeight: "bold",
-                }}>
-                  {bookingLoading ? "Se trimite..." : "🚜 Confirmă rezervarea"}
+                <button 
+                  onClick={handleRezerva} 
+                  disabled={bookingLoading || !dataStart || !dataEnd} 
+                  className={`w-full flex justify-center items-center gap-2 border-none rounded-lg p-3 text-[15px] font-bold transition-colors ${
+                    (!dataStart || !dataEnd || bookingLoading) ? 'bg-gray-300 text-gray-500 cursor-not-allowed' : 'bg-[#1a2e1a] hover:bg-[#2d4a2d] text-[#e8d5a3] cursor-pointer'
+                  }`}
+                >
+                  {bookingLoading ? "Se trimite..." : (
+                    <>
+                      {dataStart && dataEnd && !bookingLoading && (
+                        <div className="w-[18px] h-[18px] bg-[#e8d5a3] [mask-image:url('/FAVICON.png')] [mask-size:contain] [mask-repeat:no-repeat] [mask-position:center]" />
+                      )}
+                      Confirmă rezervarea
+                    </>
+                  )}
                 </button>
               </>
             )}
