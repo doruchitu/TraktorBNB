@@ -34,185 +34,116 @@ export default function CumFunctioneaza() {
   const pasiActivi = rolActiv === "proprietar" ? pasiProprietar : pasiClient;
 
   return (
-    <div style={{ minHeight: "100vh", background: "#0d1a0d", fontFamily: "Georgia, serif", overflowX: "hidden" }}>
+    <div className="min-h-screen bg-[#0d1a0d] font-serif overflow-x-hidden">
 
-      <nav style={{
-        position: "fixed", top: 0, left: 0, right: 0, zIndex: 100,
-        background: scrollY > 50 ? "rgba(13,26,13,0.95)" : "transparent",
-        backdropFilter: scrollY > 50 ? "blur(10px)" : "none",
-        padding: "0 3rem", height: "70px",
-        display: "flex", alignItems: "center", justifyContent: "space-between",
-        transition: "background 0.3s ease",
-        borderBottom: scrollY > 50 ? "1px solid rgba(232,213,163,0.1)" : "none",
-      }}>
-        <div onClick={() => navigate("/")} style={{ display: "flex", alignItems: "center", gap: "10px", cursor: "pointer" }}>
-          <span style={{ fontSize: "24px" }}>🚜</span>
-          <span style={{ color: "#e8d5a3", fontSize: "22px", fontWeight: "bold", letterSpacing: "1px" }}>
+      {/* NAVBAR */}
+      <nav className={`fixed top-0 left-0 right-0 z-[100] px-4 md:px-12 h-[60px] md:h-[70px] flex items-center justify-between transition-all duration-300 ${
+        scrollY > 50 ? "bg-[#0d1a0d]/95 backdrop-blur-md border-b border-[#e8d5a3]/10" : "bg-transparent"
+      }`}>
+        <div onClick={() => navigate("/")} className="flex items-center gap-2 cursor-pointer">
+          {/* Logo bej */}
+          <div className="w-5 h-5 md:w-6 md:h-6 bg-[#e8d5a3] [mask-image:url('/FAVICON.png')] [mask-size:contain] [mask-repeat:no-repeat] [mask-position:center]" />
+          <span className="text-[#e8d5a3] text-[18px] md:text-[22px] font-bold tracking-[1px]">
             TraktorShare
           </span>
         </div>
-        <div style={{ display: "flex", gap: "12px" }}>
-          <button onClick={() => navigate("/login")} style={{
-            background: "transparent", color: "#e8d5a3",
-            border: "1px solid rgba(232,213,163,0.4)", borderRadius: "8px",
-            padding: "9px 22px", fontSize: "14px", cursor: "pointer",
-            fontFamily: "Georgia, serif", transition: "all 0.2s",
-          }}
-            onMouseEnter={e => e.target.style.borderColor = "#e8d5a3"}
-            onMouseLeave={e => e.target.style.borderColor = "rgba(232,213,163,0.4)"}>
-            Autentificare
+        <div className="flex gap-2 md:gap-3">
+          <button 
+            onClick={() => navigate("/login")} 
+            className="bg-transparent text-[#e8d5a3] border border-[#e8d5a3]/40 hover:border-[#e8d5a3] rounded-md md:rounded-lg px-3 py-1.5 md:px-5 md:py-2 text-[12px] md:text-[14px] transition-colors"
+          >
+            <span className="hidden sm:inline">Autentificare</span>
+            <span className="sm:hidden">Intră</span>
           </button>
-          <button onClick={() => navigate("/signup")} style={{
-            background: "#4a7c4a", color: "white",
-            border: "none", borderRadius: "8px",
-            padding: "9px 22px", fontSize: "14px", cursor: "pointer",
-            fontFamily: "Georgia, serif", transition: "all 0.2s",
-          }}
-            onMouseEnter={e => e.target.style.background = "#3a6a3a"}
-            onMouseLeave={e => e.target.style.background = "#4a7c4a"}>
-            Creează cont
+          <button 
+            onClick={() => navigate("/signup")} 
+            className="bg-[#4a7c4a] hover:bg-[#3a6a3a] text-white border-none rounded-md md:rounded-lg px-3 py-1.5 md:px-5 md:py-2 text-[12px] md:text-[14px] transition-colors"
+          >
+            <span className="hidden sm:inline">Creează cont</span>
+            <span className="sm:hidden">Cont nou</span>
           </button>
         </div>
       </nav>
 
-      <div style={{
-        background: "linear-gradient(160deg, #0d1a0d 0%, #1a2e1a 60%, #0d1a0d 100%)",
-        textAlign: "center", padding: "150px 2rem 3rem",
-        position: "relative", overflow: "hidden",
-      }}>
-        <div style={{
-          position: "absolute", width: "700px", height: "700px",
-          borderRadius: "50%", border: "1px solid rgba(232,213,163,0.04)",
-          top: "-10%", left: "50%", transform: "translateX(-50%)",
-        }} />
+      {/* HERO SECTION */}
+      <div className="bg-[linear-gradient(160deg,#0d1a0d_0%,#1a2e1a_60%,#0d1a0d_100%)] text-center pt-[120px] md:pt-[150px] px-4 md:px-8 pb-12 relative overflow-hidden">
+        {/* Decorative Circle */}
+        <div className="absolute w-[400px] h-[400px] md:w-[700px] md:h-[700px] rounded-full border border-[#e8d5a3]/5 top-[-5%] left-1/2 -translate-x-1/2" />
 
-        <h1 style={{
-          color: "#e8d5a3", fontSize: "clamp(2rem, 5vw, 3.2rem)", fontWeight: "bold",
-          marginBottom: "16px", lineHeight: 1.15,
-          opacity: visible ? 1 : 0, transform: visible ? "translateY(0)" : "translateY(20px)",
-          transition: "opacity 0.8s ease 0.1s, transform 0.8s ease 0.1s",
-        }}>
-          Cum funcționează <span style={{ color: "#7dc47d" }}>TraktorShare</span>
+        <h1 className={`text-[#e8d5a3] text-[clamp(2rem,5vw,3.2rem)] font-bold mb-4 leading-[1.15] transition-all duration-800 ease-out delay-100 ${visible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-5"}`}>
+          Cum funcționează <span className="text-[#7dc47d]">TraktorShare</span>
         </h1>
-        <p style={{
-          color: "#9db89d", fontSize: "16px", maxWidth: "540px", margin: "0 auto",
-          lineHeight: 1.8, fontFamily: "Arial, sans-serif",
-          opacity: visible ? 1 : 0, transition: "opacity 0.8s ease 0.2s",
-        }}>
-          Fiecare rezervare pornește din același loc și leagă doi oameni: cel care are un utilaj
-          liber și cel care are nevoie de el.
+        <p className={`text-[#9db89d] text-base max-w-[540px] mx-auto leading-[1.8] font-sans transition-opacity duration-800 ease-out delay-200 ${visible ? "opacity-100" : "opacity-0"}`}>
+          Fiecare rezervare pornește din același loc și leagă doi oameni: cel care are un utilaj liber și cel care are nevoie de el.
         </p>
       </div>
 
-      <div style={{ background: "#0d1a0d", padding: "1rem 2rem 5rem" }}>
-        <div style={{ maxWidth: "780px", margin: "0 auto", position: "relative" }}>
-
-          <div style={{ display: "flex", justifyContent: "center", marginBottom: "0" }}>
-            <div style={{
-              background: "#e8d5a3", color: "#1a2e1a",
-              borderRadius: "10px", padding: "14px 28px",
-              fontFamily: "Arial, sans-serif", fontWeight: "bold", fontSize: "14px",
-              boxShadow: "0 4px 20px rgba(232,213,163,0.15)",
-              opacity: visible ? 1 : 0, transform: visible ? "translateY(0)" : "translateY(15px)",
-              transition: "opacity 0.6s ease 0.3s, transform 0.6s ease 0.3s",
-            }}>
+      {/* DIAGRAM SECTION*/}
+      <div className="bg-[#0d1a0d] px-4 md:px-8 pb-20 pt-4 hidden md:block">
+        <div className="max-w-[780px] mx-auto relative">
+          
+          <div className="flex justify-center mb-0">
+            <div className={`bg-[#e8d5a3] text-[#1a2e1a] rounded-lg px-7 py-3.5 font-sans font-bold text-[14px] shadow-[0_4px_20px_rgba(232,213,163,0.15)] transition-all duration-700 ease-out delay-300 ${visible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-4"}`}>
               🌾 Cont creat pe TraktorShare
             </div>
           </div>
 
-          <svg width="100%" height="60" viewBox="0 0 780 60" style={{ display: "block" }}>
+          <svg width="100%" height="60" viewBox="0 0 780 60" className="block">
             <path d="M 390 0 C 390 30, 195 15, 195 60" stroke="rgba(125,196,125,0.35)" strokeWidth="2" fill="none" />
             <path d="M 390 0 C 390 30, 585 15, 585 60" stroke="rgba(74,124,74,0.5)" strokeWidth="2" fill="none" />
           </svg>
 
-          <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(280px, 1fr))", gap: "2.5rem" }}>
-
-            <div style={{
-              opacity: visible ? 1 : 0, transform: visible ? "translateY(0)" : "translateY(20px)",
-              transition: "opacity 0.6s ease 0.4s, transform 0.6s ease 0.4s",
-            }}>
-              <div style={{
-                textAlign: "center", marginBottom: "1.5rem",
-                color: "#7dc47d", fontFamily: "Arial, sans-serif",
-                fontSize: "13px", letterSpacing: "2px", textTransform: "uppercase", fontWeight: "bold",
-              }}>
+          <div className="grid grid-cols-2 gap-10">
+            {/* Coloana Proprietar */}
+            <div className={`transition-all duration-700 ease-out delay-400 ${visible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-5"}`}>
+              <div className="text-center mb-6 text-[#7dc47d] font-sans text-[13px] tracking-[2px] uppercase font-bold">
                 Dacă ai un utilaj
               </div>
               {pasiProprietar.map((p, i) => (
-                <div key={p.nr} style={{ display: "flex", gap: "16px", marginBottom: i < pasiProprietar.length - 1 ? "1.6rem" : 0, position: "relative" }}>
+                <div key={p.nr} className={`flex gap-4 relative ${i < pasiProprietar.length - 1 ? "mb-6" : ""}`}>
                   {i < pasiProprietar.length - 1 && (
-                    <div style={{
-                      position: "absolute", left: "19px", top: "40px", bottom: "-26px",
-                      width: "1px", background: "rgba(125,196,125,0.2)",
-                    }} />
+                    <div className="absolute left-[19px] top-[40px] bottom-[-26px] w-[1px] bg-[#7dc47d]/20" />
                   )}
-                  <div style={{
-                    width: "40px", height: "40px", borderRadius: "50%", flexShrink: 0,
-                    background: "rgba(125,196,125,0.1)", border: "1px solid rgba(125,196,125,0.3)",
-                    display: "flex", alignItems: "center", justifyContent: "center",
-                    color: "#7dc47d", fontFamily: "Arial, sans-serif", fontSize: "13px", fontWeight: "bold",
-                    position: "relative", zIndex: 1,
-                  }}>
+                  <div className="w-10 h-10 rounded-full shrink-0 bg-[#7dc47d]/10 border border-[#7dc47d]/30 flex items-center justify-center text-[#7dc47d] font-sans text-[13px] font-bold relative z-10">
                     {p.nr}
                   </div>
-                  <div style={{ paddingTop: "6px" }}>
-                    <h3 style={{ color: "#e8d5a3", fontSize: "16px", margin: "0 0 4px" }}>{p.title}</h3>
-                    <p style={{ color: "#9db89d", fontFamily: "Arial, sans-serif", fontSize: "13px", lineHeight: 1.6, margin: 0 }}>{p.desc}</p>
+                  <div className="pt-1.5">
+                    <h3 className="text-[#e8d5a3] text-base m-0 mb-1">{p.title}</h3>
+                    <p className="text-[#9db89d] font-sans text-[13px] leading-[1.6] m-0">{p.desc}</p>
                   </div>
                 </div>
               ))}
             </div>
 
-            <div style={{
-              opacity: visible ? 1 : 0, transform: visible ? "translateY(0)" : "translateY(20px)",
-              transition: "opacity 0.6s ease 0.5s, transform 0.6s ease 0.5s",
-            }}>
-              <div style={{
-                textAlign: "center", marginBottom: "1.5rem",
-                color: "#4a7c4a", fontFamily: "Arial, sans-serif",
-                fontSize: "13px", letterSpacing: "2px", textTransform: "uppercase", fontWeight: "bold",
-              }}>
+            {/* Coloana Client */}
+            <div className={`transition-all duration-700 ease-out delay-500 ${visible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-5"}`}>
+              <div className="text-center mb-6 text-[#4a7c4a] font-sans text-[13px] tracking-[2px] uppercase font-bold">
                 Dacă ai nevoie de unul
               </div>
               {pasiClient.map((p, i) => (
-                <div key={p.nr} style={{ display: "flex", gap: "16px", marginBottom: i < pasiClient.length - 1 ? "1.6rem" : 0, position: "relative" }}>
+                <div key={p.nr} className={`flex gap-4 relative ${i < pasiClient.length - 1 ? "mb-6" : ""}`}>
                   {i < pasiClient.length - 1 && (
-                    <div style={{
-                      position: "absolute", left: "19px", top: "40px", bottom: "-26px",
-                      width: "1px", background: "rgba(74,124,74,0.25)",
-                    }} />
+                    <div className="absolute left-[19px] top-[40px] bottom-[-26px] w-[1px] bg-[#4a7c4a]/25" />
                   )}
-                  <div style={{
-                    width: "40px", height: "40px", borderRadius: "50%", flexShrink: 0,
-                    background: "rgba(74,124,74,0.15)", border: "1px solid rgba(74,124,74,0.4)",
-                    display: "flex", alignItems: "center", justifyContent: "center",
-                    color: "#9db89d", fontFamily: "Arial, sans-serif", fontSize: "13px", fontWeight: "bold",
-                    position: "relative", zIndex: 1,
-                  }}>
+                  <div className="w-10 h-10 rounded-full shrink-0 bg-[#4a7c4a]/15 border border-[#4a7c4a]/40 flex items-center justify-center text-[#9db89d] font-sans text-[13px] font-bold relative z-10">
                     {p.nr}
                   </div>
-                  <div style={{ paddingTop: "6px" }}>
-                    <h3 style={{ color: "#e8d5a3", fontSize: "16px", margin: "0 0 4px" }}>{p.title}</h3>
-                    <p style={{ color: "#9db89d", fontFamily: "Arial, sans-serif", fontSize: "13px", lineHeight: 1.6, margin: 0 }}>{p.desc}</p>
+                  <div className="pt-1.5">
+                    <h3 className="text-[#e8d5a3] text-base m-0 mb-1">{p.title}</h3>
+                    <p className="text-[#9db89d] font-sans text-[13px] leading-[1.6] m-0">{p.desc}</p>
                   </div>
                 </div>
               ))}
             </div>
           </div>
 
-          <svg width="100%" height="60" viewBox="0 0 780 60" style={{ display: "block", marginTop: "1rem" }}>
+          <svg width="100%" height="60" viewBox="0 0 780 60" className="block mt-4">
             <path d="M 195 0 C 195 30, 390 15, 390 60" stroke="rgba(125,196,125,0.35)" strokeWidth="2" fill="none" />
             <path d="M 585 0 C 585 30, 390 15, 390 60" stroke="rgba(74,124,74,0.5)" strokeWidth="2" fill="none" />
           </svg>
 
-          <div style={{ display: "flex", justifyContent: "center" }}>
-            <div style={{
-              background: "#1a2e1a", border: "1px solid rgba(232,213,163,0.3)", color: "#e8d5a3",
-              borderRadius: "10px", padding: "14px 28px",
-              fontFamily: "Arial, sans-serif", fontWeight: "bold", fontSize: "14px",
-              opacity: visible ? 1 : 0, transform: visible ? "translateY(0)" : "translateY(15px)",
-              transition: "opacity 0.6s ease 0.6s, transform 0.6s ease 0.6s",
-            }}>
+          <div className="flex justify-center mt-0">
+            <div className={`bg-[#1a2e1a] border border-[#e8d5a3]/30 text-[#e8d5a3] rounded-lg px-7 py-3.5 font-sans font-bold text-[14px] transition-all duration-700 ease-out delay-700 ${visible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-4"}`}>
               📄 Model de contract generat automat
             </div>
           </div>
@@ -220,52 +151,41 @@ export default function CumFunctioneaza() {
         </div>
       </div>
 
-      <div style={{ background: "#f7f5f0", padding: "5rem 2rem" }}>
-        <div style={{ maxWidth: "780px", margin: "0 auto" }}>
-          <h2 style={{ textAlign: "center", color: "#1a2e1a", fontSize: "clamp(1.6rem, 3.5vw, 2.2rem)", marginBottom: "2.5rem" }}>
+      {/* MOBILE STEPS SECTION */}
+      <div className="bg-[#f7f5f0] py-16 md:py-20 px-4 md:px-8 md:hidden">
+        <div className="max-w-[780px] mx-auto">
+          <h2 className="text-center text-[#1a2e1a] text-[clamp(1.6rem,3.5vw,2.2rem)] font-bold mb-8">
             Vezi pas cu pas, pe rolul tău
           </h2>
 
-          <div style={{ display: "flex", justifyContent: "center", gap: "8px", marginBottom: "2.5rem" }}>
-            <button onClick={() => setRolActiv("proprietar")} style={{
-              padding: "10px 24px", borderRadius: "20px",
-              border: rolActiv === "proprietar" ? "none" : "1px solid #ccc",
-              background: rolActiv === "proprietar" ? "#1a2e1a" : "white",
-              color: rolActiv === "proprietar" ? "#e8d5a3" : "#555",
-              fontSize: "14px", cursor: "pointer", fontFamily: "Arial, sans-serif",
-              fontWeight: "bold", transition: "all 0.2s",
-            }}>
+          <div className="flex flex-col sm:flex-row justify-center gap-2 sm:gap-3 mb-10">
+            <button 
+              onClick={() => setRolActiv("proprietar")} 
+              className={`px-6 py-2.5 rounded-full text-[14px] font-sans font-bold transition-colors w-full sm:w-auto ${
+                rolActiv === "proprietar" ? "bg-[#1a2e1a] text-[#e8d5a3] border-none" : "bg-white text-gray-500 border border-gray-300"
+              }`}
+            >
               🚜 Sunt proprietar
             </button>
-            <button onClick={() => setRolActiv("client")} style={{
-              padding: "10px 24px", borderRadius: "20px",
-              border: rolActiv === "client" ? "none" : "1px solid #ccc",
-              background: rolActiv === "client" ? "#1a2e1a" : "white",
-              color: rolActiv === "client" ? "#e8d5a3" : "#555",
-              fontSize: "14px", cursor: "pointer", fontFamily: "Arial, sans-serif",
-              fontWeight: "bold", transition: "all 0.2s",
-            }}>
+            <button 
+              onClick={() => setRolActiv("client")} 
+              className={`px-6 py-2.5 rounded-full text-[14px] font-sans font-bold transition-colors w-full sm:w-auto ${
+                rolActiv === "client" ? "bg-[#1a2e1a] text-[#e8d5a3] border-none" : "bg-white text-gray-500 border border-gray-300"
+              }`}
+            >
               🌾 Caut un utilaj
             </button>
           </div>
 
-          <div style={{ display: "flex", flexDirection: "column", gap: "1rem" }}>
+          <div className="flex flex-col gap-4">
             {pasiActivi.map((p, i) => (
-              <div key={p.nr} style={{
-                background: "white", borderRadius: "12px", border: "1px solid #e8e0d0",
-                padding: "1.3rem 1.5rem", display: "flex", gap: "18px", alignItems: "flex-start",
-              }}>
-                <div style={{
-                  width: "34px", height: "34px", borderRadius: "50%", flexShrink: 0,
-                  background: "#1a2e1a", color: "#e8d5a3",
-                  display: "flex", alignItems: "center", justifyContent: "center",
-                  fontFamily: "Arial, sans-serif", fontSize: "12px", fontWeight: "bold",
-                }}>
+              <div key={p.nr} className="bg-white rounded-xl border border-[#e8e0d0] p-5 flex gap-4 items-start shadow-sm">
+                <div className="w-9 h-9 rounded-full shrink-0 bg-[#1a2e1a] text-[#e8d5a3] flex items-center justify-center font-sans text-[12px] font-bold">
                   {i + 1}
                 </div>
                 <div>
-                  <h3 style={{ color: "#1a2e1a", fontSize: "16px", margin: "0 0 4px" }}>{p.title}</h3>
-                  <p style={{ color: "#777", fontFamily: "Arial, sans-serif", fontSize: "14px", lineHeight: 1.6, margin: 0 }}>{p.desc}</p>
+                  <h3 className="text-[#1a2e1a] text-base m-0 mb-1 font-bold">{p.title}</h3>
+                  <p className="text-gray-500 font-sans text-[14px] leading-[1.6] m-0">{p.desc}</p>
                 </div>
               </div>
             ))}
@@ -273,23 +193,18 @@ export default function CumFunctioneaza() {
         </div>
       </div>
 
-      <div style={{ background: "#1a2e1a", padding: "5rem 2rem", textAlign: "center" }}>
-        <h2 style={{ color: "#e8d5a3", fontSize: "clamp(1.6rem, 3.5vw, 2.2rem)", marginBottom: "1rem" }}>
+      {/* CTA SECTION */}
+      <div className="bg-[#1a2e1a] py-20 px-4 md:px-8 text-center">
+        <h2 className="text-[#e8d5a3] text-[clamp(1.6rem,3.5vw,2.2rem)] font-bold mb-4">
           Gata să pornești?
         </h2>
-        <p style={{ color: "#9db89d", fontFamily: "Arial, sans-serif", marginBottom: "2rem" }}>
+        <p className="text-[#9db89d] font-sans mb-8 max-w-md mx-auto leading-relaxed">
           Fii printre primii care se conectează și postează sau închiriază un utilaj.
         </p>
-        <button onClick={() => navigate("/signup")} style={{
-          background: "#4a7c4a", color: "white",
-          border: "none", borderRadius: "10px",
-          padding: "16px 36px", fontSize: "16px",
-          cursor: "pointer", fontFamily: "Georgia, serif",
-          fontWeight: "bold", transition: "all 0.2s",
-          boxShadow: "0 4px 20px rgba(74,124,74,0.4)",
-        }}
-          onMouseEnter={e => e.target.style.background = "#3a6a3a"}
-          onMouseLeave={e => e.target.style.background = "#4a7c4a"}>
+        <button 
+          onClick={() => navigate("/signup")} 
+          className="bg-[#4a7c4a] hover:bg-[#3a6a3a] text-white border-none rounded-xl px-8 py-4 text-[16px] cursor-pointer font-serif font-bold transition-all shadow-[0_4px_20px_rgba(74,124,74,0.4)]"
+        >
           🚜 Creează cont gratuit
         </button>
       </div>

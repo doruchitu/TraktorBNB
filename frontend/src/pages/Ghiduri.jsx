@@ -54,121 +54,88 @@ export default function Ghiduri() {
   ];
 
   return (
-    <div style={{ minHeight: "100vh", background: "#0d1a0d", fontFamily: "Georgia, serif", overflowX: "hidden" }}>
+    <div className="min-h-screen bg-[#0d1a0d] font-serif overflow-x-hidden">
 
-      <nav style={{
-        position: "fixed", top: 0, left: 0, right: 0, zIndex: 100,
-        background: scrollY > 50 ? "rgba(13,26,13,0.95)" : "transparent",
-        backdropFilter: scrollY > 50 ? "blur(10px)" : "none",
-        padding: "0 3rem", height: "70px",
-        display: "flex", alignItems: "center", justifyContent: "space-between",
-        transition: "background 0.3s ease",
-        borderBottom: scrollY > 50 ? "1px solid rgba(232,213,163,0.1)" : "none",
-      }}>
-        <div onClick={() => navigate("/")} style={{ display: "flex", alignItems: "center", gap: "10px", cursor: "pointer" }}>
-          <span style={{ fontSize: "24px" }}>🚜</span>
-          <span style={{ color: "#e8d5a3", fontSize: "22px", fontWeight: "bold", letterSpacing: "1px" }}>
+      {/* NAVBAR */}
+      <nav className={`fixed top-0 left-0 right-0 z-[100] px-4 md:px-12 h-[60px] md:h-[70px] flex items-center justify-between transition-all duration-300 ${
+        scrollY > 50 ? "bg-[#0d1a0d]/95 backdrop-blur-md border-b border-[#e8d5a3]/10" : "bg-transparent"
+      }`}>
+        <div onClick={() => navigate("/")} className="flex items-center gap-2 cursor-pointer">
+          <div className="w-5 h-5 md:w-6 md:h-6 bg-[#e8d5a3] [mask-image:url('/FAVICON.png')] [mask-size:contain] [mask-repeat:no-repeat] [mask-position:center]" />
+          <span className="text-[#e8d5a3] text-[18px] md:text-[22px] font-bold tracking-[1px]">
             TraktorShare
           </span>
         </div>
-        <div style={{ display: "flex", gap: "12px" }}>
-          <button onClick={() => navigate("/login")} style={{
-            background: "transparent", color: "#e8d5a3",
-            border: "1px solid rgba(232,213,163,0.4)", borderRadius: "8px",
-            padding: "9px 22px", fontSize: "14px", cursor: "pointer",
-            fontFamily: "Georgia, serif", transition: "all 0.2s",
-          }}
-            onMouseEnter={e => e.target.style.borderColor = "#e8d5a3"}
-            onMouseLeave={e => e.target.style.borderColor = "rgba(232,213,163,0.4)"}>
-            Autentificare
+        <div className="flex gap-2 md:gap-3">
+          <button 
+            onClick={() => navigate("/login")} 
+            className="bg-transparent text-[#e8d5a3] border border-[#e8d5a3]/40 hover:border-[#e8d5a3] rounded-md md:rounded-lg px-3 py-1.5 md:px-5 md:py-2 text-[12px] md:text-[14px] transition-colors font-serif"
+          >
+            <span className="hidden sm:inline">Autentificare</span>
+            <span className="sm:hidden">Intră</span>
           </button>
-          <button onClick={() => navigate("/signup")} style={{
-            background: "#4a7c4a", color: "white",
-            border: "none", borderRadius: "8px",
-            padding: "9px 22px", fontSize: "14px", cursor: "pointer",
-            fontFamily: "Georgia, serif", transition: "all 0.2s",
-          }}
-            onMouseEnter={e => e.target.style.background = "#3a6a3a"}
-            onMouseLeave={e => e.target.style.background = "#4a7c4a"}>
-            Creează cont
+          <button 
+            onClick={() => navigate("/signup")} 
+            className="bg-[#4a7c4a] hover:bg-[#3a6a3a] text-white border-none rounded-md md:rounded-lg px-3 py-1.5 md:px-5 md:py-2 text-[12px] md:text-[14px] transition-colors font-serif"
+          >
+            <span className="hidden sm:inline">Creează cont</span>
+            <span className="sm:hidden">Cont nou</span>
           </button>
         </div>
       </nav>
 
-      <div style={{
-        background: "linear-gradient(160deg, #0d1a0d 0%, #1a2e1a 60%, #0d1a0d 100%)",
-        textAlign: "center", padding: "150px 2rem 3rem",
-        position: "relative", overflow: "hidden",
-      }}>
-        <div style={{
-          position: "absolute", width: "700px", height: "700px",
-          borderRadius: "50%", border: "1px solid rgba(232,213,163,0.04)",
-          top: "-10%", left: "50%", transform: "translateX(-50%)",
-        }} />
+      {/* HERO SECTION */}
+      <div className="bg-[linear-gradient(160deg,#0d1a0d_0%,#1a2e1a_60%,#0d1a0d_100%)] text-center pt-[120px] md:pt-[150px] px-4 md:px-8 pb-12 relative overflow-hidden">
+        {/* Decorative Circle */}
+        <div className="absolute w-[400px] h-[400px] md:w-[700px] md:h-[700px] rounded-full border border-[#e8d5a3]/5 top-[-10%] left-1/2 -translate-x-1/2" />
 
-        <p style={{
-          color: "#7dc47d", fontSize: "13px", letterSpacing: "3px", textTransform: "uppercase",
-          marginBottom: "16px", fontFamily: "Arial, sans-serif",
-          opacity: visible ? 1 : 0, transition: "opacity 0.8s ease",
-        }}>
+        <p className={`text-[#7dc47d] text-[12px] md:text-[13px] tracking-[2px] md:tracking-[3px] uppercase mb-4 font-sans font-bold transition-opacity duration-800 ease-out ${visible ? "opacity-100" : "opacity-0"}`}>
           Resurse pentru platformă
         </p>
-        <h1 style={{
-          color: "#e8d5a3", fontSize: "clamp(2rem, 5vw, 3.2rem)", fontWeight: "bold",
-          marginBottom: "16px", lineHeight: 1.15,
-          opacity: visible ? 1 : 0, transform: visible ? "translateY(0)" : "translateY(20px)",
-          transition: "opacity 0.8s ease 0.1s, transform 0.8s ease 0.1s",
-        }}>
-          Ghiduri pentru <span style={{ color: "#7dc47d" }}>fermieri</span>
+        <h1 className={`text-[#e8d5a3] text-[clamp(2rem,5vw,3.2rem)] font-bold mb-4 leading-[1.15] transition-all duration-800 ease-out delay-100 ${visible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-5"}`}>
+          Ghiduri pentru <span className="text-[#7dc47d]">fermieri</span>
         </h1>
-        <p style={{
-          color: "#9db89d", fontSize: "16px", maxWidth: "540px", margin: "0 auto",
-          lineHeight: 1.8, fontFamily: "Arial, sans-serif",
-          opacity: visible ? 1 : 0, transition: "opacity 0.8s ease 0.2s",
-        }}>
+        <p className={`text-[#9db89d] text-[15px] md:text-[16px] max-w-[540px] mx-auto leading-[1.8] font-sans transition-opacity duration-800 ease-out delay-200 ${visible ? "opacity-100" : "opacity-0"}`}>
           Trei ghiduri scurte care te ajută să folosești platforma eficient, indiferent dacă
           publici un utilaj sau cauți unul.
         </p>
       </div>
 
-      <div style={{ background: "#f7f5f0", padding: "4rem 2rem 5rem" }}>
-        <div style={{ maxWidth: "760px", margin: "0 auto", display: "flex", flexDirection: "column", gap: "3rem" }}>
-
+      {/* GHIDURI SECTION */}
+      <div className="bg-[#f7f5f0] py-16 md:py-20 px-4 md:px-8">
+        <div className="max-w-[760px] mx-auto flex flex-col gap-8 md:gap-12">
+          
           {ghiduri.map((g, gi) => (
-            <div key={g.nr} style={{
-              background: "white", borderRadius: "16px", border: "1px solid #e8e0d0",
-              padding: "2.2rem",
-              opacity: visible ? 1 : 0, transform: visible ? "translateY(0)" : "translateY(20px)",
-              transition: `opacity 0.6s ease ${0.15 * gi + 0.2}s, transform 0.6s ease ${0.15 * gi + 0.2}s`,
-            }}>
-              <div style={{ display: "flex", alignItems: "center", gap: "14px", marginBottom: "10px" }}>
-                <div style={{
-                  width: "48px", height: "48px", borderRadius: "12px", flexShrink: 0,
-                  background: "#1a2e1a",
-                  display: "flex", alignItems: "center", justifyContent: "center",
-                  fontSize: "22px",
-                }}>
+            <div 
+              key={g.nr} 
+              className={`bg-white rounded-2xl border border-[#e8e0d0] p-6 md:p-9 shadow-sm transition-all duration-700 ease-out ${visible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-5"}`}
+              style={{ transitionDelay: `${0.15 * gi + 0.2}s` }}
+            >
+              <div className="flex items-center gap-3.5 mb-3">
+                <div className="w-12 h-12 rounded-xl shrink-0 bg-[#1a2e1a] flex items-center justify-center text-[22px]">
                   {g.icon}
                 </div>
                 <div>
-                  <span style={{ color: "#4a7c4a", fontFamily: "Arial, sans-serif", fontSize: "12px", fontWeight: "bold", letterSpacing: "1px" }}>
+                  <span className="text-[#4a7c4a] font-sans text-[11px] md:text-[12px] font-bold tracking-[1px]">
                     GHID {g.nr}
                   </span>
-                  <h2 style={{ color: "#1a2e1a", fontSize: "22px", margin: "2px 0 0" }}>{g.title}</h2>
+                  <h2 className="text-[#1a2e1a] text-[20px] md:text-[22px] m-0 mt-0.5 font-bold">
+                    {g.title}
+                  </h2>
                 </div>
               </div>
 
-              <p style={{ color: "#777", fontFamily: "Arial, sans-serif", fontSize: "14px", lineHeight: 1.7, margin: "0 0 1.6rem" }}>
+              <p className="text-gray-500 font-sans text-[14px] md:text-[15px] leading-[1.7] m-0 mb-6">
                 {g.intro}
               </p>
 
-              <div style={{ display: "flex", flexDirection: "column", gap: "1.2rem" }}>
+              <div className="flex flex-col gap-5">
                 {g.puncte.map((p, i) => (
-                  <div key={i} style={{ borderLeft: "3px solid #e8d5a3", paddingLeft: "16px" }}>
-                    <h4 style={{ color: "#1a2e1a", fontSize: "14.5px", margin: "0 0 4px", fontFamily: "Arial, sans-serif" }}>
+                  <div key={i} className="border-l-[3px] border-[#e8d5a3] pl-4">
+                    <h4 className="text-[#1a2e1a] text-[14px] md:text-[14.5px] m-0 mb-1 font-sans font-bold">
                       {p.subtitlu}
                     </h4>
-                    <p style={{ color: "#666", fontFamily: "Arial, sans-serif", fontSize: "13.5px", lineHeight: 1.7, margin: 0 }}>
+                    <p className="text-gray-600 font-sans text-[13px] md:text-[13.5px] leading-[1.7] m-0">
                       {p.text}
                     </p>
                   </div>
@@ -180,22 +147,18 @@ export default function Ghiduri() {
         </div>
       </div>
 
-      <div style={{ background: "#1a2e1a", padding: "5rem 2rem", textAlign: "center" }}>
-        <h2 style={{ color: "#e8d5a3", fontSize: "clamp(1.6rem, 3.5vw, 2.2rem)", marginBottom: "1rem" }}>
+      {/* CTA SECTION */}
+      <div className="bg-[#1a2e1a] py-16 md:py-20 px-4 md:px-8 text-center">
+        <h2 className="text-[#e8d5a3] text-[clamp(1.6rem,3.5vw,2.2rem)] font-bold mb-4">
           Ai altă întrebare?
         </h2>
-        <p style={{ color: "#9db89d", fontFamily: "Arial, sans-serif", marginBottom: "2rem" }}>
+        <p className="text-[#9db89d] font-sans mb-8 max-w-md mx-auto leading-relaxed">
           Scrie-ne direct și îți răspundem cât de repede putem.
         </p>
-        <a href="mailto:contact@traktorshare.ro" style={{
-          display: "inline-block",
-          background: "#4a7c4a", color: "white",
-          border: "none", borderRadius: "10px",
-          padding: "16px 36px", fontSize: "16px",
-          textDecoration: "none",
-          fontFamily: "Georgia, serif",
-          fontWeight: "bold",
-        }}>
+        <a 
+          href="mailto:contact@traktorshare.ro" 
+          className="inline-block bg-[#4a7c4a] hover:bg-[#3a6a3a] text-white border-none rounded-xl px-8 py-4 text-[15px] md:text-[16px] font-serif font-bold transition-all shadow-[0_4px_20px_rgba(74,124,74,0.4)] no-underline"
+        >
           ✉️ Trimite un email
         </a>
       </div>

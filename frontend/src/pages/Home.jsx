@@ -206,23 +206,31 @@ export default function Home() {
     <div className="min-h-screen bg-[#f7f5f0] font-serif">
 
       {/* NAVBAR */}
-      <nav className="sticky top-0 z-[100] h-16 bg-[#1a2e1a] px-4 md:px-8 flex items-center justify-between shadow-md">
-        <div className="flex items-center gap-2.5">
-          <div className="w-[26px] h-[26px] bg-[#e8d5a3] [mask-image:url('/FAVICON.png')] [mask-size:contain] [mask-repeat:no-repeat] [mask-position:center]" />
-          <span className="text-[#e8d5a3] text-[20px] font-bold tracking-[0.5px]">TraktorShare</span>
+      <nav className="sticky top-0 z-[100] h-14 md:h-16 bg-[#1a2e1a] px-3 md:px-8 flex items-center justify-between shadow-md">
+        
+        <div className="flex items-center gap-1.5 md:gap-2.5">
+          <div className="w-[20px] h-[20px] md:w-[26px] md:h-[26px] bg-[#e8d5a3] [mask-image:url('/FAVICON.png')] [mask-size:contain] [mask-repeat:no-repeat] [mask-position:center]" />
+          <span className="text-[#e8d5a3] text-[16px] md:text-[20px] font-bold tracking-[0.5px]">TraktorShare</span>
         </div>
-        <div className="flex items-center gap-3 md:gap-5">
-          <span className="hidden sm:inline text-[#9db89d] text-[14px] font-sans">
+
+        <div className="flex items-center gap-1.5 md:gap-4">
+          <span className="hidden md:inline text-[#9db89d] text-[14px] font-sans mr-2">
             Bună, <span className="text-[#e8d5a3] font-bold">{user?.nume}</span>
           </span>
-          <button onClick={() => navigate("/adauga-utilaj")} className="bg-[#4a7c4a] hover:bg-[#3a5a3a] text-white border-none rounded-md px-3 md:px-4 py-2 text-[12px] md:text-[13px] transition-colors font-sans font-medium">
-            + Adaugă Utilaj
+          
+          <button onClick={() => navigate("/adauga-utilaj")} className="bg-[#4a7c4a] hover:bg-[#3a5a3a] text-white border-none rounded-md px-2.5 py-1.5 md:px-4 md:py-2 text-[11px] md:text-[13px] transition-colors font-sans font-medium whitespace-nowrap">
+            <span className="hidden sm:inline">+ Adaugă Utilaj</span>
+            <span className="sm:hidden">+ Adaugă</span>
           </button>
-          <button onClick={() => navigate("/rezervari")} className="bg-transparent hover:bg-[#2d4a2d] text-[#9db89d] border border-[#3a5a3a] rounded-md px-3 md:px-4 py-2 text-[12px] md:text-[13px] transition-colors font-sans">
-            📋 Rezervări
+          
+          <button onClick={() => navigate("/rezervari")} className="bg-transparent hover:bg-[#2d4a2d] text-[#9db89d] border border-[#3a5a3a] rounded-md px-2.5 py-1.5 md:px-4 md:py-2 text-[11px] md:text-[13px] transition-colors font-sans whitespace-nowrap">
+            <span className="hidden sm:inline">📋 Rezervări</span>
+            <span className="sm:hidden">📋</span>
           </button>
-          <button onClick={handleLogout} className="hidden sm:block bg-transparent hover:bg-[#2d4a2d] text-[#9db89d] border border-[#3a5a3a] rounded-md px-3 md:px-4 py-2 text-[12px] md:text-[13px] transition-colors font-sans">
-            Ieși
+          
+          <button onClick={handleLogout} className="bg-transparent hover:bg-[#2d4a2d] text-[#9db89d] border border-[#3a5a3a] rounded-md px-2.5 py-1.5 md:px-4 md:py-2 text-[11px] md:text-[13px] transition-colors font-sans whitespace-nowrap">
+            <span className="hidden sm:inline">Ieși</span>
+            <span className="sm:hidden">🚪</span>
           </button>
         </div>
       </nav>

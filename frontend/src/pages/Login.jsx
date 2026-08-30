@@ -48,31 +48,32 @@ function Login() {
   return (
     <div 
       className="min-h-screen relative flex items-center justify-center bg-cover bg-center"
-      // Înlocuiește cu calea către imaginea ta de fundal cu câmpul noaptea
       style={{ backgroundImage: "url('https://images.unsplash.com/photo-1500382017468-9049fed747ef?q=80&w=2000&auto=format&fit=crop')" }}
     >
-      {/* Overlay întunecat */}
       <div className="absolute inset-0 bg-black/70 backdrop-blur-[2px]"></div>
 
       {/* Container Principal */}
       <div className="relative z-10 w-full max-w-6xl mx-auto px-6 flex flex-col lg:flex-row items-center justify-between">
         
         {/* Partea Stângă: Branding */}
-        <div className="flex flex-col items-center lg:items-start mb-12 lg:mb-0 lg:w-1/2">
-          <div className="flex items-center gap-4">
-            {/* Înlocuiește cu iconița ta rotundă */}
-            <img src="/FAVICON.png" alt="TraktorShare Icon" className="w-20 h-20 object-contain" />
-            <h1 className="text-5xl font-extrabold tracking-tight text-gray-200">
-              Traktor<span className="text-[#84cc44]">Share</span>
+        <div className="flex flex-col items-center mb-6 md:mb-8 w-full">
+          <div className="flex items-center justify-center gap-2 md:gap-4 mb-3 md:mb-4">
+            <img 
+              src="/FAVICON.png" 
+              alt="Logo" 
+              className="w-12 h-12 md:w-16 md:h-16 object-contain" 
+            />
+
+            <h1 className="text-3xl md:text-5xl font-bold font-serif tracking-wide">
+              <span className="text-white">Traktor</span>
+              <span className="text-[#84cc44]">Share</span>
             </h1>
           </div>
-          <div className="mt-4 flex items-center gap-4 w-full">
-            <div className="h-px bg-white/20 flex-1 lg:hidden"></div>
-            <p className="text-[0.75rem] text-gray-400 font-semibold uppercase tracking-[0.2em] text-center lg:text-left">
-              Conectăm fermierii, eficientizăm agricultura.
-            </p>
-            <div className="h-px bg-white/20 flex-1 lg:hidden"></div>
-          </div>
+
+          {/* Subtitlul: font mai mic pe mobil pentru a nu pica pe 3 rânduri */}
+          <p className="text-gray-300 text-[10px] md:text-xs tracking-[2px] md:tracking-[3px] uppercase text-center px-4 max-w-[90%] md:max-w-full">
+            Conectăm fermierii, eficientizăm agricultura.
+          </p>
         </div>
 
         {/* Partea Dreapta*/}

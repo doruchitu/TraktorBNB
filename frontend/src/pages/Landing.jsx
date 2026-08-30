@@ -28,34 +28,37 @@ export default function Landing() {
     <div className="min-h-screen bg-[#0d1a0d] font-serif overflow-x-hidden">
 
       {/* Navbar */}
-      <nav className={`fixed top-0 left-0 right-0 z-[100] px-6 md:px-12 h-[70px] flex items-center justify-between transition-all duration-300 ${
+      <nav className={`fixed top-0 left-0 right-0 z-[100] px-4 md:px-12 h-[60px] md:h-[70px] flex items-center justify-between transition-all duration-300 ${
         scrollY > 50 ? "bg-[#0d1a0d]/95 backdrop-blur-md border-b border-[#e8d5a3]/10" : "bg-transparent"
       }`}>
-        <div className="flex items-center gap-3">
-          {/* Iconița transformată în BEJ pentru Navbar */}
-          <div className="w-7 h-7 bg-[#e8d5a3] opacity-90 [mask-image:url('/FAVICON.png')] [mask-size:contain] [mask-repeat:no-repeat] [mask-position:center]"></div>
-          <span className="text-[#e8d5a3] text-xl md:text-[22px] font-bold tracking-[1px]">
+        <div className="flex items-center gap-2 md:gap-3">
+          <div className="w-5 h-5 md:w-7 md:h-7 bg-[#e8d5a3] opacity-90 [mask-image:url('/FAVICON.png')] [mask-size:contain] [mask-repeat:no-repeat] [mask-position:center]"></div>
+          <span className="text-[#e8d5a3] text-[18px] md:text-[22px] font-bold tracking-[1px] font-serif">
             TraktorShare
           </span>
         </div>
-        <div className="flex gap-3">
+        
+        <div className="flex gap-2 md:gap-3">
           <button 
             onClick={() => navigate("/login")} 
-            className="hidden sm:block bg-transparent text-[#e8d5a3] border border-[#e8d5a3]/40 rounded-lg px-5 py-2 text-sm cursor-pointer transition-colors hover:border-[#e8d5a3]"
+            className="bg-transparent text-[#e8d5a3] border border-[#e8d5a3]/40 rounded-md md:rounded-lg px-3 py-1.5 md:px-5 md:py-2 text-[12px] md:text-sm cursor-pointer transition-colors hover:border-[#e8d5a3]"
           >
-            Autentificare
+            <span className="hidden sm:inline">Autentificare</span>
+            <span className="sm:hidden">Conectare</span>
           </button>
+          
           <button 
             onClick={() => navigate("/signup")} 
-            className="bg-[#4a7c4a] text-white border-none rounded-lg px-5 py-2 text-sm cursor-pointer transition-colors hover:bg-[#3a6a3a]"
+            className="bg-[#4a7c4a] text-white border-none rounded-md md:rounded-lg px-3 py-1.5 md:px-5 md:py-2 text-[12px] md:text-sm cursor-pointer transition-colors hover:bg-[#3a6a3a]"
           >
-            Creează cont
+            <span className="hidden sm:inline">Creează cont</span>
+            <span className="sm:hidden">Cont nou</span>
           </button>
         </div>
       </nav>
 
       {/* Hero Section */}
-      <div className="min-h-screen bg-[linear-gradient(160deg,#0d1a0d_0%,#1a2e1a_40%,#0d1a0d_100%)] flex flex-col items-center justify-center text-center p-8 relative overflow-hidden">
+      <div className="min-h-screen bg-[linear-gradient(160deg,#0d1a0d_0%,#1a2e1a_40%,#0d1a0d_100%)] flex flex-col items-center justify-center text-center p-8 pt-24 md:pt-8 relative overflow-hidden">
         
         {/* Cercuri decorative */}
         <div className="absolute w-[600px] h-[600px] rounded-full border border-[#e8d5a3]/5 top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2"></div>
@@ -113,7 +116,6 @@ export default function Landing() {
 
       </div>
 
-      {/* Features Section */}
       <div className="bg-[#f7f5f0] py-24 px-8">
         <div className="max-w-[1100px] mx-auto">
           <h2 className="text-center text-[#1a2e1a] text-[clamp(1.8rem,4vw,2.5rem)] mb-4 font-bold">
@@ -138,7 +140,6 @@ export default function Landing() {
         </div>
       </div>
 
-      {/* How it Works Section */}
       <div className="bg-[#1a2e1a] py-24 px-8">
         <div className="max-w-[900px] mx-auto text-center">
           <h2 className="text-[#e8d5a3] text-[clamp(1.8rem,4vw,2.5rem)] mb-16 font-bold">
@@ -176,7 +177,6 @@ export default function Landing() {
             onClick={() => navigate("/signup")} 
             className="flex items-center gap-2.5 bg-[#1a2e1a] text-[#e8d5a3] rounded-xl px-8 py-4 text-base font-bold transition-colors hover:bg-[#2d4a2d]"
           >
-            {/* Iconița transformată în BEJ pentru Buton */}
             <div className="w-5 h-5 bg-[#e8d5a3] [mask-image:url('/FAVICON.png')] [mask-size:contain] [mask-repeat:no-repeat] [mask-position:center]"></div>
             Creează cont gratuit
           </button>

@@ -73,22 +73,28 @@ function Signup() {
       <div className="relative z-10 w-full max-w-6xl mx-auto px-6 flex flex-col lg:flex-row items-center justify-between gap-12">
         
         {/* Partea Stângă: Branding & Beneficii */}
-        <div className="flex flex-col items-center lg:items-start lg:w-1/2">
-          <div className="flex items-center gap-4">
-            <img src="/FAVICON.png" alt="TraktorShare Icon" className="w-20 h-20 object-contain" />
-            <h1 className="text-5xl font-extrabold tracking-tight text-gray-200">
+        <div className="flex flex-col items-center lg:items-start lg:w-1/2 w-full mb-6 lg:mb-0">
+          <div className="flex items-center justify-center lg:justify-start gap-2 md:gap-4">
+            <img 
+              src="/FAVICON.png" 
+              alt="TraktorShare Icon" 
+              className="w-12 h-12 md:w-16 md:h-16 lg:w-20 lg:h-20 object-contain" 
+            />
+            {/* Titlu adaptiv */}
+            <h1 className="text-3xl md:text-4xl lg:text-5xl font-extrabold tracking-tight text-gray-200">
               Traktor<span className="text-[#84cc44]">Share</span>
             </h1>
           </div>
-          <div className="mt-4 flex items-center gap-4 w-full">
+          
+          <div className="mt-3 md:mt-4 flex items-center gap-2 md:gap-4 w-full px-2">
             <div className="h-px bg-white/20 flex-1 lg:hidden"></div>
-            <p className="text-[0.75rem] text-gray-400 font-semibold uppercase tracking-[0.2em] text-center lg:text-left">
+            <p className="text-[10px] md:text-[0.75rem] text-gray-400 font-semibold uppercase tracking-[0.1em] md:tracking-[0.2em] text-center lg:text-left">
               Conectăm fermierii, eficientizăm agricultura.
             </p>
             <div className="h-px bg-white/20 flex-1 lg:hidden"></div>
           </div>
           
-          {/* Listă avantaje (vizibilă doar pe desktop) */}
+          {/* Listă avantaje (vizibilă doar pe desktop, nu o modificăm) */}
           <div className="hidden lg:block mt-12 text-gray-300">
             <h3 className="text-xl font-medium mb-4 text-white">Alătură-te comunității:</h3>
             <ul className="space-y-3">
