@@ -61,51 +61,151 @@ function Signup() {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-green-50">
-      <form onSubmit={handleSubmit} className="bg-white p-8 rounded-lg shadow-md w-96">
-        <h2 className="text-2xl font-bold mb-6 text-green-700 text-center">
-          🚜 Creează Cont TraktorShare
-        </h2>
+    <div 
+      className="min-h-screen relative flex items-center justify-center bg-cover bg-center py-12"
+      // Folosește aceeași imagine ca la Login sau una similară
+      style={{ backgroundImage: "url('https://images.unsplash.com/photo-1500382017468-9049fed747ef?q=80&w=2000&auto=format&fit=crop')" }}
+    >
+      {/* Overlay întunecat */}
+      <div className="absolute inset-0 bg-black/70 backdrop-blur-[2px]"></div>
 
-        {error && (
-          <div className="mb-4 p-2 bg-red-100 text-red-600 rounded text-sm text-center">
-            {error}
+      {/* Container Principal */}
+      <div className="relative z-10 w-full max-w-6xl mx-auto px-6 flex flex-col lg:flex-row items-center justify-between gap-12">
+        
+        {/* Partea Stângă: Branding & Beneficii */}
+        <div className="flex flex-col items-center lg:items-start lg:w-1/2">
+          <div className="flex items-center gap-4">
+            <img src="/FAVICON.png" alt="TraktorShare Icon" className="w-20 h-20 object-contain" />
+            <h1 className="text-5xl font-extrabold tracking-tight text-gray-200">
+              Traktor<span className="text-[#84cc44]">Share</span>
+            </h1>
           </div>
-        )}
-
-        <div className="flex gap-2 mb-4">
-          <input className="w-1/2 p-2 border rounded focus:outline-none focus:ring-2 focus:ring-green-400"
-            placeholder="Nume" onChange={handleChange('nume')} />
-          <input className="w-1/2 p-2 border rounded focus:outline-none focus:ring-2 focus:ring-green-400"
-            placeholder="Prenume" onChange={handleChange('prenume')} />
+          <div className="mt-4 flex items-center gap-4 w-full">
+            <div className="h-px bg-white/20 flex-1 lg:hidden"></div>
+            <p className="text-[0.75rem] text-gray-400 font-semibold uppercase tracking-[0.2em] text-center lg:text-left">
+              Conectăm fermierii, eficientizăm agricultura.
+            </p>
+            <div className="h-px bg-white/20 flex-1 lg:hidden"></div>
+          </div>
+          
+          {/* Listă avantaje (vizibilă doar pe desktop) */}
+          <div className="hidden lg:block mt-12 text-gray-300">
+            <h3 className="text-xl font-medium mb-4 text-white">Alătură-te comunității:</h3>
+            <ul className="space-y-3">
+              <li className="flex items-center gap-3">
+                <svg className="w-5 h-5 text-[#84cc44]" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" /></svg>
+                <span>Găsește rapid utilajele de care ai nevoie în zona ta</span>
+              </li>
+              <li className="flex items-center gap-3">
+                <svg className="w-5 h-5 text-[#84cc44]" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" /></svg>
+                <span>Închiriază propriile utilaje și generează venituri</span>
+              </li>
+              <li className="flex items-center gap-3">
+                <svg className="w-5 h-5 text-[#84cc44]" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" /></svg>
+                <span>Consultă asistentul nostru inteligent (AI) oricând</span>
+              </li>
+            </ul>
+          </div>
         </div>
 
-        <input className="w-full mb-4 p-2 border rounded focus:outline-none focus:ring-2 focus:ring-green-400"
-          type="email" placeholder="Email" onChange={handleChange('email')} />
+        {/* Partea Dreaptă: Formular Glassmorphism */}
+        <div className="w-full max-w-lg">
+          <div className="bg-white/5 backdrop-blur-xl border border-white/10 p-8 rounded-2xl shadow-2xl">
+            <h2 className="text-2xl font-bold mb-6 text-white text-center">Creare Cont</h2>
+            
+            <form onSubmit={handleSubmit}>
+              {error && (
+                <div className="mb-6 p-3 bg-red-500/20 border-l-4 border-red-500 text-red-200 rounded-r text-sm">
+                  {error}
+                </div>
+              )}
 
-        <input className="w-full mb-4 p-2 border rounded focus:outline-none focus:ring-2 focus:ring-green-400"
-          type="tel" placeholder="Telefon (ex: 07xxxxxxxx)" onChange={handleChange('telefon')} />
+              <div className="space-y-4">
+                {/* Nume si Prenume */}
+                <div className="flex flex-col sm:flex-row gap-4">
+                  <div className="w-full sm:w-1/2">
+                    <label className="block text-sm font-medium text-gray-300 mb-1">Nume</label>
+                    <input
+                      className="w-full p-3 bg-black/40 border border-[#2a4020] text-gray-100 rounded-xl focus:outline-none focus:ring-2 focus:ring-[#84cc44] focus:border-transparent transition-all placeholder-gray-500"
+                      placeholder="Ex: Popescu"
+                      onChange={handleChange('nume')}
+                    />
+                  </div>
+                  <div className="w-full sm:w-1/2">
+                    <label className="block text-sm font-medium text-gray-300 mb-1">Prenume</label>
+                    <input
+                      className="w-full p-3 bg-black/40 border border-[#2a4020] text-gray-100 rounded-xl focus:outline-none focus:ring-2 focus:ring-[#84cc44] focus:border-transparent transition-all placeholder-gray-500"
+                      placeholder="Ex: Ion"
+                      onChange={handleChange('prenume')}
+                    />
+                  </div>
+                </div>
 
-        <input className="w-full mb-4 p-2 border rounded focus:outline-none focus:ring-2 focus:ring-green-400"
-          type="password" placeholder="Parolă (minim 6 caractere)" onChange={handleChange('password')} />
+                {/* Email */}
+                <div>
+                  <label className="block text-sm font-medium text-gray-300 mb-1">Email</label>
+                  <input
+                    className="w-full p-3 bg-black/40 border border-[#2a4020] text-gray-100 rounded-xl focus:outline-none focus:ring-2 focus:ring-[#84cc44] focus:border-transparent transition-all placeholder-gray-500"
+                    type="email"
+                    placeholder="fermier@exemplu.ro"
+                    onChange={handleChange('email')}
+                  />
+                </div>
 
-        <input className="w-full mb-6 p-2 border rounded focus:outline-none focus:ring-2 focus:ring-green-400"
-          type="password" placeholder="Confirmă Parola" onChange={handleChange('confirmPassword')} />
+                {/* Telefon */}
+                <div>
+                  <label className="block text-sm font-medium text-gray-300 mb-1">Telefon</label>
+                  <input
+                    className="w-full p-3 bg-black/40 border border-[#2a4020] text-gray-100 rounded-xl focus:outline-none focus:ring-2 focus:ring-[#84cc44] focus:border-transparent transition-all placeholder-gray-500"
+                    type="tel"
+                    placeholder="07xxxxxxxx"
+                    onChange={handleChange('telefon')}
+                  />
+                </div>
 
-        <button
-          disabled={loading}
-          className="w-full bg-green-600 text-white py-2 rounded hover:bg-green-700 font-bold disabled:opacity-50"
-        >
-          {loading ? 'Se creează contul...' : 'Creează Cont'}
-        </button>
+                {/* Parola & Confirmare */}
+                <div className="flex flex-col sm:flex-row gap-4">
+                    <div className="w-full sm:w-1/2">
+                        <label className="block text-sm font-medium text-gray-300 mb-1">Parolă</label>
+                        <input
+                        className="w-full p-3 bg-black/40 border border-[#2a4020] text-gray-100 rounded-xl focus:outline-none focus:ring-2 focus:ring-[#84cc44] focus:border-transparent transition-all placeholder-gray-500"
+                        type="password"
+                        placeholder="Minim 6 caractere"
+                        onChange={handleChange('password')}
+                        />
+                    </div>
+                    <div className="w-full sm:w-1/2">
+                        <label className="block text-sm font-medium text-gray-300 mb-1">Confirmă Parolă</label>
+                        <input
+                        className="w-full p-3 bg-black/40 border border-[#2a4020] text-gray-100 rounded-xl focus:outline-none focus:ring-2 focus:ring-[#84cc44] focus:border-transparent transition-all placeholder-gray-500"
+                        type="password"
+                        placeholder="Confirmă parola"
+                        onChange={handleChange('confirmPassword')}
+                        />
+                    </div>
+                </div>
+              </div>
 
-        <p className="mt-4 text-center text-sm">
-          Ai deja cont?{' '}
-          <span className="text-green-500 cursor-pointer hover:underline" onClick={() => navigate('/login')}>
-            Intră în cont
-          </span>
-        </p>
-      </form>
+              <button
+                disabled={loading}
+                className="w-full mt-8 bg-[#1f9b2d] text-white py-3 rounded-xl hover:bg-[#1a8525] shadow-lg transition-all font-bold text-lg disabled:opacity-50"
+              >
+                {loading ? 'Se creează contul...' : 'Creează Cont'}
+              </button>
+            </form>
+
+            {/* Link către Login */}
+            <div className="mt-6 border-t border-white/10 pt-6 text-center">
+              <p className="text-sm text-gray-400">
+                Ai deja cont?{' '}
+                <button onClick={() => navigate('/login')} className="text-[#84cc44] font-medium hover:underline">
+                  Intră în cont
+                </button>
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
   );
 }
