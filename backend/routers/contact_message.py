@@ -25,10 +25,10 @@ def trimite_mesaj(data: ContactMessage):
     msg = MIMEMultipart()
     msg["From"] = GMAIL_USER
     msg["To"] = GMAIL_USER
-    msg["Subject"] = f"Mesaj nou de la {data.nume} - TraktorBNB Contact"
+    msg["Subject"] = f"Mesaj nou de la {data.nume} - TraktorShare Contact"
     msg["Reply-To"] = data.email
 
-    body = f"""Mesaj nou primit prin formularul de contact TraktorBNB
+    body = f"""Mesaj nou primit prin formularul de contact TraktorShare
 
 Nume: {data.nume}
 Email: {data.email}

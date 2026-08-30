@@ -26,7 +26,7 @@ class ContractPDF(FPDF):
     def header(self):
         self.set_font("DejaVu", "B", 20)
         self.set_text_color(26, 46, 26)
-        self.cell(0, 15, "TraktorBNB", align="C", new_x="LMARGIN", new_y="NEXT")
+        self.cell(0, 15, "TraktorShare", align="C", new_x="LMARGIN", new_y="NEXT")
         self.set_font("DejaVu", "", 11)
         self.set_text_color(100, 100, 100)
         self.cell(0, 8, "Contract de inchiriere utilaj agricol", align="C", new_x="LMARGIN", new_y="NEXT")
@@ -40,7 +40,7 @@ class ContractPDF(FPDF):
         self.set_y(-15)
         self.set_font("DejaVu", "I", 8)
         self.set_text_color(150, 150, 150)
-        self.cell(0, 10, f"TraktorBNB - Platforma fermierilor romani | Pagina {self.page_no()}", align="C")
+        self.cell(0, 10, f"TraktorShare - Platforma fermierilor romani | Pagina {self.page_no()}", align="C")
 
 
 @router.get("/{booking_id}")
@@ -139,7 +139,7 @@ def download_contract(
         "3. Utilajul va fi returnat in aceeasi stare in care a fost preluat, cu rezervorul de combustibil plin.",
         "4. In caz de defectiune tehnica aparuta din vina locatarului, acesta suporta costurile de reparatie.",
         "5. Plata se efectueaza integral inainte de preluarea utilajului.",
-        "6. Contractul intra in vigoare la data aprobarii rezervarii pe platforma TraktorBNB.",
+        "6. Contractul intra in vigoare la data aprobarii rezervarii pe platforma TraktorShare.",
         "7. Litigiile se solutioneaza pe cale amiabila sau prin instantele competente din Romania.",
     ]
     pdf.set_font("DejaVu", "", 9)
