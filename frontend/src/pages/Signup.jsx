@@ -64,7 +64,7 @@ function Signup() {
     <div className="min-h-screen flex items-center justify-center bg-green-50">
       <form onSubmit={handleSubmit} className="bg-white p-8 rounded-lg shadow-md w-96">
         <h2 className="text-2xl font-bold mb-6 text-green-700 text-center">
-          🚜 Creează Cont TraktorBNB
+          🚜 Creează Cont TraktorShare
         </h2>
 
         {error && (

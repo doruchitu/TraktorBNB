@@ -11,8 +11,8 @@ export default defineConfig({
         enabled: true
       },
       manifest: {
-        name: 'TraktorBNB',
-        short_name: 'TraktorBNB',
+        name: 'TraktorShare',
+        short_name: 'TraktorShare',
         description: 'Platformă de închirieri agricole din România',
         theme_color: '#1a2e1a',
         background_color: '#1a2e1a',

@@ -212,7 +212,7 @@ export default function Home() {
       }}>
         <div style={{ display: "flex", alignItems: "center", gap: "10px" }}>
           <span style={{ fontSize: "22px" }}>🚜</span>
-          <span style={{ color: "#e8d5a3", fontSize: "20px", fontWeight: "bold", letterSpacing: "0.5px" }}>TraktorBNB</span>
+          <span style={{ color: "#e8d5a3", fontSize: "20px", fontWeight: "bold", letterSpacing: "0.5px" }}>TraktorShare</span>
         </div>
         <div style={{ display: "flex", alignItems: "center", gap: "20px" }}>
           <span style={{ color: "#9db89d", fontSize: "14px" }}>
@@ -437,8 +437,8 @@ export default function Home() {
         textAlign: "center", padding: "2rem", marginTop: "4rem",
         fontSize: "13px", fontFamily: "Arial, sans-serif",
       }}>
-        <div style={{ fontSize: "20px", marginBottom: "8px" }}>🚜 TraktorBNB</div>
-        <p style={{ margin: 0, opacity: 0.6 }}>© 2026 TraktorBNB · Platforma fermierilor români</p>
+        <div style={{ fontSize: "20px", marginBottom: "8px" }}>🚜 TraktorShare</div>
+        <p style={{ margin: 0, opacity: 0.6 }}>© 2026 TraktorShare · Platforma fermierilor români</p>
       </footer>
 
       {modalDetalii && (

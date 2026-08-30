@@ -48,7 +48,7 @@ export default function CumFunctioneaza() {
         <div onClick={() => navigate("/")} style={{ display: "flex", alignItems: "center", gap: "10px", cursor: "pointer" }}>
           <span style={{ fontSize: "24px" }}>🚜</span>
           <span style={{ color: "#e8d5a3", fontSize: "22px", fontWeight: "bold", letterSpacing: "1px" }}>
-            TraktorBNB
+            TraktorShare
           </span>
         </div>
         <div style={{ display: "flex", gap: "12px" }}>
@@ -92,7 +92,7 @@ export default function CumFunctioneaza() {
           opacity: visible ? 1 : 0, transform: visible ? "translateY(0)" : "translateY(20px)",
           transition: "opacity 0.8s ease 0.1s, transform 0.8s ease 0.1s",
         }}>
-          Cum funcționează <span style={{ color: "#7dc47d" }}>TraktorBNB</span>
+          Cum funcționează <span style={{ color: "#7dc47d" }}>TraktorShare</span>
         </h1>
         <p style={{
           color: "#9db89d", fontSize: "16px", maxWidth: "540px", margin: "0 auto",
@@ -116,7 +116,7 @@ export default function CumFunctioneaza() {
               opacity: visible ? 1 : 0, transform: visible ? "translateY(0)" : "translateY(15px)",
               transition: "opacity 0.6s ease 0.3s, transform 0.6s ease 0.3s",
             }}>
-              🌾 Cont creat pe TraktorBNB
+              🌾 Cont creat pe TraktorShare
             </div>
           </div>
 

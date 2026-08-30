@@ -68,7 +68,7 @@ export default function Ghiduri() {
         <div onClick={() => navigate("/")} style={{ display: "flex", alignItems: "center", gap: "10px", cursor: "pointer" }}>
           <span style={{ fontSize: "24px" }}>🚜</span>
           <span style={{ color: "#e8d5a3", fontSize: "22px", fontWeight: "bold", letterSpacing: "1px" }}>
-            TraktorBNB
+            TraktorShare
           </span>
         </div>
         <div style={{ display: "flex", gap: "12px" }}>
@@ -187,7 +187,7 @@ export default function Ghiduri() {
         <p style={{ color: "#9db89d", fontFamily: "Arial, sans-serif", marginBottom: "2rem" }}>
           Scrie-ne direct și îți răspundem cât de repede putem.
         </p>
-        <a href="mailto:contact@traktorbnb.ro" style={{
+        <a href="mailto:contact@traktorshare.ro" style={{
           display: "inline-block",
           background: "#4a7c4a", color: "white",
           border: "none", borderRadius: "10px",

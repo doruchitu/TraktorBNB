@@ -51,7 +51,7 @@ function Login() {
     <div className="min-h-screen flex items-center justify-center bg-gray-100">
       <form onSubmit={handleLogin} className="bg-white p-8 rounded-lg shadow-md w-96">
         <h2 className="text-2xl font-bold mb-6 text-green-600 text-center">
-          🚜 TraktorBNB
+          🚜 TraktorShare
         </h2>
 
         {error && (

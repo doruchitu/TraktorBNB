@@ -46,7 +46,7 @@ export default function Landing() {
         <div style={{ display: "flex", alignItems: "center", gap: "10px" }}>
           <span style={{ fontSize: "24px" }}>🚜</span>
           <span style={{ color: "#e8d5a3", fontSize: "22px", fontWeight: "bold", letterSpacing: "1px" }}>
-            TraktorBNB
+            TraktorShare
           </span>
         </div>
         <div style={{ display: "flex", gap: "12px" }}>

@@ -137,7 +137,7 @@ export default function Rezervari() {
       }}>
         <div style={{ display: "flex", alignItems: "center", gap: "10px", cursor: "pointer" }} onClick={() => navigate("/home")}>
           <span style={{ fontSize: "22px" }}>🚜</span>
-          <span style={{ color: "#e8d5a3", fontSize: "20px", fontWeight: "bold" }}>TraktorBNB</span>
+          <span style={{ color: "#e8d5a3", fontSize: "20px", fontWeight: "bold" }}>TraktorShare</span>
         </div>
         <button onClick={() => navigate("/home")} style={{
           background: "transparent", color: "#9db89d",

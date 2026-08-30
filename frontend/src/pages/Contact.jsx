@@ -60,7 +60,7 @@ export default function Contact() {
         <div onClick={() => navigate("/")} style={{ display: "flex", alignItems: "center", gap: "10px", cursor: "pointer" }}>
           <span style={{ fontSize: "24px" }}>🚜</span>
           <span style={{ color: "#e8d5a3", fontSize: "22px", fontWeight: "bold", letterSpacing: "1px" }}>
-            TraktorBNB
+            TraktorShare
           </span>
         </div>
         <div style={{ display: "flex", gap: "12px" }}>
@@ -233,8 +233,8 @@ export default function Contact() {
             <p style={{ color: "#888", fontFamily: "Arial, sans-serif", fontSize: "13px", marginBottom: "4px" }}>
               Sau scrie-ne direct la
             </p>
-            <a href="mailto:admin.traktorbnb@gmail.com" style={{ color: "#1a2e1a", fontFamily: "Arial, sans-serif", fontSize: "14px", fontWeight: "bold", textDecoration: "none" }}>
-              admin.traktorbnb@gmail.com
+            <a href="mailto:admin.traktorshare@gmail.com" style={{ color: "#1a2e1a", fontFamily: "Arial, sans-serif", fontSize: "14px", fontWeight: "bold", textDecoration: "none" }}>
+              admin.traktorshare@gmail.com
             </a>
           </div>
 

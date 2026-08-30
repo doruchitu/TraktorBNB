@@ -18,7 +18,7 @@ export default function Footer() {
 
           <div>
             <div style={{ fontSize: "20px", color: "#e8d5a3", marginBottom: "10px", fontFamily: "Georgia, serif" }}>
-              🚜 TraktorBNB
+              🚜 TraktorShare
             </div>
             <p style={{ lineHeight: 1.7, maxWidth: "260px" }}>
               Conectăm fermierii români cu utilajele agricole de care au nevoie, oriunde în țară.
@@ -51,8 +51,8 @@ export default function Footer() {
             <h4 style={{ color: "#e8d5a3", fontSize: "14px", marginBottom: "14px", fontFamily: "Georgia, serif" }}>
               Contact
             </h4>
-            <a href="mailto:admin.traktorbnb@gmail.com" style={{ color: "#5a7a5a", textDecoration: "none", display: "block" }}>
-              admin.traktorbnb@gmail.com
+            <a href="mailto:admin.traktorshare@gmail.com" style={{ color: "#5a7a5a", textDecoration: "none", display: "block" }}>
+              admin.traktorshare@gmail.com
             </a>
           </div>
 
@@ -72,7 +72,7 @@ export default function Footer() {
             </a>
           </div>
           <div style={{ color: "#4a6a4a" }}>
-            © 2026 TraktorBNB. Toate drepturile rezervate.
+            © 2026 TraktorShare. Toate drepturile rezervate.
           </div>
         </div>
 
