@@ -6,6 +6,7 @@ import io
 from database import SessionLocal
 import entities
 from auth import get_current_user
+import os # Adaugat pentru a verifica existenta pozei
 
 router = APIRouter(prefix="/contract", tags=["Contract"])
 
@@ -24,13 +25,21 @@ class ContractPDF(FPDF):
         self.add_font("DejaVu", "I", "fonts/DejaVuSans.ttf")
 
     def header(self):
+        logo_path = "static/FAVICON.png" 
+        if os.path.exists(logo_path):
+            self.image(logo_path, x=15, y=10, w=16)
+
+       
+        self.set_y(12) 
         self.set_font("DejaVu", "B", 20)
         self.set_text_color(26, 46, 26)
-        self.cell(0, 15, "TraktorShare", align="C", new_x="LMARGIN", new_y="NEXT")
+        self.cell(0, 10, "TraktorShare", align="C", new_x="LMARGIN", new_y="NEXT")
+        
         self.set_font("DejaVu", "", 11)
         self.set_text_color(100, 100, 100)
         self.cell(0, 8, "Contract de inchiriere utilaj agricol", align="C", new_x="LMARGIN", new_y="NEXT")
-        self.ln(4)
+        
+        self.ln(6)
         self.set_draw_color(26, 46, 26)
         self.set_line_width(0.8)
         self.line(15, self.get_y(), 195, self.get_y())
@@ -90,7 +99,6 @@ def download_contract(
         pdf.set_text_color(30, 30, 30)
         pdf.cell(0, 7, str(value), new_x="LMARGIN", new_y="NEXT")
 
-    # Parti contractante
     section_title("PARTI CONTRACTANTE")
     pdf.set_font("DejaVu", "B", 10)
     pdf.set_text_color(26, 46, 26)
@@ -131,7 +139,6 @@ def download_contract(
     pdf.cell(0, 10, f"  TOTAL DE PLATA: {total:.2f} RON", fill=True, new_x="LMARGIN", new_y="NEXT")
     pdf.ln(4)
 
-    # Clauze
     section_title("CLAUZE SI CONDITII")
     clauze = [
         "1. Locatarul se obliga sa utilizeze utilajul conform destinatiei sale si cu respectarea normelor tehnice.",
@@ -149,7 +156,6 @@ def download_contract(
         pdf.ln(1)
     pdf.ln(4)
 
-    # Semnaturi
     section_title("SEMNATURI")
     pdf.ln(4)
     pdf.set_font("DejaVu", "", 10)
