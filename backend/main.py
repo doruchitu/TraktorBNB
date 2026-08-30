@@ -11,7 +11,7 @@ import entities, schemas
 
 entities.Base.metadata.create_all(bind=engine)
 
-app = FastAPI(title="TraktorBNB")
+app = FastAPI(title="TraktorShare")
 
 app.add_middleware(
     CORSMiddleware,
