@@ -9,6 +9,9 @@ import Landing from './pages/Landing';
 import CumFunctioneaza from "./pages/CumFunctioneaza";
 import Ghiduri from "./pages/Ghiduri";
 import Contact from "./pages/Contact";
+import Termeni from './pages/Termeni';
+import Confidentialitate from './pages/Confidentialitate';
+import CookieBanner from './components/CookieBanner';
 
 // verf daca user is logat
 function ProtectedRoute({ children }) {
@@ -29,7 +32,10 @@ function App() {
         <Route path="/cum-functioneaza" element={<CumFunctioneaza />} />
         <Route path="/ghiduri" element={<Ghiduri />} />
         <Route path="/contact" element={<Contact />} />
+        <Route path="/termeni" element={<Termeni />} />
+        <Route path="/confidentialitate" element={<Confidentialitate />} />
       </Routes>
+      <CookieBanner />
     </Router>
   );
 }
