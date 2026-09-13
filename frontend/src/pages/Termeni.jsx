@@ -18,9 +18,9 @@ export default function Termeni() {
       <nav className={`fixed top-0 left-0 right-0 z-[100] px-12 h-[70px] flex items-center justify-between transition-colors duration-300 ${
         scrollY > 50 ? "bg-[#0d1a0d]/95 backdrop-blur-md border-b border-[#e8d5a3]/10" : "bg-transparent"
       }`}>
-        <div onClick={() => navigate("/")} className="flex items-center gap-2 cursor-pointer">
-          <span className="text-2xl">🚜</span>
-          <span className="text-[#e8d5a3] text-[22px] font-bold tracking-wide">TraktorShare</span>
+        <div className="flex items-center gap-1.5 md:gap-2.5">
+          <div className="w-[20px] h-[20px] md:w-[26px] md:h-[26px] bg-[#e8d5a3] [mask-image:url('/FAVICON.png')] [mask-size:contain] [mask-repeat:no-repeat] [mask-position:center]" />
+          <span className="text-[#e8d5a3] text-[16px] md:text-[20px] font-bold tracking-[0.5px]">TraktorShare</span>
         </div>
       </nav>
 
