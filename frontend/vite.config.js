@@ -8,7 +8,7 @@ export default defineConfig({
     VitePWA({
       registerType: 'autoUpdate',
       devOptions: {
-        enabled: true
+        enabled: process.env.CYPRESS !== 'true'
       },
       manifest: {
         name: 'TraktorShare',
