@@ -33,18 +33,18 @@ describe('Calendar interactiv', () => {
     cy.url().should('include', '/rezervari')
   })
 
-it('modalul calendarului se deschide daca exista utilaje', () => {
-  cy.get('body').then(($body) => {
-    if ($body.find('button:contains("Rezervă")').length > 0) {
-      cy.get('button').contains('Rezervă').first().click({ force: true })
-      cy.get('body').then(($b) => {
-        if ($b.text().includes('Disponibil')) {
-          cy.contains('Disponibil').should('be.visible')
-        }
-      })
-    } else {
-      cy.log('Nu exista utilaje - test skipped')
-    }
+  it('modalul calendarului se deschide daca exista utilaje', () => {
+    cy.get('body').then(($body) => {
+      if ($body.find('button:contains("Rezervă")').length > 0) {
+        cy.get('button').contains('Rezervă').first().click({ force: true })
+        cy.get('body').then(($b) => {
+          if ($b.text().includes('Disponibil')) {
+            cy.contains('Disponibil').should('be.visible')
+          }
+        })
+      } else {
+        cy.log('Nu exista utilaje - test skipped')
+      }
+    })
   })
-})
 })
