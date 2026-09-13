@@ -1,13 +1,13 @@
 describe('Contract PDF', () => {
   beforeEach(() => {
-    cy.fixture('user').then((user) => {
-      cy.visit('/login')
-      cy.get('input[type="email"]').type(user.email)
-      cy.get('input[type="password"]').type(user.password)
-      cy.get('button').contains('Intră în Cont').click()
-      cy.url().should('include', '/home')
-      cy.visit('/rezervari')
-    })
+    const email = Cypress.env('EMAIL') || 'test.cypress@gmail.com'
+    const password = Cypress.env('PASSWORD') || 'parola123'
+    cy.visit('/login')
+    cy.get('input[type="email"]').type(email)
+    cy.get('input[type="password"]').type(password)
+    cy.get('button').contains('Intră în Cont').click()
+    cy.url({ timeout: 10000 }).should('include', '/home')
+    cy.visit('/rezervari')
   })
 
   it('pagina de rezervari se incarca corect', () => {
@@ -15,17 +15,17 @@ describe('Contract PDF', () => {
     cy.contains('Cereri primite').should('be.visible')
   })
 
-it('butonul de descarcare apare doar pentru rezervari aprobate', () => {
-  cy.get('body').then(($body) => {
-    if ($body.text().includes('În așteptare')) {
-      cy.contains('În așteptare').parent().parent()
-        .find('button').contains('Descarcă contract')
-        .should('not.exist')
-    } else {
-      cy.log('Nu exista rezervari pending pentru acest test')
-    }
+  it('butonul de descarcare apare doar pentru rezervari aprobate', () => {
+    cy.get('body').then(($body) => {
+      if ($body.text().includes('În așteptare')) {
+        cy.contains('În așteptare').parent().parent()
+          .find('button').contains('Descarcă contract')
+          .should('not.exist')
+      } else {
+        cy.log('Nu exista rezervari pending pentru acest test')
+      }
+    })
   })
-})
 
   it('butonul de descarcare contract este vizibil pentru rezervari aprobate', () => {
     cy.get('body').then(($body) => {
