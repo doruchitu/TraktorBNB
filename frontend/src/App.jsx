@@ -1,5 +1,7 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
+import { onAuthStateChanged } from 'firebase/auth';
+import { auth } from './firebase';
 import Signup from './pages/Signup';
 import Login from './pages/Login';
 import Home from './pages/Home';
@@ -13,10 +15,28 @@ import Termeni from './pages/Termeni';
 import Confidentialitate from './pages/Confidentialitate';
 import CookieBanner from './components/CookieBanner';
 
-// verf daca user is logat
 function ProtectedRoute({ children }) {
-  const token = localStorage.getItem('token');
-  return token ? children : <Navigate to="/login" />;
+  const [user, setUser] = useState(undefined);
+
+  useEffect(() => {
+    const unsubscribe = onAuthStateChanged(auth, (firebaseUser) => {
+      setUser(firebaseUser);
+    });
+    return () => unsubscribe();
+  }, []);
+
+  if (user === undefined) {
+    return (
+      <div style={{
+        minHeight: "100vh", display: "flex", alignItems: "center", justifyContent: "center",
+        background: "#0d1a0d", color: "#e8d5a3", fontFamily: "Georgia, serif",
+      }}>
+        Se verifică autentificarea...
+      </div>
+    );
+  }
+
+  return user ? children : <Navigate to="/login" />;
 }
 
 function App() {
